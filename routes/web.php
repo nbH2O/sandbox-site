@@ -7,9 +7,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/members', 
+Route::get('/worlds', 
     [UserController::class, 'index']
-);
+)->name('worlds');
+
+Route::get('/market', 
+    [UserController::class, 'index']
+)->name('market');
+
+
+Route::get('/members', function () {
+    return view('user.index');
+})->name('members');
+
 Route::get('/@{name}', 
     [UserController::class, 'profile']
 );

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -29,7 +30,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $with = ['role'];
+    protected $with = ['primaryRole'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -54,12 +55,16 @@ class User extends Authenticatable
         ];
     }
 
-    public function role(): BelongsTo
+    public function roles(): BelongsToMany
     {
-        return $this->belongsTo(UserRole::class)->where('is_visible', true);
+        return $this->belongsToMany(Role::class)->orderBy('power', 'DESC')->where('is_public', true);
     }
-    public function roleAny(): BelongsTo
+    public function primaryRole(): BelongsToMany
     {
-        return $this->belongsTo(UserRole::class);
+        return $this->belongsToMany(Role::class)->orderBy('power', 'DESC')->where('is_public', true)->limit(1);
+    }
+    public function anyRoles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class)->orderBy('power', 'DESC');
     }
 }

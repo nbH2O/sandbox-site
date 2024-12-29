@@ -17,11 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->foreignId('role_id')->nullable()->constrained(
-                table: 'user_roles', indexName: 'role_id'
-            );
 
             $table->text('description')->nullable();
+            $table->boolean('is_name_scrubbed');
             $table->boolean('is_description_scrubbed');
             $table->integer('currency');
             $table->integer('points');
@@ -38,14 +36,21 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('user_roles', function (Blueprint $table) {
-            $table->string('id')->primary();
+        Schema::create('role_user', function (Blueprint $table) {
+            $table->id();
+            $table->string('role_id');
+            $table->foreignId('user_id');
+            $table->timestamps();
+        });
+
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
             $table->string('name');
             $table->text('description');
             $table->string('icon');
             $table->string('color'); // hex
             $table->integer('power'); // can be null for random roles - but 'admin' should be higher than 'tester' for instance
-            $table->boolean('is_visible'); // on profile/comment/forum/etc
+            $table->boolean('is_public'); // visible on profile/comment/forum/etc
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -55,13 +60,13 @@ return new class extends Migration
         });
 
         Schema::create('user_ip_logs', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->foreignId('user_id')->constrained();
             $table->ipAddress();
         });
 
         Schema::create('user_friendships', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->foreignId('sender_id')->nullable()->constrained(
                 table: 'users', indexName: 'sender_id'
             );
@@ -87,7 +92,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('user_roles');
+        Schema::dropIfExists('roles');
+        Schema::dropIfExists('user_role');
         Schema::dropIfExists('user_ip_logs');
         Schema::dropIfExists('user_friendsships');
         Schema::dropIfExists('password_reset_tokens');

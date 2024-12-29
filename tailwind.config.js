@@ -12,6 +12,12 @@ export default {
     ],
     theme: {
         extend: {
+            colors: {
+                'border' : {
+                    light: '#CCC',
+                    dark: '#333'
+                },
+            },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },

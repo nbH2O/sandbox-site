@@ -11,7 +11,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // inject livewire assets so that alpine.js can be
+        // used outside of livewire components
+        \Livewire\Livewire::forceAssetInjection();
     }
 
     /**

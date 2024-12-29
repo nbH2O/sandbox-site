@@ -11,7 +11,9 @@ class UserController extends Controller
     public function profile(string $name)
     {
         return view('user.profile', [
-            'user' => User::where('name', $name)->firstOrFail()
+            'user' => User::with(['roles' => function ($query) {
+                $query->limit(3); // Add condition to filter the relationship
+            }])->where('name', $name)->firstOrFail()
         ]);
     }
 }
