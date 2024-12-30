@@ -25,7 +25,7 @@
             @endif
         </div>
         <div class="w-full h-[2px] md:w-[2px] md:h-auto mt-3 md:mt-0 md:mx-3 bg-border-light dark:bg-border-dark"></div>
-        <div class="order-3 md:order-none w-full md:w-[calc(50%_-_calc(1px_+0.75rem))] flex flex-col gap-4">
+        <div class="[&>*]:h-1/3 order-3 md:order-none w-full md:w-[calc(50%_-_calc(1px_+0.75rem))] flex flex-col gap-4">
             <x-one-off.user.profile-snippet title="{{ __('Awards') }}">
 
             </x-one-off.user.profile-snippet>
@@ -34,7 +34,7 @@
             </x-one-off.user.profile-snippet>
             <x-one-off.user.profile-snippet title="{{ __('Friends') }}">
                 @foreach ($user->friends as $friend)
-                    <div class="flex flex-col justify-center relative">
+                    <div class="w-1/4 flex flex-col justify-center relative">
                         <a class="absolute top-0 left-0 h-full w-full" href="{{ '/@'.$friend->name }}">
                         </a>
                         <img class="bg-glow" src="{{ $user->avatar_hash ?? Vite::asset('resources/assets/default_renders/user.png') }}" />

@@ -1,3 +1,5 @@
 <x-layout.app>
-    <p>{{ request()->url() }} {{ route('members') }}</p>
+    <div class="max-w-full w-[40rem]">
+        @livewire('user.search')
+    </div>
 </x-layout.app>

@@ -4,7 +4,9 @@
 
 ])
 
-<div class="flex-1">
+<div {{ $attributes->merge([
+    
+]) }}>
     <div class="flex justify-between items-center">
         <h5>{{ $title }}</h5>
         <x-button size="sm" color="gray" href="{{ $href }}">

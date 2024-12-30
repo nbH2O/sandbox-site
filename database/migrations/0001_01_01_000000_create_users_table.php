@@ -27,7 +27,7 @@ return new class extends Migration
             $table->foreignId('primary_group_id')->nullable()->constrained(
                 table: 'groups', indexName: 'primary_group_id'
             );
-            $table->uuid('avatar_hash')->nullable();
+            $table->ulid('render_ulid');
 
             $table->rememberToken();
             $table->timestamp('born_at');
