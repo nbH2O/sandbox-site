@@ -74,6 +74,7 @@ return new class extends Migration
                 table: 'users', indexName: 'receiver_id'
             );
             $table->boolean('is_accepted');
+            $table->timestamps();
         });
 
         Schema::create('sessions', function (Blueprint $table) {

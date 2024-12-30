@@ -33,7 +33,26 @@
 
             </x-one-off.user.profile-snippet>
             <x-one-off.user.profile-snippet title="{{ __('Friends') }}">
-
+                @foreach ($user->friends as $friend)
+                    <div class="flex flex-col justify-center relative">
+                        <a class="absolute top-0 left-0 h-full w-full" href="{{ '/@'.$friend->name }}">
+                        </a>
+                        <img class="bg-glow" src="{{ $user->avatar_hash ?? Vite::asset('resources/assets/default_renders/user.png') }}" />
+                        <p class="flex gap-1 items-center justify-center">
+                            @if ($friend->primaryRole)
+                                <span>
+                                    @svg($friend->primaryRole->icon, [
+                                        'style' => 'color:'.$friend->primaryRole->color,
+                                        'class' => 'size-5'
+                                    ])
+                                </span>
+                            @endif
+                            <span>
+                                {{ $friend->name }}
+                            </span>
+                        </p>
+                    </div>
+                @endforeach
             </x-one-off.user.profile-snippet>
         </div>
         @if ($user->description)

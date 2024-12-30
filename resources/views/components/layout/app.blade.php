@@ -51,7 +51,7 @@
                                 <x-button color="blue" size="sm" outerClass="w-9">
                                     <x-ri-login-box-line class="size-5" />
                                 </x-button>
-                                <x-button color="primary" size="sm" class="flex gap-1.5 group">
+                                <x-button color="primary" size="sm" class="flex gap-1.5" outerClass="group">
                                     <x-ri-user-5-line class="-ms-1.5 size-5 group-hover:animate-bounce" />
                                     <span class="font-bold">{{ __('Join') }}</span>
                                 </x-button>

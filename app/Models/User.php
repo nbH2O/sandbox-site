@@ -8,11 +8,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Support\Collection as BaseCollection;
+use \Staudenmeir\LaravelMergedRelations\Eloquent\HasMergedRelationships;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasMergedRelationships;
 
     /**
      * The attributes that are mass assignable.
@@ -59,12 +63,56 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class)->orderBy('power', 'DESC')->where('is_public', true);
     }
-    public function primaryRole(): BelongsToMany
+    public function primaryRole(): HasOneThrough
     {
-        return $this->belongsToMany(Role::class)->orderBy('power', 'DESC')->where('is_public', true)->limit(1);
+        return $this->hasOneThrough(
+            Role::class,
+            UserRole::class,
+            'user_id', // r
+            'id', // ur
+            'id', // r
+            'role_id' // ur
+        )->orderBy('power', 'DESC')->where('is_public', true);
     }
     public function anyRoles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class)->orderBy('power', 'DESC');
     }
+
+
+
+
+    public function friendsTo(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_friendships', 'sender_id', 'receiver_id')
+            ->withPivot('is_accepted')
+            ->withTimestamps();
+    }
+    public function friendsFrom(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_friendships', 'receiver_id', 'sender_id')
+            ->withPivot('is_accepted')
+            ->withTimestamps();
+    }
+    public function pendingFriendsTo()
+    {
+        return $this->friendsTo()->wherePivot('is_accepted', false);
+    }
+    public function pendingFriendsFrom()
+    {
+        return $this->friendsFrom()->wherePivot('is_accepted', false);
+    }
+    public function acceptedFriendsTo()
+    {
+        return $this->friendsTo()->wherePivot('is_accepted', true);
+    }
+    public function acceptedFriendsFrom()
+    {
+        return $this->friendsFrom()->wherePivot('is_accepted', true);
+    }
+    public function friends(): \Staudenmeir\LaravelMergedRelations\Eloquent\Relations\MergedRelation
+    {
+        return $this->mergedRelationWithModel(User::class, 'friends_view');
+    }
+
 }
