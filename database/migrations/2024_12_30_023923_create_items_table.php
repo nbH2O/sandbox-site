@@ -16,26 +16,46 @@ return new class extends Migration
             $table->foreignId('creator_id')->constrained(
                 table: 'users', indexName: 'creator_id'
             );
-            $table->foreignId('type_id')->constrained();
+            $table->foreignId('type_id')->constrained(
+                table: 'item_types', indexName: 'creator_id'
+            );
 
             $table->string('name');
             $table->text('description');
+            $table->integer('price');
             $table->boolean('is_name_scrubbed');
             $table->boolean('is_description_scrubbed');
 
+            $table->boolean('is_onsale');
             $table->boolean('is_special');
             $table->integer('average_price')->nullable();
 
-            $table->integer('max_copies');
-            $table->timestamp('available_from');
-            $table->timestamp('available_to');
+            $table->integer('max_copies')->nullable();
+            $table->boolean('is_sold_out');
+            $table->timestamp('available_from')->nullable();
+            $table->timestamp('available_to')->nullable();
 
-            $table->ulid('render_ulid');
-            $table->ulid('file_ulid');
+            $table->ulid('render_ulid')->nullable();
+            $table->ulid('file_ulid')->nullable(); // awards/packs wont have this
 
             $table->boolean('is_public');
             $table->boolean('is_accepted');
             $table->timestamps();
+        });
+
+        Schema::create('item_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('is_public'); // if shows in shop
+        });
+
+        // pack or outfit type should be bundles
+        Schema::create('item_bundle_contents', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('bundle_id')->constrained(
+                table: 'items', indexName: 'bundle_id'
+            );
+            $table->foreignId('item_id')->constrained();
         });
     }
 
@@ -45,5 +65,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('items');
+        Schema::dropIfExists('item_types');
+        Schema::dropIfExists('item_bundle_contents');
     }
 };

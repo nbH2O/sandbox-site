@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Staudenmeir\LaravelMergedRelations\Facades\Schema as MSchema;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -36,13 +38,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('role_user', function (Blueprint $table) {
-            $table->id();
-            $table->string('role_id');
-            $table->foreignId('user_id');
-            $table->timestamps();
-        });
-
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -51,6 +46,25 @@ return new class extends Migration
             $table->string('color'); // hex
             $table->integer('power'); // can be null for random roles - but 'admin' should be higher than 'tester' for instance
             $table->boolean('is_public'); // visible on profile/comment/forum/etc
+        });
+        Schema::create('role_user', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('role_id');
+            $table->foreignId('user_id');
+            $table->timestamps();
+        });
+
+        Schema::create('user_inventories', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id');
+            $table->foreignId('item_id');
+
+            // these are only for specials obvisouslsly
+            $table->boolean('is_for_trade')->nullable(); // 1 wanna trade 0 no, null whatever
+            $table->integer('resale_price')->nullable();
+            $table->integer('serial');
+
+            $table->timestamps();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -76,6 +90,10 @@ return new class extends Migration
             $table->boolean('is_accepted');
             $table->timestamps();
         });
+        MSchema::createMergeView(
+            'friends_view',
+            [(new User())->acceptedFriendsTo(), (new User())->acceptedFriendsFrom()]
+        );
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
@@ -96,7 +114,8 @@ return new class extends Migration
         Schema::dropIfExists('roles');
         Schema::dropIfExists('user_role');
         Schema::dropIfExists('user_ip_logs');
-        Schema::dropIfExists('user_friendsships');
+        Schema::dropIfExists('user_friendships');
+        MSchema::dropView('friends_view');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }

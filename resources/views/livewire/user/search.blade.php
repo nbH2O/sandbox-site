@@ -13,7 +13,7 @@
             <div class="my-2 h-[2px] bg-border-light dark:bg-border-dark"></div>
             <div class="flex gap-4 relative">
                 <a class="absolute top-0 left-0 w-full h-full z-10" href="{{ '/@'.$user->name }}"></a>
-                <img class="size-40 bg-glow" src="yo" />
+                <img class="w-1/3 md:w-40 aspect-square bg-glow" src="yo" />
                 <div class="flex flex-col gap-2">
                     <h4 class="flex items-center gap-1">
                         @svg($user->primaryRole->icon, [

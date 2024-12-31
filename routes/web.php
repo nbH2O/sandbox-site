@@ -11,9 +11,9 @@ Route::get('/worlds',
     [UserController::class, 'index']
 )->name('worlds');
 
-Route::get('/market', 
-    [UserController::class, 'index']
-)->name('market');
+Route::get('/market', function () {
+    return view('item.index');
+})->name('market');
 
 
 Route::get('/members', function () {
