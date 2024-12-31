@@ -49,13 +49,27 @@ return new class extends Migration
             $table->boolean('is_public'); // if shows in shop
         });
 
-        // pack or outfit type should be bundles
+        // can theoretically be expanded to include outfits
+        // at a later time
         Schema::create('item_bundle_contents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('bundle_id')->constrained(
                 table: 'items', indexName: 'bundle_id'
             );
             $table->foreignId('item_id')->constrained();
+        });
+
+        Schema::create('inventories', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id');
+            $table->foreignId('item_id');
+
+            // these are only for specials obvisouslsly
+            $table->boolean('is_for_trade')->nullable(); // 1 wanna trade 0 no, null whatever
+            $table->integer('resale_price')->nullable();
+            $table->integer('serial');
+
+            $table->timestamps();
         });
     }
 
@@ -67,5 +81,6 @@ return new class extends Migration
         Schema::dropIfExists('items');
         Schema::dropIfExists('item_types');
         Schema::dropIfExists('item_bundle_contents');
+        Schema::dropIfExists('inventories');
     }
 };

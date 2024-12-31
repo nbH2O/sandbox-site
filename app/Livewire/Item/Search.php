@@ -3,7 +3,7 @@
 namespace App\Livewire\Item;
 
 use Livewire\Component;
-use App\Models\Item;
+use App\Models\Item\Item;
 
 class Search extends Component
 {

@@ -13,20 +13,26 @@
             <div class="my-2 h-[2px] bg-border-light dark:bg-border-dark"></div>
             <div class="flex gap-4 relative">
                 <a class="absolute top-0 left-0 w-full h-full z-10" href="{{ '/@'.$user->name }}"></a>
-                <img class="w-1/3 md:w-40 aspect-square bg-glow" src="yo" />
-                <div class="flex flex-col gap-2">
+                <img class="w-1/3 md:w-40 aspect-square bg-glow" src="{{ $user->getRender() }}" />
+                <div class="flex flex-col gap-2 min-h-full">
                     <h4 class="flex items-center gap-1">
-                        @svg($user->primaryRole->icon, [
-                            'style' => 'color:'.$user->primaryRole->color,
-                            'class' => 'size-6'
-                        ])
                         <span>
                             {{ $user->name }}
                         </span>
                     </h4>
-                    <p>
+                    <p class="grow">
                         {{ $user->description }}
                     </p>
+                    @if ($user->roles)
+                        <div class="flex gap-4 items-center justify-center mt-4">
+                            @foreach ($user->roles as $role)
+                                <x-one-off.user.role 
+                                    textClass="text-muted"
+                                    :role="$role"
+                                />
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
         @endforeach

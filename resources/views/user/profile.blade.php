@@ -3,7 +3,7 @@
         <div class="w-full md:w-[calc(50%_-_calc(1px_+0.75rem))] flex flex-col bg-glow">
             <h3 class="flex items-center gap-2"><x-ri-circle-fill class="{{ ($user->online_at > now()->subMinutes(4)) ? 'text-[#00A437]' : 'text-border-light dark:text-border-dark' }} size-2.5" />{{ $user->name }}</h3>
             <div class="flex flex-1 flex-col items-center gap-4">
-                <img class="w-3/4 aspect-square" src="{{ $user->avatar_hash ?? Vite::asset('resources/assets/default_renders/user.png') }}" />
+                <img class="w-3/4 aspect-square" src="{{ $user->getRender() }}" />
                 <div class="flex gap-4">
                     <x-button color="green">{{ __('Friend') }}</x-button>
                     <x-button color="blue">{{ __('Message') }}</x-button>
@@ -13,13 +13,9 @@
             @if ($user->roles)
                 <div class="flex gap-4 items-center justify-center mt-4">
                     @foreach ($user->roles as $role)
-                        <div class="flex gap-1 items-center justify-center">
-                            @svg($role->icon, [
-                                'style' => 'color: '.$role->color,
-                                'class' => 'h-7'
-                            ])
-                            <h6 class="uppercase">{{ $role->name }}</h6>
-                        </div>
+                        <x-one-off.user.role 
+                            :role="$role"
+                        />
                     @endforeach
                 </div>
             @endif

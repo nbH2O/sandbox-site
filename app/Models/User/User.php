@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\User;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -113,6 +113,19 @@ class User extends Authenticatable
     public function friends(): \Staudenmeir\LaravelMergedRelations\Eloquent\Relations\MergedRelation
     {
         return $this->mergedRelationWithModel(User::class, 'friends_view');
+    }
+
+    /**
+     * get the user's render url
+     *
+     * @return string
+     */
+    public function getRender(): string
+    {   
+        if ($this->render_ulid)
+            return config('site.file_url').'/'.$this->render_ulid.'.png';
+
+        return config('site.file_url').'/default/rendering.png';
     }
 
 }

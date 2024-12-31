@@ -28,7 +28,8 @@
         'green' => 'from-[#00ba42] to-[#007F22]',
         'yellow' => 'from-[#f5ba00] to-[#e99500]',
         'red' => 'from-[#fb3d3e] to-[#c90e16]',
-        'gray' => 'dark:from-[#43434a] dark:to-[#2f2f33] to-[#52525b] from-[#71717a]'
+        'gray' => 'dark:from-[#43434a] dark:to-[#2f2f33] to-[#52525b] from-[#71717a]',
+        'transparent' => ''
     ],
 
     'type' => 'solid',

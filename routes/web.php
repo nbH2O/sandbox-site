@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Item\ItemController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,6 +15,9 @@ Route::get('/worlds',
 Route::get('/market', function () {
     return view('item.index');
 })->name('market');
+Route::get('/${id}', 
+    [ItemController::class, 'profile']
+);
 
 
 Route::get('/members', function () {

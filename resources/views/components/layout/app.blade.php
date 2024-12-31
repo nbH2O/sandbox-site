@@ -36,7 +36,6 @@
                     </div>
                     
                         @if (Auth::user())
-                        @else
                             <div class="flex items-center gap-2">
                                 <x-one-off.header.badged-icon 
                                     icon="ri-chat-4-line"
@@ -48,6 +47,10 @@
                                     label="77"
                                     badgeColor="red"
                                 />
+                                <p>{{ Auth::user()->name }}</p>
+                            </div>
+                        @else
+                            <div class="flex items-center gap-2">
                                 <x-button color="blue" size="sm" outerClass="w-9">
                                     <x-ri-login-box-line class="size-5" />
                                 </x-button>

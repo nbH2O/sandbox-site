@@ -17,7 +17,10 @@ export default {
                     light: '#CCC',
                     dark: '#333'
                 },
-                'primary': '#9f47f1'
+                'primary': '#af63fa',
+                'blue': '#00a9fe',
+                'red': '#f43638',
+                'yellow': '#efa700'
             },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],

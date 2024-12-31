@@ -3,7 +3,7 @@
     'title' => null,
     'active' => false,
     'activeVals' => [
-        true => 'border-b-[#00a9fe]',
+        true => 'border-primary',
         false => 'border-border-light dark:border-border-dark'
     ]
 ])
