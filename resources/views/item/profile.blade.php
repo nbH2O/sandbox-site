@@ -96,5 +96,41 @@
                 <p>{{ $item->description }}</p>
             </div>
         @endif
+        <div class="mt-2" x-data="{ tab: 'comments' }">
+            <x-tab-list>
+                <x-tab 
+                    x-on:click="tab = 'comments'"
+                    x-bind:data-active="tab == 'comments'"
+                    icon="ri-chat-poll-fill"
+                    title="{{ __('Comments') }}"
+                />
+                <x-tab
+                    x-on:click="tab = 'owners'"
+                    x-bind:data-active="tab == 'owners'"
+                    icon="ri-briefcase-4-fill"
+                    title="{{ __('Owners') }}"
+                />
+                @if ($item->cheapestReseller)
+                    <x-tab
+                        x-on:click="tab = 'resellers'"
+                        x-bind:data-active="tab == 'resellers'"
+                        icon="ri-list-check-2"
+                        title="{{ __('Resellers') }}"
+                        data-disabled
+                    />
+                @else
+                    <x-tab
+                        icon="ri-list-check-2"
+                        title="{{ __('Resellers') }}"
+                        data-disabled
+                    />
+                @endif
+            </x-tab-list>
+            <div x-show="tab == 'comments'">
+                @livewire('comments', [
+                    'model' => $item
+                ])
+            </div>
+        </div>
     </div>
 </x-layout.app>

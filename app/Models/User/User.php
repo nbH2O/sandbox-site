@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Collection as BaseCollection;
 use \Staudenmeir\LaravelMergedRelations\Eloquent\HasMergedRelationships;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+
+use App\Models\Comment;
 
 class User extends Authenticatable
 {
@@ -44,6 +47,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes'
     ];
 
     /**
@@ -127,5 +132,11 @@ class User extends Authenticatable
 
         return config('site.file_url').'/default/rendering.png';
     }
+
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
 
 }

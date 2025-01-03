@@ -33,7 +33,7 @@
                     <div class="w-1/4 flex flex-col justify-center relative">
                         <a class="absolute top-0 left-0 h-full w-full" href="{{ '/@'.$friend->name }}">
                         </a>
-                        <img class="bg-glow" src="{{ $user->avatar_hash ?? Vite::asset('resources/assets/default_renders/user.png') }}" />
+                        <img class="bg-glow" src="{{ $friend->getRender() }}" />
                         <p class="flex gap-1 items-center justify-center">
                             @if ($friend->primaryRole)
                                 <span>

@@ -3,6 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Item\ItemController;
+use App\Http\Controllers\RenderController;
+
+Route::post(config('site.renderer_callback'), 
+    [RenderController::class, 'callback']
+);
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,3 +32,16 @@ Route::get('/members', function () {
 Route::get('/@{name}', 
     [UserController::class, 'profile']
 );
+
+Route::prefix('my')->group(function () {
+    Route::get('/avatar', function () {
+        return view('user.edit-avatar');
+    });
+});
+
+Route::prefix('auth')->group(function () {
+    Route::get('/login', function () {
+        return view('auth.login');
+    });
+})->middleware('guest');
+

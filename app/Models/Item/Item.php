@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 use App\Models\User\User;
+use App\Models\Comment;
 
 class Item extends Model
 {
@@ -23,6 +25,12 @@ class Item extends Model
             'available_to' => 'datetime',
         ];
     }
+
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
 
     public function type(): BelongsTo
     {
