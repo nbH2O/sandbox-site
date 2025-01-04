@@ -23,7 +23,11 @@ class UserChecks
         if ($user = Auth::user()) {
             // ban
             if ($user->isBanned()) {
-                return redirect(route('banned'));
+                if ($request->route()->getName() == 'banned') {
+                    return $next($request);
+                } else {
+                    return redirect(route('banned'));
+                }
             }
             // daily reward
             if($user->rewarded_at <= now()->subHours(24)) {

@@ -13,6 +13,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/banned', function () {
+    return view('user.banned');
+})->name('banned');
+
 Route::get('/worlds', 
     [UserController::class, 'index']
 )->name('worlds');
