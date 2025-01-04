@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User\User;
 
+use Carbon\Carbon;
+
 class UserChecks
 {
     /**
@@ -25,14 +27,25 @@ class UserChecks
             }
             // daily reward
             if($user->rewarded_at <= now()->subHours(24)) {
-                if ($user->hasVerifiedEmail()) {
-                    $user->increment('currency', 2);
-                    $user->rewarded_at = now();
-                    $user->save();
-                    $request->session()->flash('userRewarded', true);
-                } else {
-                    $request->session()->flash('userRewarded', false);
+                $do = true;
+                if (session('userRewardFailed') && !$user->hasVerifiedEmail()) {
+                    if (Carbon::parse(session('userRewardFailed'))->addHours(12)->isFuture() ) {
+                        $do = false;
+                    }
                 }
+
+                if ($do == true) {
+                    if ($user->hasVerifiedEmail()) {
+                        $user->increment('currency', 2);
+                        $user->rewarded_at = now();
+                        $user->save();
+                        $request->session()->flash('userRewarded', true);
+                    } else {
+    
+                        $request->session()->flash('userRewarded', false);
+                    }
+                }
+
             }
         }
 

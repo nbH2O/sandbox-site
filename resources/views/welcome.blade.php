@@ -1,1 +1,3 @@
-<p>j</p>
+<x-layout.app>
+
+</x-layout.app>
