@@ -14,7 +14,7 @@
         @apply bg-[#19191c];
     }
     .text-body {
-        @apply text-[#222226] dark:text-[#ededf1];
+        @apply text-[#3c3c3c] dark:text-[#cbcbd3];
     }
     .text-light {
         @apply text-[#222226];
@@ -23,7 +23,7 @@
         @apply text-[#ededf1];
     }
     .text-muted {
-        @apply text-[#3c3c3c] dark:text-[#cbcbd3];
+        @apply text-[#4f4f4f] dark:text-[#b5b5c0];
     }
     /* darker than muted, lighter than border */
     .text-muted-2 {
@@ -51,5 +51,9 @@
     }
     h1, .text-h1, h2, .text-h2, h3, .text-h3, h4, .text-h4, h5, .text-h5, h6, .text-h6 {
         @apply font-bold;
+        @apply text-[#222226] dark:text-[#ededf1];
+    }
+    .font-bold:not(.text-muted) {
+        @apply text-[#222226] dark:text-[#ededf1];
     }
 }

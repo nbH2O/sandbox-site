@@ -62,8 +62,18 @@
                 {{ $slot }}
             </main>
         </div>
-        <footer class="bg-[#19191c] h-56">
-            hi
+        <footer class="px-4 bg-neutral-950/10 dark:bg-black/20 h-44 flex justify-center">
+            <div class="max-w-full w-[70rem] flex items-center">
+                <div class="basis-3/12">
+                    <span class="text-muted">
+                        &copy;
+                        2023 &mdash; {{ date('Y') }}
+                    </span>
+                </div>
+                <div class="flex gap-4">
+                    thej
+                </div>
+            </div>
         </footer>
     </body>
 </html>

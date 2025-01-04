@@ -18,4 +18,21 @@ class UserController extends Controller
             }])->where('id', $id)->firstOrFail()
         ]);
     }
+
+    public function banned()
+    {
+        $ban = Auth()->user()
+                ->bans()
+                ->notExpired()
+                ->orderBy('expired_at', 'DESC')
+                ->get();
+    
+        if (isset($ban[0])) {
+            return view('user.banned', [
+                'ban' => $ban[0]
+            ]);
+        } else {
+            return redirect('/');
+        }
+    }
 }

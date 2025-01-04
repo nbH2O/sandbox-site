@@ -1,17 +1,7 @@
-@php
-    // yeah ik this should be a controller
-    $ban = Auth::user()
-                ->bans()
-                ->notExpired()
-                ->orderBy('expired_at', 'DESC')
-                ->get()
-                [0];
-@endphp
-
 <x-layout.app>
     <div class="max-w-full w-[50rem]">
         <h3 class="mb-1">{{ __("Your account is suspended") }}</h3>
-        <p class="text-muted mb-2">
+        <p class="mb-2">
             {{ __('We have found that your account is in violation of our Terms of Service.') }}
             {{ __('Further violations will result in a termination of your account.') }}
         </p>
@@ -27,7 +17,7 @@
                 {{ $ban->comment }}
             </p>
         </x-card>
-        <p class="text-muted mt-2">
+        <p class="mt-2">
             {{ __('Please be sure to read the Terms of Service when your suspension expires.') }}
             <br />
             {{ __('If you would like to appeal, visit the') }}

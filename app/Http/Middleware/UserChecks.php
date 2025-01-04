@@ -23,7 +23,10 @@ class UserChecks
         if ($user = Auth::user()) {
             // ban
             if ($user->isBanned()) {
-                if ($request->route()->getName() == 'banned') {
+                if ($request->route()->getName() == 'banned' 
+                    // for appealz
+                    || $request->route()->getName() == 'contact'
+                ) {
                     return $next($request);
                 } else {
                     return redirect(route('banned'));
