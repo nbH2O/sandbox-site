@@ -84,7 +84,15 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class)->orderBy('power', 'DESC');
     }
 
+    public function hasPanelAccess(): bool
+    {
+        if (!$res = $this->anyRoles()->first())
+            return false;
+        if ($res->power < config('site.panel_access_min_power'))
+            return false;
 
+        return true;
+    }
 
 
     public function friendsTo(): BelongsToMany

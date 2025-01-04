@@ -4,9 +4,12 @@ namespace App\Livewire\User;
 
 use Livewire\Component;
 use App\Models\User\User;
+use Livewire\WithPagination;
 
 class Search extends Component
 {
+    use WithPagination;
+
     public $query = null;
 
     public function render()
@@ -14,7 +17,9 @@ class Search extends Component
         return view('livewire.user.search', [
             'users' => User::with(['roles' => function ($query) {
                 $query->limit(3); // Add condition to filter the relationship
-            }])->where('name', 'LIKE', '%'.$this->query.'%')->paginate(12),
+            }])->where('name', 'LIKE', '%'.$this->query.'%')
+            ->orderBy('online_at', 'DESC')
+            ->simplePaginate(12),
         ]);
     }
 }

@@ -4,11 +4,17 @@
             <h3 class="flex items-center gap-2"><x-ri-circle-fill class="{{ ($user->online_at > now()->subMinutes(4)) ? 'text-[#00A437]' : 'text-border-light dark:text-border-dark' }} size-2.5" />{{ $user->name }}</h3>
             <div class="flex flex-1 flex-col items-center gap-4">
                 <img class="w-3/4 aspect-square" src="{{ $user->getRender() }}" />
-                <div class="flex gap-4">
-                    <x-button color="green">{{ __('Friend') }}</x-button>
-                    <x-button color="blue">{{ __('Message') }}</x-button>
-                    <x-button color="yellow">{{ __('Trade') }}</x-button>
-                </div>
+                @if (Auth::user())
+                    @if ($user->id != Auth::user()->id)
+                        <div class="flex gap-3">
+                            @livewire('user.friend-button', [
+                                'user' => $user
+                            ])
+                            <x-button color="blue">@svg('ri-discuss-fill', ['class' => 'size-5'])</x-button>
+                            <x-button color="yellow">@svg('ri-swap-2-fill', ['class' => 'size-5'])</x-button>
+                        </div>
+                    @endif
+                @endif
             </div>
             @if ($user->roles)
                 <div class="flex gap-4 items-center justify-center mt-4">
@@ -57,5 +63,32 @@
                 <p>{{ $user->description }}</p>
             </div>
         @endif
+        <div class="w-full mt-2" x-data="{ tab: 'comments' }">
+            <x-tab-list>
+                <x-tab 
+                    x-on:click="tab = 'comments'"
+                    x-bind:data-active="tab == 'comments'"
+                    icon="ri-chat-poll-fill"
+                    title="{{ __('Wall') }}"
+                />
+                <x-tab 
+                    x-on:click="tab = 'inventory'"
+                    x-bind:data-active="tab == 'inventory'"
+                    icon="ri-briefcase-4-fill"
+                    title="{{ __('Inventory') }}"
+                />
+                <x-tab 
+                    x-on:click="tab = 'stats'"
+                    x-bind:data-active="tab == 'stats'"
+                    icon="ri-line-chart-fill"
+                    title="{{ __('Stats') }}"
+                />
+            </x-tab-list>
+            <div x-show="tab == 'comments'">
+                @livewire('comments', [
+                    'model' => $user
+                ])
+            </div>
+        </div>
     </div>
 </x-layout.app>

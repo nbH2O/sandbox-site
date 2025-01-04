@@ -116,7 +116,6 @@
                         x-bind:data-active="tab == 'resellers'"
                         icon="ri-list-check-2"
                         title="{{ __('Resellers') }}"
-                        data-disabled
                     />
                 @else
                     <x-tab

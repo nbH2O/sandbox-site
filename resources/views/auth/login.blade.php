@@ -1,6 +1,6 @@
 <x-layout.app>
-    <div class="flex justify-center max-w-full w-[20rem]">
-        <div class="flex-1 flex flex-col gap-2">
+    <div class="flex justify-center max-w-full w-[21rem]">
+        <div class="flex-1 flex flex-col gap-4">
             <h2>{{ __('Log in') }}</h2>
             @livewire('auth.login')
         </div>

@@ -38,16 +38,14 @@
         'outline' => 'bg-body text-body'
     ],
 
-    'busy' => false
+
 ])
-<a {!! $attributes !!} class="{{ $outerClass }} {{ $colorVals[$color].' '.$sizeVals[$size]['outer'] }} cursor-pointer select-none text-dark rounded-sm bg-gradient-to-b p-[4px]">
+<a {!! $attributes !!} class="{{ $outerClass }} {{ $colorVals[$color].' '.$sizeVals[$size]['outer'] }} cursor-pointer select-none text-dark rounded-sm bg-gradient-to-b p-[4px] group">
     <span 
         class='w-full h-full relative flex justify-center items-center rounded-sm {{ $typeVals[$type] }} {{ $sizeVals[$size]['inner'] }}'
     >
-        @if ($busy == true || $busy == 'true')
-            <x-ri-loader-5-fill class="drop-shadow absolute m-auto animate-spin {{ $sizeVals[$size]['busy'] }}" />
-        @endif
-        <span class="{{ $class }} drop-shadow uppercase flex items-center {{ $busy ? 'opacity-0' : null }}">
+        <x-ri-loader-5-fill class="hidden group-data-[busy]:block drop-shadow absolute m-auto animate-spin {{ $sizeVals[$size]['busy'] }}" />
+        <span class="{{ $class }} group-data-[busy]:opacity-0 drop-shadow uppercase flex items-center">
             {{ $slot }}
         </span>
     </span>

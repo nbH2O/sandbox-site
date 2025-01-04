@@ -37,11 +37,16 @@ Route::prefix('my')->group(function () {
     Route::get('/avatar', function () {
         return view('user.edit-avatar');
     });
-});
+})->middleware('auth');
 
 Route::prefix('auth')->group(function () {
     Route::get('/login', function () {
         return view('auth.login');
-    });
+    })->name('login');
 })->middleware('guest');
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/report', function () {
+        return view('welcome');
+    })->name('report');
+});
