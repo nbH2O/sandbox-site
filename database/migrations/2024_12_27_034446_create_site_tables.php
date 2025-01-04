@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('feature_statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            // route name
+            $table->string('name')->unique();
             $table->boolean('is_enabled');
             $table->text('message')->nullable();
         });
 
         Schema::create('site_messages', function (Blueprint $table) {
             $table->id();
-            $table->string('icon');
+            $table->string('icon')->nullable();
             $table->string('color');
             $table->string('type');
             $table->text('message');
@@ -30,7 +31,7 @@ return new class extends Migration
             $table->id()->unique(); // always ensure is 1 so table is constrained to single row
             $table->text('message')->nullable();
             $table->boolean('is_bypassable');
-            $table->integer('bypass_minimum_power'); // minimum role power to bypass the maintenance - if bypassable
+            $table->integer('min_power')->nullable(); // minimum role power to bypass the maintenance - if bypassable
         });
     }
 

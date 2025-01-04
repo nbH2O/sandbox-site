@@ -5,6 +5,8 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
 use App\Http\Middleware\UserChecks;
+use App\Http\Middleware\FeatureStatus;
+use App\Http\Middleware\SoftMaintenance;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,7 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->web(append: [UserChecks::class]);
+        // soft maintenance takes priority
+        $middleware->web(append: [SoftMaintenance::class, UserChecks::class, FeatureStatus::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

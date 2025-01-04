@@ -9,7 +9,7 @@
 
 <div class="overflow-visible" x-data="{ open: {{ isset($trigger) ? 'false' : 'true' }} }">
     @if (isset($trigger))
-        <div class="cursor-pointer" x-on:click="open = !open">
+        <div class="cursor-pointer flex" x-on:click="open = !open">
             {{ $trigger }}
         </div>
     @endif

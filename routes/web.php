@@ -5,6 +5,8 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Item\ItemController;
 use App\Http\Controllers\RenderController;
 
+use App\Http\Middleware\MinPower;
+
 Route::post(config('site.renderer_callback'), 
     [RenderController::class, 'callback']
 );
@@ -31,7 +33,7 @@ Route::get('/${id}',
 
 Route::get('/members', function () {
     return view('user.index');
-})->name('members');
+})->middleware(MinPower::class.':200')->name('members');
 
 Route::get('/@{id}', 
     [UserController::class, 'profile']
