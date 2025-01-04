@@ -21,14 +21,14 @@
                 <div class="flex flex-1 flex-col gap-1">
                     <div class="flex-1">
                         <div class="flex justify-between mb-1 items-center">
-                            <a href="{{ '/@'.$comment->user->name }}" class="text-h6 flex gap-2 items-center">
+                            <a href="{{ $comment->user->getLink() }}" class="text-h6 flex gap-2 items-center">
                                 @if ($comment->user->primaryRole)
                                     @svg($comment->user->primaryRole->icon, [
                                         'style' => 'color:'.$comment->user->primaryRole->color,
                                         'class' => 'size-6'
                                     ])
                                 @endif
-                                {{ $comment->user->name }}
+                                {{ $comment->user->getName() }}
                             </a>
                             <x-dropdown align="right">
                                 <x-slot name="trigger">

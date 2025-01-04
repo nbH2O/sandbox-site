@@ -14,12 +14,14 @@ use Illuminate\Support\Collection as BaseCollection;
 use \Staudenmeir\LaravelMergedRelations\Eloquent\HasMergedRelationships;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+use Mchev\Banhammer\Traits\Bannable;
+
 use App\Models\Comment;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasMergedRelationships;
+    use HasFactory, Notifiable, HasMergedRelationships, Bannable;
 
     /**
      * The attributes that are mass assignable.
@@ -62,6 +64,31 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * is scurbed
+     * 
+     * @return string
+     */
+    public function getName(): string
+    {
+        if (!$this->is_name_scrubbed)
+            return $this->name;
+
+        return '[scrubbed'.$this->id.']';
+    }
+    public function getDescription(): string
+    {
+        if (!$this->is_description_scrubbed)
+            return $this->description;
+
+        return '[scrubbed'.$this->id.']';
+    }
+
+    public function getLink(): string
+    {
+        return url('/@'.$this->id);
     }
 
     public function roles(): BelongsToMany

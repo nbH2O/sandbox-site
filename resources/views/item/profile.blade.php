@@ -5,7 +5,7 @@
                 <img src="{{ $item->getRender() }}" />
             </x-card>
             <div class="basis-8/12 flex flex-col">
-                <h3 class="mb-2.5">{{ $item->name }}</h3>
+                <h3 class="mb-2.5">{{ $item->getName() }}</h3>
                 <div class="flex grow">
                     <div class="basis-7/12 flex flex-col gap-2">
                         <div class="flex flex-col mb-2.5">
@@ -81,7 +81,7 @@
                                     'class' => 'text-primary size-5'
                                 ])
                             @endif
-                            {{ $item->creator->name }}
+                            {{ $item->creator->getName() }}
                         </p>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
         @if ($item->description)
             <div class="mt-3.5">
                 <h4 class="mb-1">{{ __('Description') }}</h4>
-                <p>{{ $item->description }}</p>
+                <p>{{ $item->getDescription() }}</p>
             </div>
         @endif
         <div class="mt-2" x-data="{ tab: 'comments' }">

@@ -26,6 +26,26 @@ class Item extends Model
         ];
     }
 
+    /**
+     * is scurbed
+     * 
+     * @return string
+     */
+    public function getName(): string
+    {
+        if (!$this->is_name_scrubbed)
+            return $this->name;
+
+        return '[scrubbed'.$this->id.']';
+    }
+    public function getDescription(): string
+    {
+        if (!$this->is_description_scrubbed)
+            return $this->description;
+
+        return '[scrubbed'.$this->id.']';
+    }
+
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');

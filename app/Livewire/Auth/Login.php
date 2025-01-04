@@ -25,6 +25,7 @@ class Login extends Component
         ];
 
         if(Auth::attempt($credentials, $this->remember)) {
+            session()->regenerate();
             return $this->redirect('/');
         } else {
             $this->addError('general', __('Incorrect username or password'));

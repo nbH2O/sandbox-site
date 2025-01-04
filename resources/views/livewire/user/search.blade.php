@@ -18,12 +18,12 @@
             @foreach ($users as $user)
                 <div class="my-2 h-[2px] bg-border-light dark:bg-border-dark"></div>
                 <div class="flex gap-4 relative">
-                    <a class="absolute top-0 left-0 w-full h-full z-10" href="{{ '/@'.$user->name }}"></a>
+                    <a class="absolute top-0 left-0 w-full h-full z-10" href="{{ $user->getLink() }}"></a>
                     <img class="w-1/3 md:w-40 aspect-square bg-glow" src="{{ $user->getRender() }}" />
                     <div class="flex flex-col gap-2 min-h-full">
-                        <h4 class="flex items-center gap-2"><x-ri-circle-fill class="{{ ($user->online_at > now()->subMinutes(4)) ? 'text-[#00A437]' : 'text-border-light dark:text-border-dark' }} size-2.5" />{{ $user->name }}</h4>
+                        <h4 class="flex items-center gap-2"><x-ri-circle-fill class="{{ ($user->online_at > now()->subMinutes(4)) ? 'text-[#00A437]' : 'text-border-light dark:text-border-dark' }} size-2.5" />{{ $user->getName() }}</h4>
                         <p class="grow">
-                            {{ $user->description }}
+                            {{ $user->getDescription() }}
                         </p>
                         @if ($user->roles)
                             <div class="flex gap-4 items-center justify-center mt-4">

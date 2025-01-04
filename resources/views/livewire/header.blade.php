@@ -44,7 +44,7 @@
                     <x-dropdown class="ms-2">
                         <x-slot name="trigger">
                             <div class="flex items-center gap-1.5">
-                                <p>{{ Auth::user()->name }}</p>
+                                <p>{{ Auth::user()->getName() }}</p>
                                 @svg('ri-arrow-down-s-line', [
                                     'class' => 'size-5'
                                 ])
@@ -54,7 +54,7 @@
                         <x-dropdown-item 
                             icon="ri-user-5-fill"
                             label="{{ __('Profile') }}"
-                            href="{{ '/@'.Auth::user()->name }}"
+                            href="{{ Auth::user()->getLink() }}"
                         />
                         <x-dropdown-item 
                             class="text-yellow"

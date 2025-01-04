@@ -1,7 +1,7 @@
 <x-layout.app>
     <div class="max-w-full w-[50rem] flex-wrap flex flex-col md:flex-row">
         <div class="w-full md:w-[calc(50%_-_calc(1px_+0.75rem))] flex flex-col bg-glow">
-            <h3 class="flex items-center gap-2"><x-ri-circle-fill class="{{ ($user->online_at > now()->subMinutes(4)) ? 'text-[#00A437]' : 'text-border-light dark:text-border-dark' }} size-2.5" />{{ $user->name }}</h3>
+            <h3 class="flex items-center gap-2"><x-ri-circle-fill class="{{ ($user->online_at > now()->subMinutes(4)) ? 'text-[#00A437]' : 'text-border-light dark:text-border-dark' }} size-2.5" />{{ $user->getName() }}</h3>
             <div class="flex flex-1 flex-col items-center gap-4">
                 <img class="w-3/4 aspect-square" src="{{ $user->getRender() }}" />
                 @if (Auth::user())
@@ -37,7 +37,7 @@
             <x-one-off.user.profile-snippet title="{{ __('Friends') }}">
                 @foreach ($user->friends as $friend)
                     <div class="w-1/4 flex flex-col justify-center relative">
-                        <a class="absolute top-0 left-0 h-full w-full" href="{{ '/@'.$friend->name }}">
+                        <a class="absolute top-0 left-0 h-full w-full" href="{{ $friend->getLink() }}">
                         </a>
                         <img class="bg-glow" src="{{ $friend->getRender() }}" />
                         <p class="flex gap-1 items-center justify-center">
@@ -60,7 +60,7 @@
         @if ($user->description)
             <div class="w-full py-4">
                 <h4 class="mb-1">{{ __('Description') }}</h4>
-                <p>{{ $user->description }}</p>
+                <p>{{ $user->getDescription() }}</p>
             </div>
         @endif
         <div class="w-full mt-2" x-data="{ tab: 'comments' }">

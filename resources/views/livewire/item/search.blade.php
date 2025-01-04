@@ -65,7 +65,7 @@
                                 <img class="w-full bg-glow aspect-square" src="{{ $item->getRender() }}" />
                                 <a class="absolute top-0 left-0 w-full h-full" href="{{ '/$'.$item->id }}"></a>
                             </x-card>
-                            <a class="text-h5" href="{{ '/$'.$item->id }}">{{ $item->name }}</a>
+                            <a class="text-h5" href="{{ '/$'.$item->id }}">{{ $item->getName() }}</a>
                             <p class="flex gap-1 text-muted -mt-1 text-sm items-center">
                                 by 
                                 @if ($item->creator->id === config('site.main_account_id'))
@@ -73,8 +73,8 @@
                                             'class' => 'text-primary size-4'
                                         ])
                                     @endif
-                                <a class="z-50" href="{{ '/@'.$item->creator->name }}">
-                                    {{ $item->creator->name }}
+                                <a class="z-50" href="{{ $item->creator->getLink() }}">
+                                    {{ $item->creator->getName() }}
                                 </a>
                             </p>
                             @if ($item->isSoldOut() && !$item->isTradeable())
@@ -99,7 +99,7 @@
                                             ])
                                             {{ $item->cheapestReseller->resale_price }}
                                         </span>
-                                        <span class="text-muted text-sm">from <a class="z-50" href="{{ '/@'.$item->cheapestReseller->user->name }}">{{ $item->cheapestReseller->user->name }}</a></span>
+                                        <span class="text-muted text-sm">from <a class="z-50" href="{{ $item->cheapestReseller->user->getLink() }}">{{ $item->cheapestReseller->user->getName() }}</a></span>
                                     </p>
                                 @else
                                     <p class="font-bold uppercase text-muted">{{ __('No Resellers') }}</p>
