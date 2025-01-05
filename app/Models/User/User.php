@@ -78,7 +78,7 @@ class User extends Authenticatable
 
         return '[scrubbed'.$this->id.']';
     }
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         if (!$this->is_description_scrubbed)
             return $this->description;
@@ -89,6 +89,11 @@ class User extends Authenticatable
     public function getLink(): string
     {
         return url('/@'.$this->id);
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class)->orderBy('id', 'DESC');
     }
 
     public function roles(): BelongsToMany

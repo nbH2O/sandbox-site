@@ -33,7 +33,7 @@ Route::get('/${id}',
 
 Route::get('/members', function () {
     return view('user.index');
-})->middleware(MinPower::class.':200')->name('members');
+})->name('members');
 
 Route::get('/@{id}', 
     [UserController::class, 'profile']
@@ -42,7 +42,10 @@ Route::get('/@{id}',
 Route::middleware('auth')->prefix('my')->group(function () {
     Route::get('/avatar', function () {
         return view('user.edit-avatar');
-    });
+    })->name('avatar');
+    Route::get('/notifications', function () {
+        return view('user.edit-avatar');
+    })->name('notifications');
 });
 
 Route::middleware('guest')->prefix('auth')->group(function () {

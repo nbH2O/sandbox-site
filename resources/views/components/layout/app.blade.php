@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="{{ Auth::user() ? (Auth::user()->theme == 1 ? 'light' : 'dark' ) : 'dark' }}">
     <head>
         <meta charset="UTF-8" />
         <link rel="preconnect" href="https://fonts.bunny.net">

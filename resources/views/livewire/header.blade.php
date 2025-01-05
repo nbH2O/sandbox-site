@@ -1,4 +1,4 @@
-<header class="z-[1000] text-[#ededf1] z-10 bg-header h-12 shadow px-2 overflow-visible flex">
+<header class="dark z-[1000] text-[#ededf1] z-10 bg-header h-12 shadow px-2 overflow-visible flex">
     <div class="flex justify-between max-w-full w-[70rem] mx-auto">
         <div class="flex">
             <img class="max-h-full p-2.5 me-4" src="https://web.archive.org/web/20230905100829im_/https://blog.brkcdn.com/2023/04/full_final_trademark_o--1-.png" />
@@ -36,11 +36,50 @@
                         label="hi"
                         badgeColor="red"
                     />
-                    <x-one-off.header.badged-icon 
-                        icon="ri-notification-2-line"
-                        label="77"
-                        badgeColor="red"
-                    />
+                    <x-dropdown align="center" x-init="$wire.getNotifications()">
+                        @php
+                            $notiCount = null;
+
+                            if ($notifications) {
+                                $notiCount = $notifications->count();
+                            } else if (session('previousNotificationCount')) {
+                                $notiCount = session('previousNotificationCount');
+                            }
+
+                            if ($notiCount > 9) {
+                                $notiCount = '9+';
+                            }
+                        @endphp
+
+                        <x-slot name="trigger">
+                            <x-one-off.header.badged-icon 
+                                icon="ri-notification-2-line"
+                                label="{{ $notiCount }}"
+                                badgeColor="red"
+                            />
+                        </x-slot>
+
+                        <div class="flex flex-col w-96">
+                            <div class="flex justify-between py-1 px-3 gap-3 items-center">
+                                <h6>{{ __('Notifications') }}</h6>
+                                <div class="flex gap-2">
+                                    <x-button size="sm" color="gray" href="{{ route('notifications') }}">
+                                        {{ __('See all') }}
+                                    </x-button>
+                                    <x-button size="sm">
+                                        @svg('ri-check-double-fill', [
+                                            'class' => 'h-6 w-5'
+                                        ])
+                                    </x-button>
+                                </div>
+                            </div>
+                            @if ($notifications)
+                                @foreach($notifications as $noti)
+                                    {{ $noti->id }}
+                                @endforeach
+                            @endif
+                        </div>
+                    </x-dropdown>
                     <x-dropdown class="ms-2">
                         <x-slot name="trigger">
                             <div class="flex items-center gap-1.5">
@@ -51,10 +90,16 @@
                             </div>
                         </x-slot>
 
-                        <x-dropdown-item 
-                            icon="ri-user-5-fill"
+                        <x-dropdown-item
+                            icon="ri-profile-fill"
                             label="{{ __('Profile') }}"
                             href="{{ Auth::user()->getLink() }}"
+                        />
+                        <x-dropdown-item
+                            class="text-primary"
+                            icon="ri-user-5-fill"
+                            label="{{ __('Avatar') }}"
+                            href="{{ route('avatar') }}"
                         />
                         <x-dropdown-item 
                             class="text-yellow"
@@ -73,9 +118,21 @@
                 </div>
             @else
                 <div class="flex items-center gap-2">
-                    <x-button href="{{ route('login') }}" color="blue" size="sm" outerClass="w-9">
-                        <x-ri-login-box-line class="size-5" />
-                    </x-button>
+                    <x-dropdown :innerClick="false" align="center">
+                        <x-slot name="trigger">
+                            <x-button color="blue" size="sm" outerClass="w-9">
+                                <x-ri-login-box-line class="size-5" />
+                            </x-button>
+                        </x-slot>
+
+                        <div class="p-2 w-60">
+                            @livewire('auth.login', [
+                                'size' => 'md',
+                                'redirect' => false
+                            ])
+                        </div>
+                    </x-dropdown>
+                    
                     <x-button color="primary" size="sm" class="flex gap-1.5" outerClass="group">
                         <x-ri-user-5-line class="-ms-1.5 size-5 group-hover:animate-bounce" />
                         <span class="font-bold">{{ __('Join') }}</span>

@@ -38,7 +38,7 @@ class Item extends Model
 
         return '[scrubbed'.$this->id.']';
     }
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         if (!$this->is_description_scrubbed)
             return $this->description;
