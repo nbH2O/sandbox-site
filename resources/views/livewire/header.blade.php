@@ -37,6 +37,7 @@
                         badgeColor="red"
                     />
                     <x-one-off.header.bi-dropdown
+                        function="$wire.getNotifications()"
                         icon="ri-notification-2-line"
                         title="{{ __('Notifications') }}"
                         pings="{{ $notifications ? $notifications->count() : session('previousNotificationCount') }}"

@@ -1,25 +1,29 @@
 @props([
     'title' => null,
     'pings' => null,
-    'icon' => null
+    'icon' => null,
+    'function' => null
 ])
 
-<x-dropdown align="center" :yAdjust="false" x-init="$wire.getNotifications()">
-    @php
+@php
         $notiCount = null;
 
         if ($pings > 9) {
             $notiCount = '9+';
         } else {
-            $noticount = $pings;
+            $notiCount = $pings;
         }
-    @endphp
+@endphp
+
+<x-dropdown align="center" :yAdjust="false" {{ $attributes }}>
+    
 
     <x-slot name="trigger">
         <x-one-off.header.badged-icon 
             icon="{{ $icon }}"
             label="{{ $notiCount }}"
             badgeColor="red"
+            x-init="{{ $function }}"
         />
     </x-slot>
 
