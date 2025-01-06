@@ -36,50 +36,31 @@
                         label="hi"
                         badgeColor="red"
                     />
-                    <x-dropdown align="center" x-init="$wire.getNotifications()">
-                        @php
-                            $notiCount = null;
-
-                            if ($notifications) {
-                                $notiCount = $notifications->count();
-                            } else if (session('previousNotificationCount')) {
-                                $notiCount = session('previousNotificationCount');
-                            }
-
-                            if ($notiCount > 9) {
-                                $notiCount = '9+';
-                            }
-                        @endphp
-
-                        <x-slot name="trigger">
-                            <x-one-off.header.badged-icon 
-                                icon="ri-notification-2-line"
-                                label="{{ $notiCount }}"
-                                badgeColor="red"
-                            />
+                    <x-one-off.header.bi-dropdown
+                        icon="ri-notification-2-line"
+                        title="{{ __('Notifications') }}"
+                        pings="{{ $notifications ? $notifications->count() : session('previousNotificationCount') }}"
+                    >
+                        <x-slot name="actions">
+                            <x-button size="sm" color="gray" href="{{ route('notifications') }}">
+                                {{ __('See all') }}
+                            </x-button>
+                            <x-button size="sm">
+                                @svg('ri-check-double-fill', [
+                                    'class' => 'h-6 w-5'
+                                ])
+                            </x-button>
                         </x-slot>
 
-                        <div class="flex flex-col w-96">
-                            <div class="flex justify-between py-1 px-3 gap-3 items-center">
-                                <h6>{{ __('Notifications') }}</h6>
-                                <div class="flex gap-2">
-                                    <x-button size="sm" color="gray" href="{{ route('notifications') }}">
-                                        {{ __('See all') }}
-                                    </x-button>
-                                    <x-button size="sm">
-                                        @svg('ri-check-double-fill', [
-                                            'class' => 'h-6 w-5'
-                                        ])
-                                    </x-button>
-                                </div>
-                            </div>
-                            @if ($notifications)
-                                @foreach($notifications as $noti)
-                                    {{ $noti->id }}
-                                @endforeach
-                            @endif
-                        </div>
-                    </x-dropdown>
+                        @if (isset($notifications[0]))
+                            @foreach($notifications as $noti)
+                                {{ $noti->id }}
+                            @endforeach
+                        @else
+                            <p class="mx-3 my-2 text-muted-2">No results</p>
+                        @endif
+
+                    </x-one-off.header.bi-dropdown>
                     <x-dropdown class="ms-2">
                         <x-slot name="trigger">
                             <div class="flex items-center gap-1.5">
