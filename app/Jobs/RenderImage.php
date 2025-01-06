@@ -30,8 +30,8 @@ class RenderImage implements ShouldQueue
         RenderToken::insert([
             'token' => $ulid,
             'renderable_id' => 1,
-            'renderable_type' => get_class($this->model)
-            //'expires_at' => now()->addMins(2)
+            'renderable_type' => get_class($this->model),
+            'expires_at' => now()->addMinutes(2)
         ]);
 
         $response = Http::post(config('site.renderer_url'), [
