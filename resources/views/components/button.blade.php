@@ -1,6 +1,4 @@
 @props([
-    'class' => null, 
-    'outerClass' => null,
 
     'size' => 'md',
     'sizeVals' => [
@@ -32,21 +30,12 @@
         'transparent' => ''
     ],
 
-    'type' => 'solid',
-    'typeVals' => [
-        'solid' => null,
-        'outline' => 'bg-body text-body'
-    ],
-
-
 ])
-<a {!! $attributes !!} class="{{ $outerClass }} {{ $colorVals[$color].' '.$sizeVals[$size]['outer'] }} cursor-pointer select-none text-dark rounded-sm bg-gradient-to-b p-[4px] group">
-    <span 
-        class='w-full h-full relative flex justify-center items-center rounded-sm {{ $typeVals[$type] }} {{ $sizeVals[$size]['inner'] }}'
-    >
+<a {!! $attributes->merge([
+    'class' => $sizeVals[$size]['outer'].' '.$sizeVals[$size]['inner'].' '.$colorVals[$color].' flex justify-center cursor-pointer select-none text-dark rounded-sm bg-gradient-to-b p-[4px] group'
+]) !!}>
         <x-ri-loader-5-fill class="hidden group-data-[busy]:block drop-shadow absolute m-auto animate-spin {{ $sizeVals[$size]['busy'] }}" />
-        <span class="{{ $class }} group-data-[busy]:opacity-0 drop-shadow uppercase flex items-center">
+        <span class="h-full w-full group-data-[busy]:opacity-0 drop-shadow uppercase flex justify-center items-center">
             {{ $slot }}
         </span>
-    </span>
 </a>

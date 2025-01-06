@@ -1,10 +1,16 @@
+@props([
+    'title' => null,
+    'pageTitle' => true, // show title in page on top??
+    'containerClass' => null // inside main
+])
+
 <!DOCTYPE html>
 <html lang="en" class="{{ Auth::user() ? (Auth::user()->theme == 1 ? 'light' : 'dark' ) : 'dark' }}">
     <head>
         <meta charset="UTF-8" />
         <link rel="preconnect" href="https://fonts.bunny.net">
-<link href="https://fonts.bunny.net/css?family=montserrat:500,600,700,800" rel="stylesheet" />
-        <title>Title</title>
+<link href="https://fonts.bunny.net/css?family=montserrat:600,700,800" rel="stylesheet" />
+        <title>{{ $title }}</title>
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -58,8 +64,15 @@
         @endif
         <div class="min-h-screen">
             @livewire('header')
-            <main class="flex justify-center min-h-full my-8 px-3">
-                {{ $slot }}
+            <main class="flex justify-center min-h-full mb-8 {{ $pageTitle && $title ? 'mt-8' : 'mt-12' }} px-3">
+                <div class="max-w-full {{ $containerClass }}">
+                    @if ($pageTitle && $title)
+                        <h2 class="mb-8 font-black">{{ $title }}</h2>
+                    @endif
+                    <div>
+                        {{ $slot }}
+                    </div>
+                </div>
             </main>
         </div>
         <footer class="px-4 bg-neutral-950/10 dark:bg-black/20 h-44 flex justify-center">

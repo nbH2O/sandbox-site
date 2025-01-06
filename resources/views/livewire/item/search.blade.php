@@ -21,10 +21,6 @@
         </x-button>
     </div>
     <div class="flex flex-col md:flex-row">
-        <div class="flex flex-col gap-3 w-56 pb-4 mb-4 border-b-2 md:!pb-0 md:!mb-0 md:!border-b-0 md:pe-4 md:me-4 md:border-r-2 border-border-light dark:border-border-dark">
-            <h5 class="text-muted uppercase">{{ __('Filter') }}</h5>
-
-        </div>
         <div class="flex flex-col gap-4 flex-1">
             <x-tab-list x-data="{ active: 'all' }">
                 <x-tab

@@ -36,8 +36,6 @@
         @error('general')
             <span class="text-red {{ $sizeVals[$size]['error'] }}">{{ $message }}</span>
         @enderror
-        <div class="flex">
-            <x-button x-on:click="$wire.submit()" wire:loading.attr="data-busy" outerClass="grow" color="green" size="{{ $size }}">{{ __('Submit') }}</x-button>
-        </div>
+        <x-button x-on:click="$wire.submit()" wire:loading.attr="data-busy" color="green" size="{{ $size }}">{{ __('Submit') }}</x-button>
     </div>
 </form>

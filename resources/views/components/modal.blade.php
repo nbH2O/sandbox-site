@@ -16,19 +16,19 @@
 
     <template x-teleport="body">
         <div class="z-[50000000000] absolute top-0 left-0 w-screen h-screen flex justify-center items-center" x-show="open">
-            <div {!! $attributes->merge(['class' => $sizeVals[$size].' flex flex-col z-10 max-w-full rounded-sm bg-body p-3']) !!}>
-                <div class="px-1 flex justify-between items-center">
-                    <h4>{{ $title }}</h4>
+            <div {!! $attributes->merge(['class' => $sizeVals[$size].' flex flex-col z-10 max-w-full rounded-sm bg-body']) !!}>
+                <div class="dark bg-header px-3 h-9 flex justify-between items-center">
+                    <h5>{{ $title }}</h5>
                     @svg('ri-close-fill', [
                         'x-on:click' => 'open = !open',
                         'class' => 'size-6 text-muted-2 cursor-pointer'
                     ])
                 </div>
-                <div class="px-1 pt-2 flex-1">
+                <div class="px-3 py-2.5 flex-1">
                     {{ $slot }}
                 </div>
                 @if (isset($actions))
-                    <div class="flex gap-3 mt-2 justify-end">
+                    <div class="flex gap-3 px-3 pb-3 justify-end">
                         {{ $actions }}
                     </div>
                 @endif
