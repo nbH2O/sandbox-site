@@ -61,15 +61,48 @@
                                 <img class="w-full bg-glow aspect-square" src="{{ $item->getRender() }}" />
                                 <a class="absolute top-0 left-0 w-full h-full" href="{{ '/$'.$item->id }}"></a>
                                 <div class="absolute m-2 top-0 left-0 flex gap-2">
-                                    @if ($item->isScheduled())
-                                        <x-one-off.item.timer-badge
-                                            :from="$item->available_from"
-                                            :to="$item->available_to"
-                                        />
+                                    @if (($item->isMaxCopies() && !$item->isSoldOut()) || $item->isScheduled())
+                                        @if ($item->isMaxCopies() && !$item->isSoldOut() && !$item->isScheduled())
+                                            <x-badge color="red" innerClass="flex items-center gap-1.5">
+                                                @svg('ri-shopping-bag-3-fill', [
+                                                    'class' => 'size-3.5'
+                                                ])
+                                                {{ $item->max_copies - $item->getCopies() }} {{ __('left') }}
+                                            </x-badge>
+                                        @elseif ($item->isScheduled())
+                                            <x-one-off.item.timer-badge
+                                                :from="$item->available_from"
+                                                :to="$item->available_to"
+                                            />
+                                        @endif
+                                    @endif
+                                    @if ($item->is_special)
+                                        <x-badge color="primary" innerClass="flex items-center gap-1.5">
+                                            @svg('ri-bard-fill', [
+                                                'class' => 'size-3.5'
+                                            ])
+                                            {{ __('Special') }}
+                                        </x-badge>
                                     @endif
                                 </div>
                                 <div class="absolute m-2 bottom-0 left-0 flex gap-2">
-
+                                @if ($item->isPurchasable())
+                                    <x-badge color="primary" innerClass="flex items-center gap-1.5">
+                                        @svg('ri-vip-diamond-fill', [
+                                            'class' => 'size-3.5'
+                                        ])
+                                        {{ $item->price > 0 ? $item->price : __('Free') }}
+                                    </x-badge>
+                                @elseif ($item->isTradeable())
+                                    @if ($item->with('cheapestReseller') && $item->cheapestReseller)
+                                        <x-badge color="primary" innerClass="flex items-center gap-1.5">
+                                            @svg('ri-vip-diamond-fill', [
+                                                'class' => 'size-3.5'
+                                            ])
+                                            {{ $item->cheapestReseller->resale_price > 0 ? $item->cheapestReseller->resale_price : __('Free') }}
+                                        </x-badge>
+                                    @endif
+                                @endif
                                 </div>
                             </x-card>
                             <a class="text-h5" href="{{ '/$'.$item->id }}">{{ $item->getName() }}</a>
@@ -84,36 +117,7 @@
                                     {{ $item->creator->getName() }}
                                 </a>
                             </p>
-                            @if ($item->isSoldOut() && !$item->isTradeable())
-                                <p class="font-bold uppercase text-muted">{{ __('Sold Out') }}</p>
-                            @elseif ($item->isPurchasable())
-                                @if ($item->isFree())
-                                <p class="font-bold uppercase text-primary">{{ __('Free') }}</p>
-                                @else
-                                    <span class="text-primary font-bold text-lg flex items-center gap-1">
-                                        @svg('ri-vip-diamond-fill', [
-                                            'class' => 'size-4'
-                                        ])
-                                        {{ $item->price }}
-                                    </span>
-                                @endif
-                            @elseif ($item->isTradeable())
-                                @if ($item->with('cheapestReseller') && $item->cheapestReseller)
-                                    <p class="flex gap-2 items-center">
-                                        <span class="text-primary font-bold text-lg flex items-center gap-1">
-                                            @svg('ri-vip-diamond-fill', [
-                                                'class' => 'size-4'
-                                            ])
-                                            {{ $item->cheapestReseller->resale_price }}
-                                        </span>
-                                        <span class="text-muted text-sm">from <a class="z-50" href="{{ $item->cheapestReseller->user->getLink() }}">{{ $item->cheapestReseller->user->getName() }}</a></span>
-                                    </p>
-                                @else
-                                    <p class="font-bold uppercase text-muted">{{ __('No Resellers') }}</p>
-                                @endif
-                            @else
-                                <p class="font-bold uppercase text-muted">{{ __('Offsale') }}</p>
-                            @endif
+
                         </div>
                     @endforeach
                 @else
