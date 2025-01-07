@@ -17,10 +17,12 @@ export default {
                     light: '#CCC',
                     dark: '#333'
                 },
+
                 'primary': '#af63fa',
-                'blue': '#00a9fe',
-                'red': '#f43638',
-                'yellow': '#efa700'
+                'green': '#5DA93D', // #00a336
+                'blue': '#009BEE', // #00a9fe
+                'red': '#E02D2D', // #f43638
+                'yellow': '#FFA10B' // #efa700
             },
             fontFamily: {
                 sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
