@@ -60,6 +60,17 @@
                             <x-card class="!p-0 relative">
                                 <img class="w-full bg-glow aspect-square" src="{{ $item->getRender() }}" />
                                 <a class="absolute top-0 left-0 w-full h-full" href="{{ '/$'.$item->id }}"></a>
+                                <div class="absolute m-2 top-0 left-0 flex gap-2">
+                                    @if ($item->isScheduled())
+                                        <x-one-off.item.timer-badge
+                                            :from="$item->available_from"
+                                            :to="$item->available_to"
+                                        />
+                                    @endif
+                                </div>
+                                <div class="absolute m-2 bottom-0 left-0 flex gap-2">
+
+                                </div>
                             </x-card>
                             <a class="text-h5" href="{{ '/$'.$item->id }}">{{ $item->getName() }}</a>
                             <p class="flex gap-1 text-muted -mt-1 text-sm items-center">
@@ -102,14 +113,6 @@
                                 @endif
                             @else
                                 <p class="font-bold uppercase text-muted">{{ __('Offsale') }}</p>
-                            @endif
-                            @if ($item->isMaxCopies() && !$item->isSoldOut())
-                                    <span class="text-red text-sm font-bold">{{ $item->max_copies - $item->getCopies() }} {{ __('of') }} {{ $item->max_copies }} {{ __('left') }}</span>
-                            @elseif ($item->isScheduled())
-                                <x-one-off.item.timer-snippet
-                                    :from="$item->available_from"
-                                    :to="$item->available_to"
-                                />
                             @endif
                         </div>
                     @endforeach
