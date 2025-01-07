@@ -67,7 +67,7 @@
             <main class="flex justify-center min-h-full mb-8 {{ $pageTitle && $title ? 'mt-8' : 'mt-12' }} px-3">
                 <div class="max-w-full {{ $containerClass }}">
                     @if ($pageTitle && $title)
-                        <h2 class="mb-8 font-black">{{ $title }}</h2>
+                        <h2 class="uppercase mb-8 font-black">{{ $title }}</h2>
                     @endif
                     <div>
                         {{ $slot }}

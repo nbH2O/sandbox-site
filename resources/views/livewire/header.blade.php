@@ -1,4 +1,4 @@
-<header class="dark z-[1000] text-[#ededf1] z-10 bg-header h-12  px-2 overflow-visible flex">
+<header class="dark z-[1000] text-[#ededf1] z-10 bg-header h-11  px-2 overflow-visible flex">
     <div class="flex justify-between max-w-full w-[60rem] mx-auto">
         <div class="flex">
             <img class="max-h-full p-2.5 me-4" src="https://web.archive.org/web/20230905100829im_/https://blog.brkcdn.com/2023/04/full_final_trademark_o--1-.png" />

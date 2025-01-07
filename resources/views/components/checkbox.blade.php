@@ -31,7 +31,7 @@
             {{-- gotta be here for stuff like wire:model --}}
             {!! $attributes !!}
         />
-        <div class="-z-10 [&>*]:hidden peer-checked:[&>*]:block rounded-sm flex items-center justify-center absolute top-0 left-0 {{ $sizeVals[$size]['c'] }} border-border-light dark:border-border-dark border-2 bg-body">
+        <div class="-z-10 [&>*]:hidden peer-checked:[&>*]:block rounded-full flex items-center justify-center absolute top-0 left-0 {{ $sizeVals[$size]['c'] }} border-border-light dark:border-border-dark border-2 bg-body">
             @svg('ri-check-fill', [
                 'class' => 'text-primary '.$sizeVals[$size]['i']
             ])
