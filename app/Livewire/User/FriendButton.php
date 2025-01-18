@@ -20,6 +20,7 @@ class FriendButton extends Component
     {
         // Proper initialization
         $this->user_id = $user->id;
+        $this->user_name = $user->name;
     }
 
     private function getFriendshipAction()
