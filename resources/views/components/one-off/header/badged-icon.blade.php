@@ -4,12 +4,13 @@
 
     'badgeColor' => 'blue',
     'badgeColorVals' => [
-        'primary' => 'from-[#b166fb] to-[#9333EA]',
-        'blue' => 'from-[#00A9FE] to-[#007CDC]',
-        'green' => 'from-[#00ba42] to-[#007F22]',
-        'yellow' => 'from-[#f5ba00] to-[#e99500]',
-        'red' => 'from-[#fb3d3e] to-[#c90e16]',
-        'gray' => 'dark:from-[#43434a] dark:to-[#2f2f33] to-[#52525b] from-[#71717a]'
+        'primary' => 'bg-primary',
+        'blue' => 'bg-blue',
+        'green' => 'bg-green',
+        'yellow' => 'bg-yellow',
+        'red' => 'bg-red',
+        'gray' => 'bg-[#455A7E]',
+        'transparent' => ''
     ],
 ])
 
@@ -24,7 +25,7 @@
         </span>
         @if ($label)
             <span class="w-0 absolute bottom-[50%] left-[50%]">
-                <span class=" flex justify-center items-center border-[#19191c] border-2 {{ $badgeColorVals[$badgeColor] }} text-xs bg-gradient-to-b w-6 h-5">
+                <span class=" flex justify-center items-center border-[#19191c] border-2 {{ $badgeColorVals[$badgeColor] }} text-xs  w-6 h-5">
                     {{ $label }}
                 </span>
             </span>
