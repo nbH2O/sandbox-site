@@ -36,7 +36,7 @@
                 @endif
             </div>
         </div>
-        <div class="m-2 rounded-sm bg-body">
+        <div class="m-2  bg-body">
             {{ $slot }}
         </div>
     </div>

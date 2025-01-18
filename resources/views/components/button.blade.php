@@ -42,7 +42,7 @@
 
 ])
 <a {!! $attributes->merge([
-    'class' => $sizeVals[$size]['s'][$aspect].' '.$sizeVals[$size]['main'].' '.$colorVals[$color].' flex justify-center cursor-pointer select-none text-dark rounded-full  p-[4px] group'
+    'class' => $sizeVals[$size]['s'][$aspect].' '.$sizeVals[$size]['main'].' '.$colorVals[$color].' flex justify-center cursor-pointer select-none text-dark  p-[4px] group'
 ]) !!}>
         <x-ri-loader-5-fill class="hidden group-data-[busy]:block  absolute m-auto animate-spin {{ $sizeVals[$size]['busy'] }}" />
         <span class="h-full w-full group-data-[busy]:opacity-0 flex justify-center items-center">

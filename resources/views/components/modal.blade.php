@@ -16,7 +16,7 @@
 
     <template x-teleport="body">
         <div class="z-[50000000000] absolute top-0 left-0 w-screen h-screen flex justify-center items-center" x-show="open">
-            <div {!! $attributes->merge(['class' => $sizeVals[$size].' flex flex-col z-10 max-w-full rounded-[1.25rem] overflow-hidden bg-body']) !!}>
+            <div {!! $attributes->merge(['class' => $sizeVals[$size].' flex flex-col z-10 max-w-full  overflow-hidden bg-body']) !!}>
                 <div class="dark bg-header p-2 flex justify-between items-center">
                     <h5 class="ms-1">{{ $title }}</h5>
                     <x-button color="red" size="sm" :aspect="true" x-on:click="open = false">

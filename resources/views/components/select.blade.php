@@ -8,7 +8,7 @@
 ])
 
 <select {!! $attributes->merge([
-    'class' => $sizeVals[$size]." bg-body rounded-full h-10 border border-2 border-border-light dark:border-border-dark px-3"
+    'class' => $sizeVals[$size]." bg-body  h-10 border border-2 border-border-light dark:border-border-dark px-3"
 ]) !!}>
     {{ $slot }}
 </select>

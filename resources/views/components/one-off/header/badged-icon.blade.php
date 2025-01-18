@@ -24,7 +24,7 @@
         </span>
         @if ($label)
             <span class="w-0 absolute bottom-[50%] left-[50%]">
-                <span class="rounded-[0.2rem] flex justify-center items-center border-[#19191c] border-2 {{ $badgeColorVals[$badgeColor] }} text-xs bg-gradient-to-b w-6 h-5">
+                <span class=" flex justify-center items-center border-[#19191c] border-2 {{ $badgeColorVals[$badgeColor] }} text-xs bg-gradient-to-b w-6 h-5">
                     {{ $label }}
                 </span>
             </span>
