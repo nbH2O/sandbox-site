@@ -37,6 +37,7 @@
                                     ])
                                 </x-slot>
 
+                                @if (Auth::user())
                                 @if ($comment->user_id == Auth::user()->id)
                                     <x-dropdown-item 
                                         class="text-red"
@@ -51,6 +52,7 @@
                                         label="{{ __('Report') }}"
                                         href="{{ route('report') }}?model=Comment&id={{ $comment->id }}"
                                     />
+                                @endif
                                 @endif
                             </x-dropdown>
                         </div>
