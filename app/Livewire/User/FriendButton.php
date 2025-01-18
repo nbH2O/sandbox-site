@@ -11,6 +11,8 @@ class FriendButton extends Component
     // commentable
     #[Locked]
     public $user_id;
+    #[Locked] // just so there isnt an extra query
+    public $user_name;
     #[Locked]
     public $action;
 
@@ -84,7 +86,8 @@ class FriendButton extends Component
         $this->action = $this->getFriendshipAction();
 
         return view('livewire.user.friend-button', [
-            'action' => $this->action
+            'action' => $this->action,
+            'name' => $this->user_name
         ]);
     }
 }

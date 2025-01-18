@@ -1,20 +1,30 @@
 @props([
+    'aspect' => false,
 
     'size' => 'md',
     'sizeVals' => [
         'sm' => [
-            'outer' => 'h-7 ',
-            'inner' => 'px-3 text-sm',
+            's' => [
+                true => 'size-7',
+                false => 'px-3 h-7'
+            ],
+            'main' => 'text-sm',
             'busy' => 'size-5'
         ],
         'md' => [
-            'outer' => 'h-9 ',
-            'inner' => 'px-4',
+            's' => [
+                true => 'size-9',
+                false => 'px-4 h-9'
+            ],
+            'main' => '',
             'busy' => 'size-7'
         ],
         'lg' => [
-            'outer' => 'h-12 ',
-            'inner' => 'px-5 text-lg',
+            's' => [
+                true => 'size-12',
+                false => 'px-5 h-12'
+            ],
+            'main' => 'text-lg',
             'busy' => 'size-9'
         ],
     ],
@@ -32,7 +42,7 @@
 
 ])
 <a {!! $attributes->merge([
-    'class' => $sizeVals[$size]['outer'].' '.$sizeVals[$size]['inner'].' '.$colorVals[$color].' flex justify-center cursor-pointer select-none text-dark rounded-full  p-[4px] group'
+    'class' => $sizeVals[$size]['s'][$aspect].' '.$sizeVals[$size]['main'].' '.$colorVals[$color].' flex justify-center cursor-pointer select-none text-dark rounded-full  p-[4px] group'
 ]) !!}>
         <x-ri-loader-5-fill class="hidden group-data-[busy]:block  absolute m-auto animate-spin {{ $sizeVals[$size]['busy'] }}" />
         <span class="h-full w-full group-data-[busy]:opacity-0 flex justify-center items-center">

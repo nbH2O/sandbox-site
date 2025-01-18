@@ -15,8 +15,23 @@
             @svg('ri-user-unfollow-fill', ['class' => 'size-5'])
         </x-button>
     @elseif ($action == 'remove')
-        <x-button x-on:click="$wire.doAction()" wire:loading.attr="data-busy" color="red">
-            @svg('ri-user-minus-fill', ['class' => 'size-5'])
-        </x-button>
+        <x-modal title="{{ __('Are you sure?') }}">
+            <x-slot name="trigger">
+                <x-button color="red">
+                    @svg('ri-user-minus-fill', ['class' => 'size-5'])
+                </x-button>
+            </x-slot>
+
+            <p>{{ __('Are you sure that you want to remove') }} {{ $name }} {{ __('from your friends list?') }}</p>
+
+            <x-slot name="actions">
+                <x-button x-on:click="open = false" color="gray">
+                    {{ __('Nevermind') }}
+                </x-button>
+                <x-button x-on:click="$wire.doAction()" wire:loading.attr="data-busy" color="red">
+                    {{ __("I'm sure") }}
+                </x-button>
+            </x-slot>
+        </x-modal>
     @endif
 </div>
