@@ -67,7 +67,7 @@
                                                 @svg('ri-shopping-bag-3-fill', [
                                                     'class' => 'size-3.5'
                                                 ])
-                                                {{ $item->max_copies - $item->getCopies() }} {{ __('left') }}
+                                                {{ Number::format($item->max_copies - $item->getCopies()) }} {{ __('left') }}
                                             </x-badge>
                                         @elseif ($item->isScheduled())
                                             <x-one-off.item.timer-badge
@@ -91,7 +91,7 @@
                                         @svg('ri-vip-diamond-fill', [
                                             'class' => 'size-3.5'
                                         ])
-                                        {{ $item->price > 0 ? $item->price : __('Free') }}
+                                        {{ $item->price > 0 ? Number::format($item->price) : __('Free') }}
                                     </x-badge>
                                 @elseif ($item->isTradeable())
                                     @if ($item->with('cheapestReseller') && $item->cheapestReseller)

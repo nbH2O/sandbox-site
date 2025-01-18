@@ -44,7 +44,7 @@
                             @if (($item->isMaxCopies() && !$item->isSoldOut()) || $item->isScheduled())
                                 <div class="flex gap-2 mt-1 -mb-1.5">
                                     @if ($item->isMaxCopies() && !$item->isSoldOut())
-                                        <span class="text-red text-sm font-bold">{{ $item->max_copies - $item->getCopies() }} {{ __('of') }} {{ $item->max_copies }} {{ __('left') }}</span>
+                                        <span class="text-red text-sm font-bold">{{ Number::format($item->max_copies - $item->getCopies()) }} {{ __('of') }} {{ $item->max_copies }} {{ __('left') }}</span>
                                     @endif
                                     @if ($item->isScheduled())
                                         <x-one-off.item.timer-snippet
