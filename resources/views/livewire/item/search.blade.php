@@ -76,16 +76,8 @@
                                             />
                                         @endif
                                     @endif
-                                    @if ($item->is_special)
-                                        <x-badge color="primary" innerClass="flex items-center gap-1.5">
-                                            @svg('ri-bard-fill', [
-                                                'class' => 'size-3.5'
-                                            ])
-                                            {{ __('Special') }}
-                                        </x-badge>
-                                    @endif
                                 </div>
-                                <div class="absolute m-2 bottom-0 left-0 flex gap-2">
+                                <div class="absolute p-2 bottom-0 left-0 flex gap-2 w-full justify-between">
                                 @if ($item->isPurchasable())
                                     <x-badge color="primary" innerClass="flex items-center gap-1.5">
                                         @svg('ri-vip-diamond-fill', [
@@ -102,6 +94,16 @@
                                             {{ $item->cheapestReseller->resale_price > 0 ? $item->cheapestReseller->resale_price : __('Free') }}
                                         </x-badge>
                                     @endif
+                                @else
+                                    <div>
+                                    </div>
+                                @endif
+                                @if ($item->is_special)
+                                    <x-badge color="rainbow" innerClass="flex items-center gap-1.5">
+                                        @svg('ri-bard-fill', [
+                                            'class' => 'size-3.5'
+                                        ])
+                                    </x-badge>
                                 @endif
                                 </div>
                             </x-card>

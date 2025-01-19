@@ -115,8 +115,8 @@
                         </div>
                     </x-dropdown>
                     
-                    <x-button color="primary" size="sm" class="flex gap-1.5" outerClass="group">
-                        <x-ri-user-5-line class="-ms-1.5 size-5 group-hover:animate-bounce" />
+                    <x-button color="primary" size="sm" outerClass="group">
+                        <x-ri-user-5-line class="-ms-1.5 me-1.5 size-5 group-hover:animate-bounce" />
                         <span class="font-bold">{{ __('Join') }}</span>
                     </x-button>
                 </div>

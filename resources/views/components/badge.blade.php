@@ -16,19 +16,20 @@
 
     'color' => 'blue',
     'colorVals' => [
-        'primary' => 'bg-primary',
-        'blue' => 'bg-blue',
-        'green' => 'bg-green',
-        'yellow' => 'bg-yellow',
-        'red' => 'bg-red',
-        'gray' => 'bg-[#455A7E]',
-        'transparent' => ''
+        'primary' => 'bg-primary text-dark',
+        'blue' => 'bg-blue text-dark',
+        'green' => 'bg-green text-dark',
+        'yellow' => 'bg-yellow text-dark',
+        'red' => 'bg-red text-dark',
+        'gray' => 'bg-[#455A7E] text-dark',
+        'transparent' => '',
+        'rainbow' => 'bg-rainbow text-light'
     ],
 
 ])
 
 <a {!! $attributes->merge([
-    'class' => $sizeVals[$size]['outer'].' '.$colorVals[$color].' flex justify-center items-center cursor-pointer select-none text-dark rounded-full group'
+    'class' => $sizeVals[$size]['outer'].' '.$colorVals[$color].' flex justify-center items-center cursor-pointer select-none  rounded-full group'
 ]) !!}>
         <x-ri-loader-5-fill class="hidden group-data-[busy]:block  absolute m-auto animate-spin {{ $sizeVals[$size]['busy'] }}" />
         <span class="h-full w-full group-data-[busy]:opacity-0 flex justify-center items-center {{ $innerClass }}">
