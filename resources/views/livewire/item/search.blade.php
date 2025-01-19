@@ -16,7 +16,7 @@
             x-on:click="$wire.$refresh()"
             wire:loading.attr="data-busy"
         >
-            <x-ri-search-line class="size-6 me-2 -ms-1" />
+            <x-ri-search-line class="size-5 -ms-1.5 me-2" />
             {{ __('Search') }}
         </x-button>
     </div>

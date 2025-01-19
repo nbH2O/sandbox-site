@@ -46,6 +46,9 @@ Route::middleware('auth')->prefix('my')->group(function () {
     Route::get('/notifications', function () {
         return view('user.edit-avatar');
     })->name('notifications');
+    Route::get('/chats', function () {
+        return view('user.edit-avatar');
+    })->name('chats');
 });
 
 Route::middleware('guest')->prefix('auth')->group(function () {

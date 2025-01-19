@@ -31,11 +31,33 @@
                             badgeColor="red"
                         />
                     @endif
-                    <x-one-off.header.badged-icon 
+                    <x-one-off.header.bi-dropdown
+                        function=""
                         icon="ri-chat-4-line"
-                        label="hi"
-                        badgeColor="red"
-                    />
+                        title="{{ __('Chats') }}"
+                        pings=""
+                    >
+                        <x-slot name="actions">
+                            <x-button size="sm" color="gray" href="{{ route('chats') }}">
+                                {{ __('See all') }}
+                            </x-button>
+                            <x-button size="sm">
+                                @svg('ri-check-double-fill', [
+                                    'class' => 'h-6 w-5'
+                                ])
+                            </x-button>
+                        </x-slot>
+
+                        @if (false)
+
+                        @else
+                            <x-one-off.header.bid-no-results
+                                icon="ri-chat-off-line"
+                                message="{{ __('You have no unread chats!') }}"
+                            />
+                        @endif
+
+                    </x-one-off.header.bi-dropdown>
                     <x-one-off.header.bi-dropdown
                         function="$wire.getNotifications()"
                         icon="ri-notification-2-line"
@@ -58,7 +80,10 @@
                                 {{ $noti->id }}
                             @endforeach
                         @else
-                            <p class="mx-3 my-2 text-muted-2">No results</p>
+                            <x-one-off.header.bid-no-results
+                                icon="ri-notification-off-line"
+                                message="{{ __('You have no unread notifications!') }}"
+                            />
                         @endif
 
                     </x-one-off.header.bi-dropdown>

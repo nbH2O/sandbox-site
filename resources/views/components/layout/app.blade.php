@@ -1,7 +1,8 @@
 @props([
     'title' => null,
     'pageTitle' => true, // show title in page on top??
-    'containerClass' => null // inside main
+    'containerClass' => null, // inside main
+    'actions' => null
 ])
 
 <!DOCTYPE html>
@@ -67,7 +68,12 @@
             <main class="flex justify-center min-h-full mb-8 {{ $pageTitle && $title ? 'mt-8' : 'mt-12' }} px-3">
                 <div class="max-w-full {{ $containerClass }}">
                     @if ($pageTitle && $title)
-                        <h2 class="uppercase mb-8 font-black">{{ $title }}</h2>
+                        <div class="flex justify-between items-center mb-8">
+                            <h2 class="uppercase font-black">{{ $title }}</h2>
+                            <div class="flex gap-4">
+                                {{ $actions }}
+                            </div>
+                        </div>
                     @endif
                     <div>
                         {{ $slot }}
