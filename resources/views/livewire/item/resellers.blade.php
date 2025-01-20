@@ -26,7 +26,7 @@
                                     <a href="{{ '/@'.$reseller->user->id }}">
                                         <h6>{{ $reseller->user->getName() }}</h6>
                                     </a>
-                                    <p class="text-muted text-sm">#{{ $reseller->serial }}</p>
+                                    <p class="{{ $reseller->serial == 1 ? 'text-gold' : ($reseller->serial == 2 ? 'text-silver' : ($reseller->serial == 3 ? 'text-bronze' : 'text-muted-2')) }} text-sm">#{{ $reseller->serial }}</p>
                                     
                                 </div>
                             </div>

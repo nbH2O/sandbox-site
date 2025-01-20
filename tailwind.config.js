@@ -22,7 +22,11 @@ export default {
                 'green': '#5DA93D', // #00a336
                 'blue': '#009BEE', // #00a9fe
                 'red': '#E02D2D', // #f43638
-                'yellow': '#FFA10B' // #efa700
+                'yellow': '#FFA10B', // #efa700
+
+                'bronze': '#CD7F32',
+                'silver': '#C0C0C0',
+                'gold': '#f2b13f'
             },
             fontFamily: {
                 sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
