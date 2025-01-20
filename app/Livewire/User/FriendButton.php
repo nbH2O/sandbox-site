@@ -6,21 +6,20 @@ use Livewire\Component;
 use App\Models\User\UserFriendship;
 use App\Models\User\User;
 
+use App\Notifications\FriendRequestReceived;
+
 class FriendButton extends Component
 {
     // commentable
     #[Locked]
-    public $user_id;
-    #[Locked] // just so there isnt an extra query
-    public $user_name;
+    public $user;
     #[Locked]
     public $action;
 
     public function mount(User $user)
     {
         // Proper initialization
-        $this->user_id = $user->id;
-        $this->user_name = $user->name;
+        $this->user = $user;
     }
 
     private function getFriendshipAction()
@@ -28,15 +27,15 @@ class FriendButton extends Component
         $au = Auth()->user();
 
         $res = UserFriendship::where(function ($q) use ($au) {
-            $q->where('sender_id', $this->user_id)
+            $q->where('sender_id', $this->user->id)
                 ->orWhere('sender_id', $au->id);
         })
         ->orWhere(function ($q) use ($au) {
-            $q->where('receiver_id', $this->user_id)
+            $q->where('receiver_id', $this->user->id)
                 ->orWhere('receiver_id', $au->id);
         })->first();
 
-        if ($this->user_id == $au->id)
+        if ($this->user->id == $au->id)
             return null;
 
         if (!$res) {
@@ -61,24 +60,26 @@ class FriendButton extends Component
         $fa = $this->getFriendshipAction();
 
         if ($action == 'accept') {
-            UserFriendship::where('sender_id', $this->user_id)
+            UserFriendship::where('sender_id', $this->user->id)
                             ->where('receiver_id', $au->id)
                             ->update(['is_accepted' => true]);
         } else if ($fa == 'remove' || $fa == 'cancel' || $fa == 'decline') {
             UserFriendship::where(function ($q) use ($au) {
-                $q->where('sender_id', $this->user_id)
+                $q->where('sender_id', $this->user->id)
                     ->orWhere('sender_id', $au->id);
             })
             ->orWhere(function ($q) use ($au) {
-                $q->where('receiver_id', $this->user_id)
+                $q->where('receiver_id', $this->user->id)
                     ->orWhere('receiver_id', $au->id);
             })->delete();
         } else if ($fa == 'send') {
             UserFriendship::insert([
                 'sender_id' => Auth()->user()->id,
-                'receiver_id' => $this->user_id,
+                'receiver_id' => $this->user->id,
                 'is_accepted' => false
             ]);
+            
+            $this->user->notify(new FriendRequestReceived(Auth()->user()));
         }
     }
 
@@ -88,7 +89,7 @@ class FriendButton extends Component
 
         return view('livewire.user.friend-button', [
             'action' => $this->action,
-            'name' => $this->user_name
+            'name' => $this->user->name
         ]);
     }
 }

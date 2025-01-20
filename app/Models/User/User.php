@@ -91,11 +91,6 @@ class User extends Authenticatable
         return url('/@'.$this->id);
     }
 
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(Notification::class)->orderBy('id', 'DESC');
-    }
-
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class)->orderBy('power', 'DESC')->where('is_public', true);

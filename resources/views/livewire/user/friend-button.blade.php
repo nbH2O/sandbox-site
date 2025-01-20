@@ -22,7 +22,7 @@
                 </x-button>
             </x-slot>
 
-            <p>{{ __('Are you sure that you want to remove') }} {{ $user_name }} {{ __('from your friends list?') }}</p>
+            <p>{{ __('Are you sure that you want to remove') }} {{ $name }} {{ __('from your friends list?') }}</p>
 
             <x-slot name="actions">
                 <x-button x-on:click="open = false" color="gray">

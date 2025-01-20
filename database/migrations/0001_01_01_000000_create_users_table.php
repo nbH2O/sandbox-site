@@ -82,15 +82,6 @@ return new class extends Migration
             [(new User())->acceptedFriendsTo(), (new User())->acceptedFriendsFrom()]
         );
 
-        Schema::create('notifications', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->integer('subject_id'); // model
-            $table->string('subject_type');
-            $table->boolean('is_read');
-            $table->timestamps();
-        });
-
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();

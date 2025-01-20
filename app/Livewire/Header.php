@@ -30,15 +30,12 @@ class Header extends Component
 
     public function getNotifications()
     {
-        $res = Auth::user()->notifications()->limit(6)->get();
-        if ($res) {
-            session(['previousNotificationCount' => $res->count()]);
-        }
+        $res = Auth::user()->unreadNotifications()->limit(6)->get();
         $this->notifications = $res;
     }
-    public function setAllNotificationsRead()
+    public function setNotificationsRead()
     {
-        Notification::where('user_id', Auth::user()->id)->update(['is_read', true]);
+        Auth::user()->unreadNotifications()->update(['read_at' => now()]);
     }
 
     public function render()

@@ -15,7 +15,7 @@
         }
 @endphp
 
-<x-dropdown align="center" :yAdjust="false" {{ $attributes }}>
+<x-dropdown align="center" :innerClick="false" :yAdjust="false" {{ $attributes }}>
     
 
     <x-slot name="trigger">

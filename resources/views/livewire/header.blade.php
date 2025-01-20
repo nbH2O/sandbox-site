@@ -68,7 +68,11 @@
                             <x-button size="sm" color="gray" href="{{ route('notifications') }}">
                                 {{ __('See all') }}
                             </x-button>
-                            <x-button size="sm">
+                            <x-button 
+                                size="sm"
+                                x-on:click="$wire.setNotificationsRead(); $wire.getNotifications();"
+                                wire:loading.attr="data-busy"
+                            >
                                 @svg('ri-check-double-fill', [
                                     'class' => 'h-6 w-5'
                                 ])
@@ -77,7 +81,7 @@
 
                         @if (isset($notifications[0]))
                             @foreach($notifications as $noti)
-                                {{ $noti->id }}
+                                <p>{{ $noti->id }}</p>
                             @endforeach
                         @else
                             <x-one-off.header.bid-no-results
