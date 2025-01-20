@@ -21,6 +21,10 @@ class UserChecks
     public function handle(Request $request, Closure $next): Response
     {
         if ($user = Auth::user()) {
+            if ($user->online_at < $user->online_at->subMinutes(3)) {
+                $user->online_at = now();
+                $user->save();
+            }
             // ban
             if ($user->isBanned()) {
                 if ($request->route()->getName() == 'banned' 

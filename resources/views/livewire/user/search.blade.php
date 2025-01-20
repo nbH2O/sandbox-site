@@ -28,7 +28,7 @@
                             {{ $user->getDescription() }}
                         </p>
                         @if ($user->roles)
-                            <div class="flex gap-4 items-center justify-center mt-4">
+                            <div class="flex gap-4 items-center">
                                 @foreach ($user->roles as $role)
                                     <x-one-off.user.role 
                                         textClass="text-muted"
