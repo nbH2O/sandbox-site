@@ -9,8 +9,8 @@
 }
 
 @layer components {
-    .bg-rainbow {
-        @apply bg-[linear-gradient(135deg,_#ff942d_0%,_#e9f75a_19.25%,_#b2e037_39.16%,_#6bcee6_53.54%,_#d2d2d2_65.27%,_#e7b280_84.07%,_#df7ff2_100%)];
+    .bg-special {
+        @apply bg-[linear-gradient(135deg,_#fcf87a,#f4cf48,#f08432)];
     }
     .bg-glow {
         @apply bg-contain bg-[radial-gradient(circle,_rgba(79,_86,_96,_.3019607843)_0%,_transparent_70%)];

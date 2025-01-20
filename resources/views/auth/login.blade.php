@@ -1,10 +1,7 @@
 <x-layout.app
     title="{{ __('Log in') }}"
+    :pageTitle="true"
+    containerClass="w-[21rem]"
 >
-    <div class="flex justify-center max-w-full w-[21rem]">
-        <div class="flex-1 flex flex-col gap-4">
-            <h2>{{ __('Log in') }}</h2>
-            @livewire('auth.login')
-        </div>
-    </div>
+    @livewire('auth.login')
 </x-layout.app>

@@ -99,7 +99,7 @@
                                     </div>
                                 @endif
                                 @if ($item->is_special)
-                                    <x-badge color="rainbow" innerClass="flex items-center gap-1.5">
+                                    <x-badge color="special" innerClass="flex items-center gap-1.5">
                                         @svg('ri-bard-fill', [
                                             'class' => 'size-3.5'
                                         ])

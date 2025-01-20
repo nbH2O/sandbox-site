@@ -23,7 +23,7 @@
         'red' => 'bg-red text-dark',
         'gray' => 'bg-[#455A7E] text-dark',
         'transparent' => '',
-        'rainbow' => 'bg-rainbow text-light'
+        'special' => 'bg-special text-light'
     ],
 
 ])
