@@ -1,3 +1,13 @@
+@php
+    $copies = $item->getCopies();
+    $hoardedCopies = $item->getHoardedCopies();
+    if (Auth::user()) {
+        $ownedCopies = $item->getOwnedCopies(Auth::user()->id);
+    } else {
+        $ownedCopies = null;
+    }
+@endphp
+
 <x-layout.app
     title="{{ $item->getName() }}"
 >
@@ -12,7 +22,7 @@
                             @svg('ri-shopping-bag-3-fill', [
                                 'class' => 'size-3.5'
                             ])
-                            {{ Number::format($item->max_copies - $item->getCopies()) }} {{ __('left') }}
+                            {{ Number::format($item->max_copies - $copies) }} {{ __('left') }}
                         </x-badge>
                     @endif
                     @if ($item->isScheduled())
@@ -76,7 +86,7 @@
                         />
                         <x-one-off.item.stat
                             label="{{ __('Copies') }}"
-                            value="{{ Number::format($item->getCopies()) }}"
+                            value="{{ Number::format($copies) }}"
                         />
                     </div>
                 </div>
@@ -151,16 +161,32 @@
                     <div class="flex justify-around flex-wrap">
                         <x-one-off.item.s-stat 
                             label="{{ __('You own') }}"
-                            value="{{ Auth::user() ? $item->getOwnedCopies(Auth::user()->id) : __('N/A') }}"
-                        />
+                        >
+                            <x-slot name="value">
+                                @if (Auth::user())
+                                    <span class="flex gap-3 items-end">
+                                        <span>{{ Number::format($ownedCopies) }}</span>
+                                        <span class="text-muted-2 text-sm mb-0.5">{{ ($ownedCopies/$copies)*100 }}%</span>
+                                    </span>
+                                @else
+                                    {{ __('N/A') }}
+                                @endif
+                            </x-slot>
+                        </x-one-off.item.s-stat>
                         <x-one-off.item.s-stat 
-                            label="{{ __('Recent avg. price') }}"
-                            value="0"
+                            label="{{ __('Average price') }}"
+                            value="{{ $item->average_price ? Number::format($item->average_price) : ($item->price ? Number::format($item->price) : __('N/A')) }}"
                         />
                         <x-one-off.item.s-stat 
                             label="{{ __('Hoarded copies') }}"
-                            value="0"
-                        />
+                        >
+                            <x-slot name="value">
+                                <span class="flex gap-3 items-end">
+                                    <span>{{ Number::format($hoardedCopies) }}</span>
+                                    <span class="text-muted-2 text-sm mb-0.5">{{ ($hoardedCopies/$copies)*100 }}%</span>
+                                </span>
+                            </x-slot>
+                        </x-one-off.item.s-stat>
                     </div>
                     <div class="flex flex-col md:flex-row gap-4">
                         <div class="basis-full md:basis-1/2">

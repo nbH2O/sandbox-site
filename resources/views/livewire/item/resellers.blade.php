@@ -1,9 +1,15 @@
 <div>
     <div class="flex gap-2 justify-between">
         <h4>{{ __('Resellers') }}</h4>
-        <x-button wire:loading.attr="data-busy" size="sm">
-            {{ __('List copy') }}
-        </x-button>
+        @if (Auth::user())
+            <x-button wire:loading.attr="data-busy" size="sm">
+                {{ __('List copy') }}
+            </x-button>
+        @else
+            <x-button x-on:click="window.location = '/auth/login';" wire:loading.attr="data-busy" size="sm">
+                {{ __('List copy') }}
+            </x-button>
+        @endif
     </div>
     <div class="">
         @if ($tabbed)
@@ -12,10 +18,14 @@
                     @foreach ($resellers as $reseller)
                         <div class="flex items-center justify-between border-t-2 border-border-light dark:border-border-dark">
                             <div class="flex gap-3 items-center">
-                                <img class="size-28" src="{{ $reseller->user->getRender() }}" />
+                                <a href="{{ '/@'.$reseller->user->id }}">
+                                    <img class="size-28" src="{{ $reseller->user->getRender() }}" />
+                                </a>
                                 <div class="flex flex-col gap-1">
 
-                                    <h6>{{ $reseller->user->getName() }}</h6>
+                                    <a href="{{ '/@'.$reseller->user->id }}">
+                                        <h6>{{ $reseller->user->getName() }}</h6>
+                                    </a>
                                     <p class="text-muted text-sm">#{{ $reseller->serial }}</p>
                                     
                                 </div>

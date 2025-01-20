@@ -107,11 +107,20 @@ class Item extends Model
                         ->where('user_id', $user_id)
                         ->count();
     }
+    public function getHoardedCopies(): int
+    {
+        return Inventory::where('item_id', $this->id)
+                        ->select('user_id', 'item_id')
+                        ->groupBy('user_id', 'item_id')
+                        ->havingRaw('COUNT(*) > 1')
+                        ->selectRaw('COUNT(*) as count')
+                        ->sum('count');
+    }
     public function isMaxCopies(): bool
     {
         return $this->max_copies ? true : false;
     }
-
+    
     /**
      * Determine if the model is free
      *
