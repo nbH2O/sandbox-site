@@ -62,7 +62,7 @@
                                 <a class="absolute top-0 left-0 w-full h-full" href="{{ '/$'.$item->id }}"></a>
                                 <div class="absolute m-2 top-0 left-0 flex gap-2">
                                     @if (($item->isMaxCopies() && !$item->isSoldOut()) || $item->isScheduled())
-                                        @if ($item->isMaxCopies() && !$item->isSoldOut() && !$item->isScheduled())
+                                        @if ($item->isMaxCopies() && !$item->isSoldOut() && !$item->available_from?->isFuture())
                                             <x-badge color="red" innerClass="flex items-center gap-1.5">
                                                 @svg('ri-shopping-bag-3-fill', [
                                                     'class' => 'size-3.5'

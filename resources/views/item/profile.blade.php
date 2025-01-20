@@ -3,8 +3,53 @@
 >
     <div class="max-w-full w-[60rem]">
         <div class="flex gap-4">
-            <x-card class="basis-4/12 bg-glow aspect-square">
+            <x-card class="basis-4/12 bg-glow aspect-square relative">
                 <img src="{{ $item->getRender() }}" />
+                <div class="absolute m-2 top-0 left-0 flex gap-2">
+                    @if ($item->isMaxCopies() && !$item->isSoldOut())
+                        <x-badge color="red" innerClass="flex items-center gap-1.5">
+                            @svg('ri-shopping-bag-3-fill', [
+                                'class' => 'size-3.5'
+                            ])
+                            {{ Number::format($item->max_copies - $item->getCopies()) }} {{ __('left') }}
+                        </x-badge>
+                    @endif
+                    @if ($item->isScheduled())
+                        <x-one-off.item.timer-badge
+                            :from="$item->available_from"
+                            :to="$item->available_to"
+                        />
+                    @endif
+                </div>
+                <div class="absolute p-2 bottom-0 left-0 flex gap-2 w-full justify-between">
+                    @if ($item->isPurchasable())
+                        <x-badge color="primary" innerClass="flex items-center gap-1.5">
+                            @svg('ri-vip-diamond-fill', [
+                                'class' => 'size-3.5'
+                            ])
+                            {{ $item->price > 0 ? Number::format($item->price) : __('Free') }}
+                        </x-badge>
+                    @elseif ($item->isTradeable())
+                        @if ($item->with('cheapestReseller') && $item->cheapestReseller)
+                            <x-badge color="primary" innerClass="flex items-center gap-1.5">
+                                @svg('ri-vip-diamond-fill', [
+                                    'class' => 'size-3.5'
+                                ])
+                                {{ $item->cheapestReseller->resale_price > 0 ? $item->cheapestReseller->resale_price : __('Free') }}
+                            </x-badge>
+                        @endif
+                    @else
+                        <div>
+                        </div>
+                    @endif
+                    @if ($item->is_special)
+                        <x-badge color="special" innerClass="flex items-center gap-1.5">
+                            @svg('ri-bard-fill', [
+                                'class' => 'size-3.5'
+                            ])
+                        </x-badge>
+                    @endif
+                </div>
             </x-card>
             <div class="basis-8/12 flex flex-col">
                 <h3 class="mb-2.5">{{ $item->getName() }}</h3>
@@ -12,9 +57,7 @@
                     <div class="basis-7/12 flex flex-col gap-2">
                         <div class="flex flex-col mb-2.5">
                             <div class="flex gap-2">
-                                @if ($item->isSoldOut() && !$item->isTradeable())
-                                    <p class="font-bold uppercase text-muted">{{ __('Sold Out') }}</p>
-                                @elseif ($item->isPurchasable())
+                                @if ($item->isPurchasable())
                                     <x-button color="primary" class="font-bold">
                                         @if ($item->isFree())
                                             {{ __('Free') }}
@@ -36,26 +79,9 @@
                                         <x-button color="transparent">
                                             See More
                                         </x-button>
-                                    @else
-                                        <p class="font-bold uppercase text-muted">{{ __('No Resellers') }}</p>
                                     @endif
-                                @else
-                                    <p class="font-bold uppercase text-muted">{{ __('Offsale') }}</p>
                                 @endif
                             </div>
-                            @if (($item->isMaxCopies() && !$item->isSoldOut()) || $item->isScheduled())
-                                <div class="flex gap-2 mt-1 -mb-1.5">
-                                    @if ($item->isMaxCopies() && !$item->isSoldOut())
-                                        <span class="text-red text-sm font-bold">{{ Number::format($item->max_copies - $item->getCopies()) }} {{ __('of') }} {{ $item->max_copies }} {{ __('left') }}</span>
-                                    @endif
-                                    @if ($item->isScheduled())
-                                        <x-one-off.item.timer-snippet
-                                            :from="$item->available_from"
-                                            :to="$item->available_to"
-                                        />
-                                    @endif
-                                </div>
-                            @endif
                         </div>
                         <x-one-off.item.stat 
                             label="{{ __('Type') }}"
