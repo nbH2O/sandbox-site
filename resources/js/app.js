@@ -1,4 +1,20 @@
 import './bootstrap';
+import {delegate} from 'tippy.js';
+import 'tippy.js/themes/light.css';
+import 'tippy.js/dist/svg-arrow.css';
+
+delegate('body', {
+  target: '[data-tooltip]',
+  allowHTML: true,
+  content: (reference) => reference.getAttribute('data-tooltip'),
+  delay: [100, 200], // Optional: delay for showing and hiding
+  placement: 'top',  // Optional: position of the tooltip
+  theme: 'tw',    // Optional: theme for styling
+  animation: 'shift-away', // Optional: tooltip animation
+  arrow: `<svg width="16" height="6" viewBox="0 0 16 6" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 0L0 6h16L8 0z" />
+</svg>`
+});
 
 // Function to calculate and update time remaining
 window.timeUntil = function (el, from, to) {

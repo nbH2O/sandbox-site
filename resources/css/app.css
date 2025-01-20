@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+.tippy-box {
+    @apply transition ease-in-out !duration-150;
+}
+.tippy-box[data-state="visible"] {
+    @apply opacity-100;
+}
+.tippy-box[data-state="hidden"] {
+    @apply opacity-0;
+}
+[data-theme="tw"] .tippy-content {
+    @apply px-2 py-1;
+    @apply bg-border-light dark:bg-border-dark;
+    @apply text-sm;
+}
+[data-theme="tw"] .tippy-svg-arrow {
+    @apply fill-border-light dark:fill-border-dark;
+  }
+
 @layer components {
     .font-bold {
         @apply text-[#222226] dark:text-[#ededf1];
