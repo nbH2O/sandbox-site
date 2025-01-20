@@ -112,7 +112,7 @@
                 </div>
             </div>
         </div>
-        <div class="mt-2" x-data="{ tab: 'comments' }">
+        <div class="mt-2" x-data="{ tab: 'comments', economyTabLoaded: false }">
             <x-tab-list>
                 <x-tab 
                     x-on:click="tab = 'comments'"
@@ -126,17 +126,17 @@
                     icon="ri-briefcase-4-fill"
                     title="{{ __('Owners') }}"
                 />
-                @if ($item->cheapestReseller)
+                @if ($item->isTradeable())
                     <x-tab
-                        x-on:click="tab = 'resellers'"
-                        x-bind:data-active="tab == 'resellers'"
+                        x-on:click="tab = 'economy'; (economyTabLoaded == false) ? ($dispatch('economyTab'), economyTabLoaded = true) : false;"
+                        x-bind:data-active="tab == 'economy'"
                         icon="ri-list-check-2"
-                        title="{{ __('Resellers') }}"
+                        title="{{ __('Economy') }}"
                     />
                 @else
                     <x-tab
                         icon="ri-list-check-2"
-                        title="{{ __('Resellers') }}"
+                        title="{{ __('Economy') }}"
                         data-disabled
                     />
                 @endif
@@ -146,6 +146,40 @@
                     'model' => $item
                 ])
             </div>
+            @if ($item->isTradeable())
+                <div x-show="tab == 'economy'" class="flex flex-col gap-8 pt-8">
+                    <div class="flex justify-around flex-wrap">
+                        <x-one-off.item.s-stat 
+                            label="{{ __('You own') }}"
+                            value="{{ Auth::user() ? $item->getOwnedCopies(Auth::user()->id) : __('N/A') }}"
+                        />
+                        <x-one-off.item.s-stat 
+                            label="{{ __('Recent avg. price') }}"
+                            value="0"
+                        />
+                        <x-one-off.item.s-stat 
+                            label="{{ __('Hoarded copies') }}"
+                            value="0"
+                        />
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="basis-full md:basis-1/2">
+                            @livewire('item.resellers', [
+                                'item' => $item
+                            ])
+                        </div>
+                        <div class="w-full h-[2px] md:w-[2px] md:h-auto bg-border-light dark:bg-border-dark"></div>
+                        <div class="basis-full md:basis-1/2">
+                            <div class="flex gap-2 justify-between">
+                                <h4>{{ __('Orders') }}</h4>
+                                <x-button size="sm">
+                                    {{ __('Place order') }}
+                                </x-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </x-layout.app>

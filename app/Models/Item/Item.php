@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 use App\Models\User\User;
@@ -67,6 +68,13 @@ class Item extends Model
         return $this->creator();
     }
 
+    public function resellers(): HasMany
+    {
+        return $this->hasMany(Inventory::class)
+                ->orderBy('resale_price', 'ASC')
+                ->where('resale_price', '>', 0)
+                ->with('user');
+    }
     public function cheapestReseller(): HasOne
     {
         return $this->hasOne(Inventory::class)
@@ -91,6 +99,12 @@ class Item extends Model
     {
         return Inventory::where('item_id', $this->id)
                         ->where('user_id', '!=', config('site.main_account_id'))
+                        ->count();
+    }
+    public function getOwnedCopies($user_id): int
+    {
+        return Inventory::where('item_id', $this->id)
+                        ->where('user_id', $user_id)
                         ->count();
     }
     public function isMaxCopies(): bool

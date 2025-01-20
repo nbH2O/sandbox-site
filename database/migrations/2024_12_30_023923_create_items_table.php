@@ -59,6 +59,23 @@ return new class extends Migration
             $table->foreignId('item_id')->constrained();
         });
 
+        Schema::create('item_sale_logs', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('item_id')->constrained();
+
+            // null if its not a resale purchase
+            $table->foreignId('reseller_id')->nullable()->constrained(
+                table: 'users', indexName: 'seller_id'
+            );
+            $table->foreignId('buyer_id')->constrained(
+                table: 'users', indexName: 'seller_id'
+            );
+
+            $table->integer('price');
+
+            $table->timestamps();
+        });
+
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
