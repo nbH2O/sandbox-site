@@ -1,5 +1,6 @@
 <x-layout.app
     title="{{ __('Market') }}"
+    :pageTitle="true"
     containerClass="w-[60rem]"
 >
     <x-slot name="actions">

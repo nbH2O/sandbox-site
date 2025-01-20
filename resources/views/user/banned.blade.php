@@ -1,4 +1,6 @@
-<x-layout.app>
+<x-layout.app
+    title="{{ __('Banned') }}"
+>
     <div class="max-w-full w-[50rem]">
         <h3 class="mb-1">{{ __("Your account is suspended") }}</h3>
         <p class="mb-2">

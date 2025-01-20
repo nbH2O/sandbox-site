@@ -1,6 +1,6 @@
 @props([
     'title' => null,
-    'pageTitle' => true, // show title in page on top??
+    'pageTitle' => false, // show title in page on top??
     'containerClass' => null, // inside main
     'actions' => null
 ])

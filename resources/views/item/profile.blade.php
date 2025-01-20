@@ -1,4 +1,6 @@
-<x-layout.app>
+<x-layout.app
+    title="{{ $item->getName() }}"
+>
     <div class="max-w-full w-[60rem]">
         <div class="flex gap-4">
             <x-card class="basis-4/12 bg-glow aspect-square">

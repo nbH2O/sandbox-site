@@ -1,4 +1,6 @@
-<x-layout.app>
+<x-layout.app
+    title="{{ $user->getName() }}"
+>
     <div class="max-w-full w-[50rem] flex-wrap flex flex-col md:flex-row">
         <div class="w-full md:w-[calc(50%_-_calc(1px_+0.75rem))] flex flex-col bg-glow">
             <h3 class="flex items-center gap-2"><x-ri-circle-fill class="{{ ($user->online_at > now()->subMinutes(4)) ? 'text-[#00A437]' : 'text-border-light dark:text-border-dark' }} size-2.5" />{{ $user->getName() }}</h3>
