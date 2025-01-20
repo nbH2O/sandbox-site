@@ -2,6 +2,7 @@
     title="{{ $item->getName() }}"
 >
     <div class="max-w-full w-[60rem]">
+        <h3 class="mb-3">{{ $item->getName() }}</h3>
         <div class="flex gap-4">
             <x-card class="basis-4/12 bg-glow aspect-square relative">
                 <img src="{{ $item->getRender() }}" />
@@ -22,14 +23,8 @@
                     @endif
                 </div>
                 <div class="absolute p-2 bottom-0 left-0 flex gap-2 w-full justify-between">
-                    @if ($item->isPurchasable())
-                        <x-badge color="primary" innerClass="flex items-center gap-1.5">
-                            @svg('ri-vip-diamond-fill', [
-                                'class' => 'size-3.5'
-                            ])
-                            {{ $item->price > 0 ? Number::format($item->price) : __('Free') }}
-                        </x-badge>
-                    @elseif ($item->isTradeable())
+                    <div></div>
+                    @if ($item->isTradeable())
                         @if ($item->with('cheapestReseller') && $item->cheapestReseller)
                             <x-badge color="primary" innerClass="flex items-center gap-1.5">
                                 @svg('ri-vip-diamond-fill', [
@@ -51,79 +46,72 @@
                     @endif
                 </div>
             </x-card>
-            <div class="basis-8/12 flex flex-col">
-                <h3 class="mb-2.5">{{ $item->getName() }}</h3>
-                <div class="flex grow">
-                    <div class="basis-7/12 flex flex-col gap-2">
-                        <div class="flex flex-col mb-2.5">
-                            <div class="flex gap-2">
-                                @if ($item->isPurchasable())
-                                    <x-button color="primary" class="font-bold">
-                                        @if ($item->isFree())
-                                            {{ __('Free') }}
-                                        @else
-                                            @svg('ri-vip-diamond-fill', [
-                                                'class' => 'size-5 me-2 -ms-1'
-                                            ])
-                                            {{ $item->price }}
-                                        @endif
-                                    </x-button>
-                                @elseif ($item->isTradeable())
-                                    @if ($item->with('cheapestReseller') && $item->cheapestReseller)
-                                        <x-button color="primary" class="font-bold">
-                                            @svg('ri-vip-diamond-fill', [
-                                                'class' => 'size-5 me-2 -ms-1'
-                                            ])
-                                            {{ $item->cheapestReseller->resale_price }}
-                                        </x-button>
-                                        <x-button color="transparent">
-                                            See More
-                                        </x-button>
+            <div class="basis-8/12 flex flex-col gap-2">
+                <div class="flex gap-3 h-28">
+                    <div>
+                        <img class="h-full" src="{{ $item->creator->getRender() }}" />
+                    </div>
+                    <div>
+                        <x-one-off.item.stat
+                            label="{{ __('Creator') }}"
+                        >
+                            <x-slot name="value">
+                                <a class="flex" href="{{ '/@'.$item->creator->id }}">
+                                    @if ($item->creator->id === config('site.main_account_id'))
+                                        @svg('ri-planet-fill', [
+                                            'class' => 'size-5 text-primary me-1'
+                                        ])
                                     @endif
-                                @endif
-                            </div>
-                        </div>
-                        <x-one-off.item.stat 
-                            label="{{ __('Type') }}"
-                            value="{{ __($item->type->name) }}"
-                        />
-                        <x-one-off.item.stat 
+                                    {{ $item->creator->getName() }}
+                                </a>
+                            </x-slot>
+                        </x-one-off.item.stat>
+                        <x-one-off.item.stat
                             label="{{ __('Created') }}"
                             value="{{ $item->created_at->diffForHumans() }}"
                         />
-                        <x-one-off.item.stat 
-                            label="{{ __('Sold') }}"
-                            value="{{ $item->getCopies() }}"
+                        <x-one-off.item.stat
+                            label="{{ __('Updated') }}"
+                            value="{{ $item->updated_at?->diffForHumans() ?? $item->created_at->diffForHumans() }}"
                         />
-                        <div>
-                            <x-one-off.item.stat 
-                                label="{{ __('Tags') }}"
-                            />
-                        </div>
-                    </div>
-                    <div class="basis-5/12 flex items-center flex-col ">
-                        <img class="px-4" src="{{ $item->creator->getRender() }}" />
-                        <p class="flex items-center gap-1">
-                            @if ($item->creator->id === config('site.main_account_id'))
-                                @svg('ri-planet-fill', [
-                                    'class' => 'text-primary size-5'
-                                ])
-                            @endif
-                            {{ $item->creator->getName() }}
-                        </p>
+                        <x-one-off.item.stat
+                            label="{{ __('Copies') }}"
+                            value="{{ Number::format($item->getCopies()) }}"
+                        />
                     </div>
                 </div>
-                <div class="py-2.5 border-y-2 border-border-light dark:border-border-dark">
-
+                <div class="h-[2px] bg-border-light dark:bg-border-dark mb-2"></div>
+                <div class="flex gap-2">
+                    @if ($item->isPurchasable())
+                        <x-button color="primary" class="font-bold">
+                            @if ($item->isFree())
+                                {{ __('Free') }}
+                            @else
+                                @svg('ri-vip-diamond-fill', [
+                                    'class' => 'size-5 me-2 -ms-1'
+                                ])
+                                {{ $item->price }}
+                            @endif
+                        </x-button>
+                    @elseif ($item->isTradeable())
+                        @if ($item->with('cheapestReseller') && $item->cheapestReseller)
+                            <x-button color="primary" class="font-bold">
+                                @svg('ri-vip-diamond-fill', [
+                                    'class' => 'size-5 me-2 -ms-1'
+                                ])
+                                {{ $item->cheapestReseller->resale_price }}
+                            </x-button>
+                            <x-button color="transparent">
+                                See More
+                            </x-button>
+                        @endif
+                    @endif
+                </div>
+                <div>
+                    <p>{{ $item->getDescription() }}</p>
                 </div>
             </div>
         </div>
-        @if ($item->description)
-            <div class="mt-3.5">
-                <h4 class="mb-1">{{ __('Description') }}</h4>
-                <p>{{ $item->getDescription() }}</p>
-            </div>
-        @endif
         <div class="mt-2" x-data="{ tab: 'comments' }">
             <x-tab-list>
                 <x-tab 

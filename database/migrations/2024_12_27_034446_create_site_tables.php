@@ -23,7 +23,6 @@ return new class extends Migration
             $table->id();
             $table->string('icon')->nullable();
             $table->string('color');
-            $table->string('type');
             $table->text('message');
         });
 
