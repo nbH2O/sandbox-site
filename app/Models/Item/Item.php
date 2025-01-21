@@ -116,6 +116,18 @@ class Item extends Model
                         ->selectRaw('COUNT(*) as count')
                         ->sum('count');
     }
+    public function isOwnedBy($user_id): bool
+    {
+        $res = Inventory::where('user_id', $user_id)
+                        ->where('item_id', $this->id)
+                        ->first();
+        
+        if ($res) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function isMaxCopies(): bool
     {
         return $this->max_copies ? true : false;
@@ -138,6 +150,8 @@ class Item extends Model
     public function isScheduled(): bool
     {
         if (!$this->available_to && !$this->available_from)
+            return false;
+        if ($this->isSoldOut())
             return false;
 
         return !$this->available_to?->isPast() || !$this->available_from?->isPast();
@@ -162,7 +176,7 @@ class Item extends Model
             return false;
         if (!$this->is_onsale)
             return false;
-        if ($this->is_sold_out)
+        if ($this->is_sold_out && $this->max_copies)
             return false;
         if ($this->available_to && $this->available_to->isPast())
             return false;

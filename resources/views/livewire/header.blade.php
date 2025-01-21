@@ -92,6 +92,9 @@
                         @endif
 
                     </x-one-off.header.bi-dropdown>
+
+                    <p>{{ Number::format(Auth::user()->currency) }}</p>
+
                     <x-dropdown class="ms-2">
                         <x-slot name="trigger">
                             <div class="flex items-center gap-1.5">

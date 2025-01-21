@@ -1,16 +1,57 @@
-@php
-    $copies = $item->getCopies();
-    $hoardedCopies = $item->getHoardedCopies();
-    if (Auth::user()) {
-        $ownedCopies = $item->getOwnedCopies(Auth::user()->id);
-    } else {
-        $ownedCopies = null;
-    }
-@endphp
-
 <x-layout.app
     title="{{ $item->getName() }}"
 >
+    @php
+        $copies = $item->getCopies();
+        $hoardedCopies = $item->getHoardedCopies();
+        if (Auth::user()) {
+            $ownedCopies = $item->getOwnedCopies(Auth::user()->id);
+            $isOwned = $item->isOwnedBy(Auth::user()->id);
+        } else {
+            $ownedCopies = null;
+            $isOwned = false;
+        }
+    @endphp
+
+    @error('unexpectedPrice')
+        <x-modal
+            title="{{ __('Price changed') }}"
+        >
+            <p>{{ __('The price on the item has changed.') }}</p>
+            <p>{{ __('It was not purchased.') }}</p>
+
+            <x-slot name="actions">
+                <x-button x-on:click="open = false" color="gray">
+                    {{ __('Okay') }}
+                </x-button>
+            </x-slot>
+        </x-modal>
+    @enderror
+    @error('highPrice')
+        <x-modal
+            title="{{ __('Not enough gems') }}"
+        >
+            <p>{{ __("You don't have enough gems.") }}</p>
+            <p>{{ __('Item was not purchased.') }}</p>
+
+            <x-slot name="actions">
+                <x-button x-on:click="open = false" color="gray">
+                    {{ __('Okay') }}
+                </x-button>
+            </x-slot>
+        </x-modal>
+    @enderror
+
+    <div  x-data="{ open: false }">
+        <x-modal 
+            x-ref="resale"
+            title="{{ __('Purchase from reseller') }}"
+        >
+            <x-slot name="trigger">
+            </x-slot>
+        </x-modal>
+    </div>
+
     <div class="max-w-full w-[60rem]">
         <h3 class="mb-3">{{ $item->getName() }}</h3>
         <div class="flex gap-4">
@@ -31,22 +72,6 @@
                             :to="$item->available_to"
                         />
                     @endif
-                </div>
-                <div class="absolute p-2 bottom-0 left-0 flex gap-2 w-full justify-between">
-                    <div></div>
-                    @if ($item->isTradeable())
-                        @if ($item->with('cheapestReseller') && $item->cheapestReseller)
-                            <x-badge color="primary" innerClass="flex items-center gap-1.5">
-                                @svg('ri-vip-diamond-fill', [
-                                    'class' => 'size-3.5'
-                                ])
-                                {{ $item->cheapestReseller->resale_price > 0 ? $item->cheapestReseller->resale_price : __('Free') }}
-                            </x-badge>
-                        @endif
-                    @else
-                        <div>
-                        </div>
-                    @endif
                     @if ($item->is_special)
                         <x-badge color="special" innerClass="flex items-center gap-1.5">
                             @svg('ri-bard-fill', [
@@ -55,6 +80,14 @@
                         </x-badge>
                     @endif
                 </div>
+                @if ($isOwned)
+                    <div class="w-full absolute bottom-0 left-0 bg-green h-10 flex justify-center items-center gap-3">
+                        @svg('ri-emotion-happy-fill', [
+                            'class' => 'size-5'
+                        ])
+                        <p>{{ __('You own this item') }}</p>
+                    </div>
+                @endif
             </x-card>
             <div class="basis-8/12 flex flex-col gap-2">
                 <div class="flex gap-3 h-28">
@@ -92,20 +125,49 @@
                 </div>
                 <div class="h-[2px] bg-border-light dark:bg-border-dark mb-2"></div>
                 <div class="flex gap-2">
-                    @if ($item->isPurchasable())
-                        <x-button color="primary" class="font-bold">
-                            @if ($item->isFree())
-                                {{ __('Free') }}
-                            @else
-                                @svg('ri-vip-diamond-fill', [
-                                    'class' => 'size-5 me-2 -ms-1'
-                                ])
-                                {{ $item->price }}
-                            @endif
-                        </x-button>
+                    @if ($item->isPurchasable() && !$isOwned)
+                        <x-modal
+                            title="Purchase item"
+                        >
+                            <x-slot name="trigger">
+                                <x-button color="primary" class="font-bold">
+                                    @if ($item->isFree())
+                                        {{ __('Free') }}
+                                    @else
+                                        @svg('ri-vip-diamond-fill', [
+                                            'class' => 'size-5 me-2 -ms-1'
+                                        ])
+                                        {{ $item->price }}
+                                    @endif
+                                </x-button>
+                            </x-slot>
+
+                            <form x-ref="purchaseForm" method="POST" action="{{ '/$'.$item->id.'/purchase' }}" class="hidden">
+                                {{ csrf_field() }}
+                                <input name="item_id" value={{ $item->id }} />
+                                <input name="price" value="{{ $item->price }}" />
+                            </form>
+
+                            <p>
+                                {{ __('Are you sure you want to purchase') }}
+                                {{ $item->getName() }}
+                                {{ __('for') }}
+                                {{ Number::format($item->price) }}
+                                {{ __('?') }}
+                            </p>
+
+                            <x-slot name="actions">
+                                <x-button x-on:click="open = false" color="red">
+                                    {{ __('No') }}
+                                </x-button>
+                                <x-button x-on:click="$refs.purchaseForm.submit()" color="green">
+                                    {{ __('Yes') }}
+                                </x-button>
+                            </x-slot>
+                        </x-modal>
                     @elseif ($item->isTradeable())
                         @if ($item->with('cheapestReseller') && $item->cheapestReseller)
-                            <x-button color="primary" class="font-bold">
+                            <x-button x-on:click="openResale()" color="primary" class="font-bold">
                                 @svg('ri-vip-diamond-fill', [
                                     'class' => 'size-5 me-2 -ms-1'
                                 ])
@@ -201,11 +263,24 @@
                                 <x-button size="sm">
                                     {{ __('Place order') }}
                                 </x-button>
+                                
                             </div>
+                            <x-one-off.header.bid-no-results
+                                icon="ri-code-ai-fill"
+                                message=""
+                            />
                         </div>
                     </div>
                 </div>
             @endif
         </div>
     </div>
+
+    <script>
+        function openResale(id, name, price) {
+            // Access the Alpine component via the x-ref and change 'open' to true
+            const modalComponent = document.querySelector('[x-ref="resale"]');
+            Alpine.data(modalComponent).__x.$data.open = true;
+        }
+    </script>
 </x-layout.app>

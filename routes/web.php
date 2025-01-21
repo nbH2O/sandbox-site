@@ -29,6 +29,9 @@ Route::get('/market', function () {
 Route::get('/${id}', 
     [ItemController::class, 'profile']
 );
+Route::middleware('auth')->post('/${id}/purchase', 
+    [ItemController::class, 'purchase']
+);
 
 
 Route::get('/members', function () {
