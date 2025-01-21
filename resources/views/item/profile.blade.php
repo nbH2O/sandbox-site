@@ -54,8 +54,8 @@
 
     <div class="max-w-full w-[60rem]">
         <h3 class="mb-3">{{ $item->getName() }}</h3>
-        <div class="flex gap-4">
-            <x-card class="basis-4/12 bg-glow aspect-square relative">
+        <div class="flex flex-col sm:flex-row gap-4">
+            <x-card class="basis-full sm:basis-1/2 md:basis-4/12 bg-glow aspect-square relative">
                 <img src="{{ $item->getRender() }}" />
                 <div class="absolute m-2 top-0 left-0 flex gap-2">
                     @if ($item->isMaxCopies() && !$item->isSoldOut())
@@ -87,58 +87,30 @@
                         ])
                         <p>{{ __('You own this item') }}</p>
                     </div>
+                @elseif ($item->isPurchasable())
+                    <div class="absolute bottom-0 left-0 m-2">
+                        <x-badge color="primary" innerClass="flex items-center gap-1.5">
+                            @svg(config('site.currency_icon'), [
+                                'class' => 'size-3.5'
+                            ])
+                            {{ $item->price > 0 ? Number::format($item->price) : __('Free') }}
+                        </x-badge>
+                    </div>
                 @endif
             </x-card>
-            <div class="basis-8/12 flex flex-col gap-2">
-                <div class="flex gap-3 h-28">
-                    <div>
-                        <img class="h-full" src="{{ $item->creator->getRender() }}" />
-                    </div>
-                    <div>
-                        <x-one-off.item.stat
-                            label="{{ __('Creator') }}"
-                        >
-                            <x-slot name="value">
-                                <a class="flex" href="{{ '/@'.$item->creator->id }}">
-                                    @if ($item->creator->id === config('site.main_account_id'))
-                                        @svg('ri-planet-fill', [
-                                            'class' => 'size-5 text-primary me-1'
-                                        ])
-                                    @endif
-                                    {{ $item->creator->getName() }}
-                                </a>
-                            </x-slot>
-                        </x-one-off.item.stat>
-                        <x-one-off.item.stat
-                            label="{{ __('Created') }}"
-                            value="{{ $item->created_at->diffForHumans() }}"
-                        />
-                        <x-one-off.item.stat
-                            label="{{ __('Updated') }}"
-                            value="{{ $item->updated_at?->diffForHumans() ?? $item->created_at->diffForHumans() }}"
-                        />
-                        <x-one-off.item.stat
-                            label="{{ __('Copies') }}"
-                            value="{{ Number::format($copies) }}"
-                        />
-                    </div>
+            <div class="basis-full sm:basis-1/2 md:basis-8/12 flex flex-col">
+                <div class="grow">
+                    <p>{{ $item->getDescription() }}</p>
                 </div>
-                <div class="h-[2px] bg-border-light dark:bg-border-dark mb-2"></div>
-                <div class="flex gap-2">
+                <div class="h-[2px] bg-border-light dark:bg-border-dark mb-4 mt-3"></div>
+                <div class="flex justify-end gap-4">
                     @if ($item->isPurchasable() && !$isOwned)
                         <x-modal
                             title="Purchase item"
                         >
                             <x-slot name="trigger">
-                                <x-button color="primary" class="font-bold">
-                                    @if ($item->isFree())
-                                        {{ __('Free') }}
-                                    @else
-                                        @svg('ri-vip-diamond-fill', [
-                                            'class' => 'size-5 me-2 -ms-1'
-                                        ])
-                                        {{ $item->price }}
-                                    @endif
+                                <x-button size="lg" color="green" class="font-bold">
+                                    {{ __('Purchase') }}
                                 </x-button>
                             </x-slot>
 
@@ -148,11 +120,16 @@
                                 <input name="price" value="{{ $item->price }}" />
                             </form>
 
-                            <p>
+                            <p class="">
                                 {{ __('Are you sure you want to purchase') }}
                                 {{ $item->getName() }}
                                 {{ __('for') }}
-                                {{ Number::format($item->price) }}
+                                <span class="text-primary font-bold items-center inline-flex pt-1">
+                                    @svg(config('site.currency_icon'), [
+                                        'class' => 'size-4 me-2'
+                                    ])
+                                    {{ Number::format($item->price) }}
+                                </span>
                                 {{ __('?') }}
                             </p>
 
@@ -179,10 +156,36 @@
                         @endif
                     @endif
                 </div>
-                <div>
-                    <p>{{ $item->getDescription() }}</p>
-                </div>
             </div>
+        </div>
+        <div class="mb-7 mt-8 flex gap-4 justify-around flex-wrap">
+            <x-one-off.item.s-stat
+                label="{{ __('Creator') }}"
+            >
+                <x-slot name="value">
+                    <a class="flex" href="{{ '/@'.$item->creator->id }}">
+                        @if ($item->creator->id === config('site.main_account_id'))
+                            @svg('ri-planet-fill', [
+                                'class' => 'size-6 text-primary me-1'
+                            ])
+                        @endif
+                        {{ $item->creator->getName() }}
+                    </a>
+                </x-slot>
+            </x-one-off.item.s-stat>
+            <x-one-off.item.s-stat 
+                label="{{ __('Copies') }}"
+                value="{{ Number::format($item->getCopies()) }}"
+            />
+            <x-one-off.item.s-stat 
+                label="{{ __('Created') }}"
+                value="{{ $item->created_at->diffForHumans() }}"
+            />
+            <x-one-off.item.s-stat 
+                label="{{ __('Updated') }}"
+                value="{{ $item->updated_at?->diffForHumans() ?? $item->created_at->diffForHumans() }}"
+            />
+            
         </div>
         <div class="mt-2" x-data="{ tab: 'comments', economyTabLoaded: false }">
             <x-tab-list>
