@@ -14,6 +14,8 @@ use Illuminate\Support\Collection as BaseCollection;
 use \Staudenmeir\LaravelMergedRelations\Eloquent\HasMergedRelationships;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+use App\Models\Item\Inventory;
+
 use Mchev\Banhammer\Traits\Bannable;
 
 use App\Models\Comment;
@@ -122,6 +124,10 @@ class User extends Authenticatable
         return true;
     }
 
+    public function inventory(): hasMany
+    {
+        return $this->hasMany(Inventory::class)->orderBy('id', 'DESC');
+    }
 
     public function friendsTo(): BelongsToMany
     {

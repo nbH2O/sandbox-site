@@ -65,7 +65,7 @@
                 <p>{{ $user->getDescription() }}</p>
             </div>
         @endif
-        <div class="w-full mt-2" x-data="{ tab: 'comments' }">
+        <div class="w-full mt-2" x-data="{ tab: 'comments', inventoryTabLoaded: false }">
             <x-tab-list>
                 <x-tab 
                     x-on:click="tab = 'comments'"
@@ -74,7 +74,7 @@
                     title="{{ __('Wall') }}"
                 />
                 <x-tab 
-                    x-on:click="tab = 'inventory'"
+                    x-on:click="tab = 'inventory'; (inventoryTabLoaded == false) ? ($dispatch('inventoryTab'), inventoryTabLoaded = true) : false;"
                     x-bind:data-active="tab == 'inventory'"
                     icon="ri-briefcase-4-fill"
                     title="{{ __('Inventory') }}"
@@ -89,6 +89,11 @@
             <div x-show="tab == 'comments'">
                 @livewire('comments', [
                     'model' => $user
+                ])
+            </div>
+            <div class="mt-4" x-show="tab == 'inventory'">
+                @livewire('user.inventory', [
+                    'user' => $user
                 ])
             </div>
         </div>

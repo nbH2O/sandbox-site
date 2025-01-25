@@ -1,10 +1,15 @@
 @props([
     'icon' => null,
     'title' => null,
+    'style' => 'underline',
+    'styleVals' => [
+        'underline' => 'border-b border-b-4 font-bold border-border-light dark:border-border-dark data-[active]:border-primary',
+        'solid' => 'px-3 data-[active]:bg-primary'
+    ]
 ])
 
 <a {!! $attributes->merge([
-    'class' => 'flex justify-center items-center h-9 grow border-b border-b-4 font-bold select-none cursor-pointer border-border-light dark:border-border-dark data-[active]:border-primary data-[disabled]:text-muted-2'
+    'class' => $styleVals[$style].' flex justify-center items-center h-9 grow  select-none cursor-pointer   data-[disabled]:text-muted-2'
 ]) !!}>
     @if ($icon)
         @svg($icon, [
