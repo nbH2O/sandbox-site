@@ -17,6 +17,15 @@ class EditAvatar extends Component
 
     public function saveAvatar()
     {
-        RenderImage::dispatch(User::find(1));
+        if (! $user = Auth()->user())
+            return;
+
+        RenderImage::dispatch(Auth()->user(), '
+            <Root name="SceneRoot">
+                <Humanoid>
+                    <Mesh src="http://bhlol.test/storage/default/rig/testhat.glb" position="0,2,0"></Mesh>
+                </Humanoid>
+            </Root>
+        ');
     }
 }

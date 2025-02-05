@@ -19,6 +19,7 @@ class RenderImage implements ShouldQueue
      */
     public function __construct(
         public Model $model,
+        public $payload
     ) {}
 
     /**
@@ -35,9 +36,7 @@ class RenderImage implements ShouldQueue
         ]);
 
         $response = Http::post(config('site.renderer_url'), [
-            'json' => json_encode([
-                'hi' => 'hi'
-            ]),
+            'payload' => $this->payload,
             'token' => $ulid,
             'callback' => url(config('site.renderer_callback')),
         ]);

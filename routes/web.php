@@ -65,3 +65,9 @@ Route::middleware('auth')->group(function () {
         return view('welcome');
     })->name('report');
 });
+
+Route::middleware(['auth', MinPower::class.":200"])->prefix('admin/panel')->group(function () {
+    Route::match(['get', 'post'], '/create-item', 
+        [AdminController::class, 'createItem']
+    );
+});

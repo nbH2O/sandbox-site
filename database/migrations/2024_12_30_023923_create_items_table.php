@@ -36,7 +36,8 @@ return new class extends Migration
             $table->timestamp('available_to')->nullable();
 
             $table->ulid('render_ulid')->nullable();
-            $table->ulid('file_ulid')->nullable(); // awards/packs wont have this
+            $table->ulid('file_ulid')->nullable(); // for faces
+            $table->foreignId('model_id')->nullable()->constrained(); // for hats
 
             $table->boolean('is_public');
             $table->boolean('is_accepted');

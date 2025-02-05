@@ -12,11 +12,35 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
 <link href="https://fonts.bunny.net/css?family=montserrat:600,700,800" rel="stylesheet" />
         <title>{{ $title }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     </head>
-    <body class="overflow-x-hidden bg-body text-[#222226] dark:text-[#ededf1]" style="font-family: 'Montserrat', sans-serif;">
+    <body class="h-screen overflow-y-hidden overflow-x-hidden bg-body text-[#222226] dark:text-[#ededf1]" style="font-family: 'Montserrat', sans-serif;">
+    
+            <div class="absolute sm:hidden bottom-0  left-0 w-full h-11 bg-header z-[99999999999999999999999]">
+            <nav class="flex h-full z-[99999999999999999999999]">
+                <x-one-off.header.link
+                    title="{{ __('Worlds') }}"
+                    icon="ri-planet-fill"
+                    href="{{ route('worlds') }}"
+                />
+                <x-one-off.header.link
+                    title="{{ __('Market') }}"
+                    icon="ri-shopping-basket-fill"
+                    href="{{ route('market') }}"
+                />
+                <x-one-off.header.link
+                    title="{{ __('Members') }}"
+                    icon="ri-user-5-fill"
+                    href="{{ route('members') }}"
+                />
+            </nav>
+        </div>
+
+        <div class="w-full h-full overflow-y-scroll overflow-x-hidden">
+        
         @if (session('userRewarded') !== null)
             <x-modal
                 title="{{ __('Daily Reward') }}"
@@ -63,6 +87,7 @@
                 @endif
             </x-modal>
         @endif
+
         <div class="min-h-screen">
             @livewire('header')
             <main class="flex justify-center min-h-full mb-8 {{ $pageTitle && $title ? 'mt-8' : 'mt-12' }} px-3">
@@ -94,5 +119,7 @@
                 </div>
             </div>
         </footer>
+        </div>
+
     </body>
 </html>
