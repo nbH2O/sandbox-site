@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Item\ItemController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RenderController;
 
 use App\Http\Middleware\MinPower;

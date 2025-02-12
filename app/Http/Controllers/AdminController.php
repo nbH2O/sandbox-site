@@ -54,7 +54,7 @@ class AdminController extends Controller
                 'render_ulid' => $validated['type'] == 0 ? null : $ulid,
                 'file_ulid' => $validated['type'] == 0 ? null : $ulid,
                 'model_id' => $validated['type'] == 0 ? $model->id : null
-            ])
+            ]);
 
             return back()->with('success', 'File uploaded successfully!');
         } else {
