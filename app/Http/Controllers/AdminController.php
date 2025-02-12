@@ -58,7 +58,7 @@ class AdminController extends Controller
 
             return back()->with('success', 'File uploaded successfully!');
         } else {
-            return view('admin.create-item');
+            return view('admin.item.create');
         }
     }
 }

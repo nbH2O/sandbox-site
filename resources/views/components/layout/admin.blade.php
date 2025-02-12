@@ -1,17 +1,17 @@
 @php
     $sidebarLinks = [
         'Site Managements' => [
-            'Banners' => '/create-item',
-            'Maintenance' => '/create-item',
-            'Features' => '/create-item',
+            'Banners' => '/site/banners',
+            'Maintenance' => '/site/maintenance',
+            'Features' => '/site/features',
         ],
         'Item Managements' => [
-            'Moderate' => '/create-item',
-            'Create' => '/create-item',
+            'Moderate' => '/item/moderate',
+            'Create' => '/item/create',
         ],
         'User Management' => [
-            'Moderate' => '/create-item',
-            'Delete' => '/create-item'
+            'Moderate' => '/user/moderate',
+            'Delete' => '/user/delete'
         ],
     ];
 @endphp
