@@ -21,9 +21,11 @@
   }
 
 @layer components {
+    /* not sure why i put this here..??
     .font-bold {
         @apply text-[#222226] dark:text-[#ededf1];
     }
+    */
 }
 
 @layer components {
