@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             ItemTypeSeeder::class,
-            RoleSeeder::class
+            RoleSeeder::class,
         ]);
 
         // main account

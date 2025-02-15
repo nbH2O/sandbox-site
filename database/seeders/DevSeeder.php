@@ -17,7 +17,9 @@ class DevSeeder extends Seeder
     public function run(): void
     {       
         $this->call([
-            DatabaseSeeder::class
+            DatabaseSeeder::class,
+
+
         ]);
 
         User::factory()->create([
@@ -34,5 +36,10 @@ class DevSeeder extends Seeder
             'role_id' => 1 // owner role
         ]);
         User::factory(10)->create();
+
+        // dev only seeders
+        $this->call([
+            Dev\UserFriendshipSeeder::class,
+        ]);
     }
 }
