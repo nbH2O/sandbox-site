@@ -9,5 +9,12 @@ return [
     'renderer_url' => 'http://localhost:3000/render',
 
     // also have to change manually in bootstrap/app.php
-    'renderer_callback' => '/renderer_callback'
+    'renderer_callback' => '/renderer_callback',
+
+    'item_types' => [
+        1 => 'face',
+        2 => 'hat',
+        3 => 'shirt',
+        4 => 'pants'
+    ]
 ];

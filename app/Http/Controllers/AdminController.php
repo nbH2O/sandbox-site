@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Item\Item;
 use App\Models\Model;
+use App\Jobs\RenderImage;
 
 class AdminController extends Controller
 {
@@ -13,7 +14,7 @@ class AdminController extends Controller
     {
         if ($request->isMethod('post')) {
             $validated = $request->validate([
-                'file' => 'required|file|mimes:jpg,png,pdf|max:2048', // example rules
+                'file' => 'required|file|mimes:jpg,png,obj,gltf,glb|max:2048', // example rules
                 'type' => 'required|in:1,2',
                 'name' => 'required|max:20',
                 'description' => 'nullable|max:128',
@@ -32,15 +33,16 @@ class AdminController extends Controller
             $ext = $file->getClientOriginalExtension();
 
             $path = $file->storeAs('public', $ulid.$ext);
+            $modelData = `<Mesh src="$ulid.$ext"></Mesh>`;
 
             if ($validated['type'] == 0) {
                 $model = Model::create([
                     'version' => 1,
-                    'data' => `<Mesh src="$ulid.$ext"></Mesh>`
+                    'data' => $modelData
                 ]);
             }
 
-            Item::create([
+            $newItem = Item::create([
                 'type' => $validated['type'],
                 'name' => $validated['name'],
                 'description' => $validated['description'],
@@ -55,6 +57,12 @@ class AdminController extends Controller
                 'file_ulid' => $validated['type'] == 0 ? null : $ulid,
                 'model_id' => $validated['type'] == 0 ? $model->id : null
             ]);
+
+            RenderImage::dispatch($newItem, `
+                <Root name="SceneRoot">
+                    $modelData
+                </Root>
+            `);
 
             return back()->with('success', 'File uploaded successfully!');
         } else {

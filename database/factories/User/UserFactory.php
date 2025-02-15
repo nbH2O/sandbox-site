@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\User;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -25,8 +25,17 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'description' => fake()->text(),
             'email' => fake()->unique()->safeEmail(),
+            'is_name_scrubbed' => rand(0, 1),
+            'is_description_scrubbed' => rand(0, 1),
+            'points' => rand(0, 999999),
+            'currency' => rand(0, 999999),
             'email_verified_at' => now(),
+            'theme' => 0,
+            'born_at' => now()->subYears(18),
+            'rewarded_at' => now(),
+            'online_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];

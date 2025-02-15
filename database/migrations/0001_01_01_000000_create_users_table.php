@@ -29,7 +29,10 @@ return new class extends Migration
             $table->foreignId('primary_group_id')->nullable()->constrained(
                 table: 'groups', indexName: 'primary_group_id'
             );
-            $table->ulid('render_ulid');
+
+            // should really only be nulled for dev, dont wanna render
+            // a bajillion avatars
+            $table->ulid('render_ulid')->nullable();
 
             $table->rememberToken();
             $table->timestamp('born_at');
@@ -110,7 +113,7 @@ return new class extends Migration
 
             $table->foreignId('clothes_array')->nullable();
             $table->foreignId('items_array')->nullable();
-        })
+        });
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
