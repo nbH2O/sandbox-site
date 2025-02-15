@@ -25,7 +25,7 @@ return new class extends Migration
             $table->boolean('is_description_scrubbed');
             $table->integer('currency');
             $table->integer('points');
-            $table->tinyInteger('theme'); // 1 light 0 dark
+            $table->tinyInteger('theme')->nullable(); // 1 light 0 dark
             $table->foreignId('primary_group_id')->nullable()->constrained(
                 table: 'groups', indexName: 'primary_group_id'
             );
@@ -44,7 +44,7 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('icon');
             $table->string('color'); // hex
             $table->integer('power'); // can be null for random roles - but 'admin' should be higher than 'tester' for instance

@@ -11,10 +11,32 @@ return [
     // also have to change manually in bootstrap/app.php
     'renderer_callback' => '/renderer_callback',
 
+
+    // defualts in db
     'item_types' => [
         1 => 'face',
         2 => 'hat',
         3 => 'shirt',
         4 => 'pants'
+    ],
+    'roles' => [
+        [
+            'id' => 1,
+            'name' => 'Owner',
+            'description' => null,
+            'icon' => 'ri-auction-fill',
+            'color' => '#fefefe',
+            'power' => 255,
+            'is_public' => 0
+        ],
+        [
+            'id' => 2,
+            'name' => 'Admin',
+            'description' => 'Site administrator',
+            'icon' => 'ri-auction-fill',
+            'color' => '#E02D2D',
+            'power' => 250,
+            'is_public' => 1
+        ]
     ]
 ];
