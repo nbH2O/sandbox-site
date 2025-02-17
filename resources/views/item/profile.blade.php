@@ -231,7 +231,7 @@
                                 @if (Auth::user())
                                     <span class="flex gap-3 items-end">
                                         <span>{{ Number::format($ownedCopies) }}</span>
-                                        <span class="text-muted-2 text-sm mb-0.5">{{ ($ownedCopies/$copies)*100 }}%</span>
+                                        <span class="text-muted-2 text-sm mb-0.5">{{ ($copies > 0) ? (($ownedCopies/$copies)*100).'%' : null }}</span>
                                     </span>
                                 @else
                                     {{ __('N/A') }}
@@ -248,7 +248,7 @@
                             <x-slot name="value">
                                 <span class="flex gap-3 items-end">
                                     <span>{{ Number::format($hoardedCopies) }}</span>
-                                    <span class="text-muted-2 text-sm mb-0.5">{{ ($hoardedCopies/$copies)*100 }}%</span>
+                                    <span class="text-muted-2 text-sm mb-0.5">{{ ($copies > 0) ? (($hoardedCopies/$copies)*100).'%' : null }}</span>
                                 </span>
                             </x-slot>
                         </x-one-off.item.s-stat>
