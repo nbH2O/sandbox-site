@@ -28,6 +28,32 @@ class Item extends Model
     }
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'type_id',
+        'name',
+        'description',
+        'creator_id',
+        'price',
+        'is_onsale',
+        'is_special',
+        'max_copies',
+        'available_from',
+        'available_to',
+        'is_public',
+        'render_ulid',
+        'file_ulid',
+        'model_id',
+        'is_name_scrubbed',
+        'is_description_scrubbed',
+        'is_sold_out',
+        'is_accepted'
+    ];
+
+    /**
      * is scurbed
      * 
      * @return string

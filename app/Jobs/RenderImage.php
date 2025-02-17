@@ -30,7 +30,7 @@ class RenderImage implements ShouldQueue
         $ulid = Str::ulid();
         RenderToken::insert([
             'token' => $ulid,
-            'renderable_id' => 1,
+            'renderable_id' => $this->model->id,
             'renderable_type' => get_class($this->model),
             'expires_at' => now()->addMinutes(2)
         ]);

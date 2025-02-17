@@ -3,11 +3,12 @@
                 {{ csrf_field() }}
                 <div>
                         <x-select
-                                name="type"
+                                name="type_id"
                                 placeholder="Type"
                         >
-                                <option value="face">Face</option>
-                                <option value="hat">Hat</option>
+                                @foreach (config('site.item_types') as $key => $val)
+                                        <option value="{{ $key }}">{{ $val }}</option>
+                                @endforeach
                         </x-select>
                 </div>
                 <div>
@@ -38,13 +39,20 @@
                                 placeholder="Max Copies (optional)"
                         />
                 </div>
-                <div class="flex gap-4 opacity-50">
-                        <x-input 
-                                placeholder="Available From (optional)"
-                        />
-                        <x-input
-                                placeholder="Available To (optional)"
-                        />
+                <div>
+                        <p class="text-muted">Aviilable from-to (universal standard time) (optional)</p>
+                        <div class="flex gap-4">
+                                <x-input 
+                                        type="datetime-local"
+                                        name="available_from"
+                                        placeholder="Available From (optional)"
+                                />
+                                <x-input
+                                        type="datetime-local"
+                                        name="available_to"
+                                        placeholder="Available To (optional)"
+                                />
+                        </div>
                 </div>
                 <div class="flex gap-4">
                         <x-checkbox 
