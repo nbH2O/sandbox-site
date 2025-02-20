@@ -18,11 +18,10 @@ class DevSeeder extends Seeder
     {       
         $this->call([
             DatabaseSeeder::class,
-
-
         ]);
 
         User::factory()->create([
+            'id' => 2,
             'name' => 'test',
             'email' => 'test@example.com',
             'is_name_scrubbed' => 0,
@@ -34,12 +33,6 @@ class DevSeeder extends Seeder
         UserRole::create([
             'user_id' => 2,
             'role_id' => 1 // owner role
-        ]);
-        User::factory(10)->create();
-
-        // dev only seeders
-        $this->call([
-            Dev\UserFriendshipSeeder::class,
         ]);
     }
 }
