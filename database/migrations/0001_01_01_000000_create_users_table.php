@@ -26,9 +26,6 @@ return new class extends Migration
             $table->integer('currency');
             $table->integer('points');
             $table->tinyInteger('theme')->nullable(); // 1 light 0 dark
-            $table->foreignId('primary_group_id')->nullable()->constrained(
-                table: 'groups', indexName: 'primary_group_id'
-            );
 
             // should really only be nulled for dev, dont wanna render
             // a bajillion avatars
@@ -85,36 +82,6 @@ return new class extends Migration
             [(new User())->acceptedFriendsTo(), (new User())->acceptedFriendsFrom()]
         );
 
-        Schema::create('avatars', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->unique()->constrained();
-
-            $table->foreignId('face_id')->nullable()->constrained(
-                table: 'items', indexName: 'face_id'
-            );
-            $table->foreignId('head_id')->nullable()->constrained(
-                table: 'items', indexName: 'head_id'
-            );
-            $table->foreignId('torso_id')->nullable()->constrained(
-                table: 'items', indexName: 'torso_id'
-            );
-            $table->foreignId('arm_left_id')->nullable()->constrained(
-                table: 'items', indexName: 'arm_left_id'
-            );
-            $table->foreignId('arm_right_id')->nullable()->constrained(
-                table: 'items', indexName: 'arm_right_id'
-            );
-            $table->foreignId('leg_left_id')->nullable()->constrained(
-                table: 'items', indexName: 'leg_left_id'
-            );
-            $table->foreignId('leg_right_id')->nullable()->constrained(
-                table: 'items', indexName: 'leg_right_id'
-            );
-
-            $table->foreignId('clothes_array')->nullable();
-            $table->foreignId('items_array')->nullable();
-        });
-
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
@@ -136,7 +103,6 @@ return new class extends Migration
         Schema::dropIfExists('user_ip_logs');
         Schema::dropIfExists('user_friendships');
         MSchema::dropView('friends_view');
-        Schema::dropIfExists('avatars');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('notifications');
         Schema::dropIfExists('sessions');

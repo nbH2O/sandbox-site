@@ -10,14 +10,20 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
+    {       
+         Schema::create('item_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('is_public'); // if shows in shop
+        });
+
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('creator_id')->constrained(
                 table: 'users', indexName: 'creator_id'
             );
             $table->foreignId('type_id')->constrained(
-                table: 'item_types', indexName: 'creator_id'
+                table: 'item_types', indexName: 'type_id'
             );
 
             $table->string('name');
@@ -44,12 +50,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('item_types', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->boolean('is_public'); // if shows in shop
-        });
-
         // can theoretically be expanded to include outfits
         // at a later time
         Schema::create('item_bundle_contents', function (Blueprint $table) {
@@ -69,7 +69,7 @@ return new class extends Migration
                 table: 'users', indexName: 'seller_id'
             );
             $table->foreignId('buyer_id')->constrained(
-                table: 'users', indexName: 'seller_id'
+                table: 'users', indexName: 'buyer_id'
             );
 
             $table->integer('price');

@@ -41,7 +41,8 @@ class Search extends Component
                         break;
                     case 'body':
                         $query->where('name', 'figure')
-                            ->orWhere('name', 'head');
+                            ->orWhere('name', 'head')
+                            ->orWhere('name', 'face');
                         break;
                     case 'pack':
                         $query->where('name', 'pack');
