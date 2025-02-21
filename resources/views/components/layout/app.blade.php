@@ -19,8 +19,8 @@
     </head>
     <body class="h-screen overflow-y-hidden overflow-x-hidden bg-body text-[#222226] dark:text-[#ededf1]" style="font-family: 'Montserrat', sans-serif;">
     
-            <div class="absolute sm:hidden bottom-0  left-0 w-full h-11 bg-header z-[99999999999999999999999]">
-            <nav class="flex h-full z-[99999999999999999999999]">
+        <div class="absolute sm:hidden bottom-0  left-0 w-full h-11 bg-header z-[99999999999999999999999]">
+            <nav class="flex justify-around [&>*]:w-1/4 h-full z-[99999999999999999999999]">
                 <x-one-off.header.link
                     title="{{ __('Worlds') }}"
                     icon="ri-planet-fill"

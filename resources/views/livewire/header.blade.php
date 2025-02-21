@@ -3,7 +3,7 @@
         <div class="flex">
             <img class="max-h-full p-2 block lg:hidden" src="/images/logo/small.png" />
             <img class="max-h-full !ps-0 p-2 hidden lg:block" src="/images/logo/large.png" />
-            <nav class="flex">
+            <nav class="hidden sm:flex">
                 <x-one-off.header.link
                     title="{{ __('Worlds') }}"
                     icon="ri-planet-fill"
@@ -26,11 +26,13 @@
             @if (Auth::user())
                 <div class="flex items-center gap-2">
                     @if (Auth::user()->hasPanelAccess())
+                        <a href="/admin/panel">
                         <x-one-off.header.badged-icon 
                             class="text-red"
                             icon="ri-auction-fill"
                             badgeColor="red"
                         />
+                        </a>
                     @endif
                     <x-one-off.header.bi-dropdown
                         function=""
