@@ -97,7 +97,7 @@
 
                     <p>{{ Number::format(Auth::user()->currency) }}</p>
 
-                    <x-dropdown class="ms-2">
+                    <x-dropdown class="ms-2" align="right">
                         <x-slot name="trigger">
                             <div class="flex items-center gap-1.5">
                                 <p>{{ Auth::user()->getName() }}</p>

@@ -2,7 +2,8 @@
     'title' => null,
     'pings' => null,
     'icon' => null,
-    'function' => null
+    'function' => null,
+    'align' => 'center'
 ])
 
 @php
@@ -15,7 +16,7 @@
         }
 @endphp
 
-<x-dropdown align="center" :innerClick="false" :yAdjust="false" {{ $attributes }}>
+<x-dropdown align="{{ $align }}" :innerClick="false" :yAdjust="false" {{ $attributes }}>
     
 
     <x-slot name="trigger">
