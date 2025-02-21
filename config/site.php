@@ -37,6 +37,15 @@ return [
             'color' => '#E02D2D',
             'power' => 250,
             'is_public' => 1
-        ]
+        ],
+        [
+            'id' => 3,
+            'name' => 'Market Designer',
+            'description' => 'Design items for the market',
+            'icon' => 'ri-artboard-fill',
+            'color' => '#AABBCC',
+            'power' => 100,
+            'is_public' => 1
+        ],
     ]
 ];

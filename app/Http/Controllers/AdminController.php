@@ -9,10 +9,36 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Models\Item\Item;
 use App\Models\Model;
+use App\Models\Site\SoftMaintenance;
 use App\Jobs\RenderImage;
 
 class AdminController extends Controller
 {
+    public function siteMaintenance(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $validated = $request->validate([
+                'message' => 'nullable',
+                'min_power' => 'nullable|min:1|max:255',
+            ]);
+
+            SoftMaintenance::create([
+                'message' => $validated['message'],
+                'is_bypassable' => 1,
+                'min_power' => $validated['min_power'] ?? 255
+            ]);
+
+            return back()->with('success', 'Maintenance enabled successfully!');
+        } else if ($request->isMethod('delete')) {
+            SoftMaintenance::query()->delete();
+            return back();
+        } else {
+            return view('admin.site.maintenance', [
+                'info' => SoftMaintenance::select('message', 'min_power')->orderBy('id', 'DESC')->first()
+            ]);
+        }
+    }
+
     public function createItem(Request $request)
     {
         if ($request->isMethod('post')) {
@@ -54,12 +80,12 @@ class AdminController extends Controller
                     'description' => $validated['description'],
                     'creator_id' => config('site.main_account_id'),
                     'price' => $validated['price'],
-                    'is_onsale' => $validated['is_onsale'] ?? 0,
-                    'is_special' => $validated['is_special'] ?? 0,
+                    'is_onsale' => $validated['is_onsale'] ? 1 : 0,
+                    'is_special' => $validated['is_special'] ? 1 : 0,
                     'max_copies' => $validated['max_copies'],
                     'available_from' => $validated['available_from'],
                     'available_to' => $validated['available_to'],
-                    'is_public' => $validated['is_public'] ?? 0,
+                    'is_public' => $validated['is_public'] ? 1 : 0,
                     'render_ulid' => $validated['type_id'] == $itemTypesFlipped['hat'] ? null : $ulid,
                     'file_ulid' => $validated['type_id'] == $itemTypesFlipped['hat'] ? null : $ulid,
                     'model_id' => $validated['type_id'] == $itemTypesFlipped['hat'] ? $model->id : null,

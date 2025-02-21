@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RenderController;
 
 use App\Http\Middleware\MinPower;
+use App\Http\Middleware\HasRole;
 
 Route::post(config('site.renderer_callback'), 
     [RenderController::class, 'callback']
@@ -67,8 +68,14 @@ Route::middleware('auth')->group(function () {
     })->name('report');
 });
 
-Route::middleware(['auth', MinPower::class.":200"])->prefix('admin/panel')->group(function () {
+Route::middleware(['auth', MinPower::class.":100"])->prefix('admin/panel')->group(function () {
+    Route::get('/', function () {
+        return view('admin.index');
+    });
+    Route::match(['get', 'post', 'delete'], '/site/maintenance', 
+        [AdminController::class, 'siteMaintenance']
+    )->middleware([MinPower::class.":250"]);
     Route::match(['get', 'post'], '/item/create', 
         [AdminController::class, 'createItem']
-    );
-});
+    )->middleware([HasRole::class.":Market Designer,250"]);;
+})->name('admin.');

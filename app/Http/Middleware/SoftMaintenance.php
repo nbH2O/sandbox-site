@@ -18,7 +18,7 @@ class SoftMaintenance
     public function handle(Request $request, Closure $next): Response
     {
         
-            if ($res = Model::find(1)) {
+            if ($res = Model::orderBy('id', 'DESC')->first()) {
                 if ($res->is_bypassable && $res->min_power) {
                     // allow livewire to bypass
                     if ($request->route()->getName() === 'livewire.update') {
