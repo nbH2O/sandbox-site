@@ -122,7 +122,7 @@
                             class="text-yellow"
                             icon="ri-settings-4-fill"
                             label="{{ __('Settings') }}"
-                            href="/my/settings"
+                            href="{{ route('settings') }}"
                         />
                         <x-dropdown-item 
                             class="text-red"

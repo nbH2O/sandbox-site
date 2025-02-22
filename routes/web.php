@@ -48,6 +48,9 @@ Route::middleware('auth')->prefix('my')->group(function () {
     Route::get('/avatar', function () {
         return view('user.edit-avatar');
     })->name('avatar');
+    Route::get('/settings', function () {
+        return view('user.settings');
+    })->name('settings');
     Route::get('/notifications', function () {
         return view('user.edit-avatar');
     })->name('notifications');

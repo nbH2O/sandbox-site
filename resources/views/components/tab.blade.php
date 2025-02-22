@@ -4,7 +4,7 @@
     'style' => 'underline',
     'styleVals' => [
         'underline' => 'border-b border-b-4 font-bold border-border-light dark:border-border-dark data-[active]:border-primary',
-        'solid' => 'px-3 data-[active]:bg-primary'
+        'solid' => 'px-6 data-[active]:bg-primary'
     ]
 ])
 
