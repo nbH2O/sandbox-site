@@ -222,6 +222,8 @@ class Item extends Model
             return false;
         if (!$this->is_sold_out && $this->max_copies)
             return false;
+        if ($this->isPurchasable())
+            return false;
 
         return true;
     }

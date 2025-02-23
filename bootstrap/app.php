@@ -22,5 +22,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [SoftMaintenance::class, UserChecks::class, FeatureStatus::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        // overwrite soft errors with redirects instead
+        $exceptions->renderable(function (\Symfony\Component\HttpKernel\Exception\PaymentRequiredHttpException $e, $request) {
+            return redirect('/402');
+        });
+        $exceptions->renderable(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, $request) {
+            return redirect('/404');
+        });
+        $exceptions->renderable(function (\Symfony\Component\HttpKernel\Exception\TokenMismatchException $e, $request) {
+            return redirect('/419');
+        });
     })->create();

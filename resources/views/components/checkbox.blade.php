@@ -26,6 +26,7 @@
         <input 
             id="{{ $rand_id }}" 
             type="checkbox" 
+            value="1"
             class="peer {{ $sizeVals[$size]['c'] }} opacity-0" 
             name="{{ $name }}"
             {{-- gotta be here for stuff like wire:model --}}

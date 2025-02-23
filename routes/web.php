@@ -82,3 +82,13 @@ Route::middleware(['auth', MinPower::class.":100"])->prefix('admin/panel')->grou
         [AdminController::class, 'createItem']
     )->middleware([HasRole::class.":Market Designer,250"]);;
 })->name('admin.');
+
+Route::get('/402', function () {
+    return view('errors.402');
+});
+Route::get('/404', function () {
+    return view('errors.404');
+});
+Route::get('/419', function () {
+    return view('errors.419');
+});
