@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 
-class CheckMaintenanceStatus extends Command
+class IsDown extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:check-maintenance-status';
+    protected $signature = 'app:is-down';
 
     /**
      * The console command description.
