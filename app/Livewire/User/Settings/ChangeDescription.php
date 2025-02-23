@@ -1,14 +1,21 @@
 <?php
 
-namespace App\Livewire\User;
+namespace App\Livewire\User\Settings;
 
 use App\Models\User\User;
 
-use Livewire\Component;
 use Illuminate\Support\Facades\Validator;
+use Livewire\Component;
 
-class Settings extends Component
+class ChangeDescription extends Component
 {
+    public $description = '';
+
+    public function mount()
+    {
+        $this->description = Auth()->user()->description;
+    }
+
     public function saveDescription($newDescription)
     {   
         if (!Auth()->check()) {
@@ -23,14 +30,13 @@ class Settings extends Component
                     'description' => 'nullable|max:255',
                 ]);
         
-                \Barryvdh\Debugbar\Facades\Debugbar::error('Error!');
-        
                 if ($validator->fails()) {
                     $this->addError('newDescription', __("Max 255 characters"));
                 } else {
+                    $this->description = $newDescription;
                     $user->description = $newDescription;
                     $user->save();
-                    session()->flash('newDescription', __("Successfully updated"));
+                    session()->flash('newDescription', 'Successfully updated!');
                 }
             }
         }
@@ -38,6 +44,6 @@ class Settings extends Component
 
     public function render()
     {
-        return view('livewire.user.settings');
+        return view('livewire.user.settings.change-description');
     }
 }
