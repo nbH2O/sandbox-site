@@ -24,7 +24,7 @@
         @enderror
     </div>
     <div>
-        <x-input wire:model="password" class="w-full" name="password" size="{{ $size }}" placeholder="{{ __('Password') }}" />
+        <x-input wire:model="password" type="password" class="w-full" name="password" size="{{ $size }}" placeholder="{{ __('Password') }}" />
         @error('password')
             <span class="text-red {{ $sizeVals[$size]['error'] }}">{{ $message }}</span>
         @enderror

@@ -1,6 +1,7 @@
 @props([
     'size' => 'md',
     'sizeVals' => [
+        'sm' => 'w-80',
         'md' => 'w-96'
     ],
 

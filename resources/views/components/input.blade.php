@@ -8,5 +8,5 @@
 ])
 
 <input {!! $attributes->merge([
-    'class' => $sizeVals[$size]."  flex-1 bg-body  h-10 border border-2 border-border-light dark:border-border-dark px-3"
+    'class' => $sizeVals[$size]." w-full flex-1 bg-body  h-10 border border-2 border-border-light dark:border-border-dark px-3"
 ]) !!} />

@@ -24,7 +24,33 @@
             </div>
             <div>
                 <p>{{ __('Password') }}</p>
-                <x-input disabled type="password" value="the j the j j" />
+                <x-modal title="{{ __('Change Password') }}" size="sm">
+                    <x-slot name="trigger">
+                        <x-icon-input 
+                            outerClass="text-muted" 
+                            icon="ri-edit-2-line" 
+                            disabled 
+                            type="password" 
+                            value="the j the j j" 
+                        />
+                    </x-slot>
+
+                    <form x-data="{ current: '', new: '', confirmNew: '' }" class="flex flex-col gap-3">
+                        <div>
+                            <x-input x-model="current" type="password" placeholder="{{ __('Current Password') }}" />
+                        </div>
+                        <div>
+                            <x-input x-model="new" type="password" placeholder="{{ __('New Password') }}" />
+                        </div>
+                        <div>
+                            <x-input x-model="confirmNew" type="password" placeholder="{{ __('Confirm New Password') }}" />
+                        </div>
+                        <div class="flex gap-3 justify-end">
+                            <x-button color="gray" x-on:click.prevent="open = false">{{ __('Cancel') }}</x-button>
+                            <x-button color="green" x-on:click.prevent="$wire.changePassword(current, new, confirmNew)" wire:loading.attr="data-busy" >{{ __('Confirm') }}</x-button>
+                        </div>
+                    </form>
+                </x-modal>
             </div>
         </div>
         <div x-data="{ description: '{{ Auth::user()->description }}' }">
