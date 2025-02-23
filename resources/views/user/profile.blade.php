@@ -62,7 +62,7 @@
         @if ($user->description)
             <div class="w-full py-4">
                 <h4 class="mb-1">{{ __('Description') }}</h4>
-                <p>{{ $user->getDescription() }}</p>
+                <p>{!! UserString::withBreaks($user->getDescription()) !!}</p>
             </div>
         @endif
         <div class="w-full mt-2" x-data="{ tab: 'comments', inventoryTabLoaded: false }">

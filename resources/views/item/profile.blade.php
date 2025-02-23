@@ -100,9 +100,11 @@
             </x-card>
             <div class="basis-full sm:basis-1/2 md:basis-8/12 flex flex-col">
                 <div class="grow">
-                    <p>{{ $item->getDescription() }}</p>
+                    <p>{!! UserString::withBreaks($item->getDescription()) !!}</p>
                 </div>
-                <div class="h-[2px] bg-border-light dark:bg-border-dark mb-4 mt-3"></div>
+                @if ($item->isPurchasable() && !$isOwned)
+                    <div class="h-[2px] bg-border-light dark:bg-border-dark mb-4 mt-3"></div>
+                @endif
                 <div class="flex justify-end gap-4">
                     @if ($item->isPurchasable() && !$isOwned)
                         <x-modal
@@ -142,18 +144,6 @@
                                 </x-button>
                             </x-slot>
                         </x-modal>
-                    @elseif ($item->isTradeable())
-                        @if ($item->with('cheapestReseller') && $item->cheapestReseller)
-                            <x-button x-on:click="openResale()" color="primary" class="font-bold">
-                                @svg('ri-vip-diamond-fill', [
-                                    'class' => 'size-5 me-2 -ms-1'
-                                ])
-                                {{ $item->cheapestReseller->resale_price }}
-                            </x-button>
-                            <x-button color="transparent">
-                                See More
-                            </x-button>
-                        @endif
                     @endif
                 </div>
             </div>
