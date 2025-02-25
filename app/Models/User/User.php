@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Collection as BaseCollection;
 use \Staudenmeir\LaravelMergedRelations\Eloquent\HasMergedRelationships;
@@ -92,6 +93,11 @@ class User extends Authenticatable
     public function getLink(): string
     {
         return url('/@'.$this->id);
+    }
+
+    public function avatar(): BelongsTo
+    {
+        return $this->belongsTo(Avatar::class);
     }
 
     public function roles(): BelongsToMany

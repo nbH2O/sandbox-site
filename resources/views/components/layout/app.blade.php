@@ -1,3 +1,13 @@
+@php
+    if (Auth::check())
+        if (!Auth::user()->email_verified_at)
+            array_push($messages, [
+                'color' => 'red',
+                'icon' => null,
+                'message' => __('You still need to verify your email!')
+            ]);
+@endphp
+
 @props([
     'title' => null,
     'pageTitle' => false, // show title in page on top??
@@ -90,6 +100,13 @@
 
         <div class="min-h-screen">
             @livewire('header')
+            @if (isset($messages[0]))
+                @foreach ($messages as $msg)
+                    <div class="h-8 bg-{{ $msg['color'] ?? 'gray' }} flex justify-center items-center">
+                        <p>{{ $msg['message'] ?? '' }}</p>
+                    </div>
+                @endforeach
+            @endif
             <main class="flex justify-center min-h-full mb-8 {{ $pageTitle && $title ? 'mt-8' : 'mt-12' }} px-3">
                 <div class="max-w-full {{ $containerClass }}">
                     @if ($pageTitle && $title)

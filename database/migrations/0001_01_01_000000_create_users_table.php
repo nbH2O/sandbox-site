@@ -30,6 +30,7 @@ return new class extends Migration
             // should really only be nulled for dev, dont wanna render
             // a bajillion avatars
             $table->ulid('render_ulid')->nullable();
+            $table->foreignId('avatar_id')->nullable();
 
             $table->rememberToken();
             $table->timestamp('born_at');

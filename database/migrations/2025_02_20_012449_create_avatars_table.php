@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('avatars', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->unique()->constrained();
 
             $table->foreignId('face_id')->nullable()->constrained(
                 table: 'items', indexName: 'face_id'
@@ -36,9 +35,23 @@ return new class extends Migration
             $table->foreignId('leg_right_id')->nullable()->constrained(
                 table: 'items', indexName: 'leg_right_id'
             );
+        });
 
-            $table->foreignId('clothes_array')->nullable();
-            $table->foreignId('items_array')->nullable();
+        Schema::create('avatar_item', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('avatar_id')->constrained();
+            $table->foreignId('item_id')->constrained();
+
+            $table->decimal('position_x_adjust', 5, 2)->nullable();
+            $table->decimal('position_y_adjust', 5, 2)->nullable();
+            $table->decimal('position_z_adjust', 5, 2)->nullable();
+
+            $table->smallInteger('rotation_x')->nullable();
+            $table->smallInteger('rotation_y')->nullable();
+            $table->smallInteger('rotation_z')->nullable();
+
+            $table->decimal('scale', 5, 2)->nullable();
         });
     }
 
@@ -47,6 +60,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('avatar_item');
         Schema::dropIfExists('avatars');
     }
 };
