@@ -95,6 +95,41 @@ class User extends Authenticatable
         return url('/@'.$this->id);
     }
 
+    public function getAvatar(): object
+    {
+        $avatar = $this->avatar()->with(['items','face','head','torso','armLeft','armRight','legLeft','legRight'])->first();
+
+        $result = (object) array("equipped", "properties");
+        $result->equipped = [];
+        $result->properties = [];
+
+        // has to be a stupid thing like this
+        // or @equipped is ignored
+        $pe = fn ($v) => array_push($result->equipped, $v);
+        $pe($avatar->face);
+        $pe($avatar->head);
+        $pe($avatar->torso);
+        $pe($avatar->arm_left);
+        $pe($avatar->arm_right);
+        $pe($avatar->leg_left);
+        $pe($avatar->leg_right);
+        
+        foreach ($avatar->items as $item) {
+            array_push($result->equipped, $item);
+        }
+
+        $pp = fn ($n, $v) => $result->properties[$n] = $v;
+        $pp('head_color', $avatar->head_color);
+        $pp('torso_color', $avatar->torso_color);
+        $pp('arm_left_color', $avatar->arm_left_color);
+        $pp('arm_right_color', $avatar->arm_right_color);
+        $pp('leg_left_color', $avatar->leg_left_color);
+        $pp('leg_right_color', $avatar->leg_right_color);
+
+        $result->properties = (object) $result->properties;
+
+        return $result;
+    }
     public function avatar(): BelongsTo
     {
         return $this->belongsTo(Avatar::class);

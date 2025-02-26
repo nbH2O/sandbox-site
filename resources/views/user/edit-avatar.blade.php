@@ -1,7 +1,6 @@
 <x-layout.app
     title="{{ __('My Avatar') }}"
+    containerClass="w-[60rem]"
 >
-    <div class="w-[70rem] max-w-full">
-        @livewire('user.edit-avatar')
-    </div>
+    @livewire('user.edit-avatar')
 </x-layout.app>
