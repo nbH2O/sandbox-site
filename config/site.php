@@ -6,18 +6,26 @@ return [
     'currency_icon' => 'ri-vip-diamond-fill',
     'after_tax' => 0.9,
     'panel_access_min_power' => 200,
-    'renderer_url' => 'http://localhost:3000/render',
+    'renderer_url' => env('RENDERER_URL', 'http://localhost:3000/render'),
 
     // also have to change manually in bootstrap/app.php
     'renderer_callback' => '/renderer_callback',
 
-
     // defualts in db
     'item_types' => [
-        1 => 'face',
-        2 => 'hat',
-        3 => 'shirt',
-        4 => 'pants'
+        1 => 'figure', // bundle
+        2 => 'head',
+        3 => 'torso',
+        4 => 'arm_left',
+        5 => 'arm_right',
+        6 => 'leg_left',
+        7 => 'leg_right',
+        
+        8 => 'pack', // bundle
+        9 => 'face',
+        10 => 'hat',
+        11 => 'shirt',
+        12 => 'pants',
     ],
     'roles' => [
         [

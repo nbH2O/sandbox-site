@@ -35,6 +35,13 @@ return new class extends Migration
             $table->foreignId('leg_right_id')->nullable()->constrained(
                 table: 'items', indexName: 'leg_right_id'
             );
+
+            $table->string('head_color')->nullable();
+            $table->string('torso_color')->nullable();
+            $table->string('arm_left_color')->nullable();
+            $table->string('arm_right_color')->nullable();
+            $table->string('leg_left_color')->nullable();
+            $table->string('leg_right_color')->nullable();
         });
 
         Schema::create('avatar_item', function (Blueprint $table) {

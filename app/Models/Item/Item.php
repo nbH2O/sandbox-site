@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 use App\Models\User\User;
 use App\Models\Comment;
+use App\Models\Model as ModelModel;
 
 class Item extends Model
 {
@@ -92,6 +93,11 @@ class Item extends Model
     public function user(): BelongsTo
     {
         return $this->creator();
+    }
+
+    public function model(): BelongsTo
+    {
+        return $this->belongsTo(ModelModel::class, 'model_id');
     }
 
     public function resellers(): HasMany

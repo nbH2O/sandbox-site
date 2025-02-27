@@ -17,36 +17,66 @@ class EditAvatar extends Component
         $inventory = $user->inventory()->with('item')->simplePaginate(8);
         $avatar = $user->getAvatar();
 
-        dd($avatar->equipped);
-
 
         return view('livewire.user.edit-avatar', [
             'inventory' => $inventory,
-            'equipped' => $equipped
+            'equipped' => $avatar->equipped
         ]);
     }
 
     public function saveAvatar()
     {
         if (! $user = Auth()->user())
-            return;
+            dd('no login');
 
-        $user = Auth()->user();
+        $avatar = $user->getAvatar();
 
-        $avatar = $user->avatar();
+        $models = '';
+        foreach ($avatar->equipped as $ei) {
+            $xml = $ei->model->data;
+
+            $doc = new \DOMDocument();
+            $doc->loadXML($xml);
+            $root = $doc->documentElement; // Get the first (root) element
+            $root->setAttribute('position', '0,2,0');
+
+            // Get all elements in the document
+            $elements = $doc->getElementsByTagName('*');
+
+            // Iterate over all elements and check for the 'src' attribute
+            foreach ($elements as $element) {
+                if ($element->hasAttribute('src')) {
+                    $element->setAttribute('src', url($element->getAttribute('src')));
+                }
+            }
+            
+            $doc->formatOutput = false;
+            $res = $doc->saveXML($root);
+            // fix self-closing tag crap
+            $models .=  preg_replace('/<(\w+)([^>]*?)\s*\/>/', '<$1$2></$1>', $res);
+        }
 
         RenderImage::dispatch($user, '
             <Root name="SceneRoot">
                 <Humanoid
-                    face="'.( false ? url('storage/'.$avatar->face->file_ulid.'.png') : url('storage/default/rig/face.png') ).'"
-                    head="'.( false ? url('storage/'.$avatar->head->file_ulid.'.obj') : url('storage/default/rig/head.obj') ).'"
-                    torso="'.( false ? url('storage/'.$avatar->head->file_ulid.'.obj') : url('storage/default/rig/torso.obj') ).'"
-                    armLeft="'.( false ? url('storage/'.$avatar->head->file_ulid.'.obj') : url('storage/default/rig/armLeft.obj') ).'"
-                    armRight="'.( false ? url('storage/'.$avatar->head->file_ulid.'.obj') : url('storage/default/rig/armRight.obj') ).'"
-                    legLeft="'.( false ? url('storage/'.$avatar->head->file_ulid.'.obj') : url('storage/default/rig/legLeft.obj') ).'"
-                    legRight="'.( false ? url('storage/'.$avatar->head->file_ulid.'.obj') : url('storage/default/rig/legRight.obj') ).'"
+                    isRenderSubject="true"
+
+                    face="'.( isset($avatar->body->face) ? url('storage/'.$avatar->body->face->file_ulid.'.png') : url('storage/default/rig/face.png') ).'"
+                    head="'.( isset($avatar->body->head) ? url('storage/'.$avatar->body->head->file_ulid.'.obj') : url('storage/default/rig/head.obj') ).'"
+                    torso="'.( isset($avatar->body->torso) ? url('storage/'.$avatar->body->torso->file_ulid.'.obj') : url('storage/default/rig/torso.obj') ).'"
+                    armLeft="'.( isset($avatar->body->arm_left) ? url('storage/'.$avatar->body->arm_left->file_ulid.'.obj') : url('storage/default/rig/armLeft.obj') ).'"
+                    armRight="'.( isset($avatar->body?->arm_right) ? url('storage/'.$avatar->body->arm_right->file_ulid.'.obj') : url('storage/default/rig/armRight.obj') ).'"
+                    legLeft="'.( isset($avatar->body->leg_left) ? url('storage/'.$avatar->body->leg_left->file_ulid.'.obj') : url('storage/default/rig/legLeft.obj') ).'"
+                    legRight="'.( isset($avatar->body->leg_right) ? url('storage/'.$avatar->body->leg_right->file_ulid.'.obj') : url('storage/default/rig/legRight.obj') ).'"
+
+                    headColor="'.($avatar->properties->head_color ?? '#D3D3D3').'"
+                    torsoColor="'.($avatar->properties->torso_color ?? '#D3D3D3').'"
+                    armLeftColor="'.($avatar->properties->arm_left_color ?? '#D3D3D3').'"
+                    armRightColor="'.($avatar->properties->arm_right_color ?? '#D3D3D3').'"
+                    legLeftColor="'.($avatar->properties->leg_left_color ?? '#D3D3D3').'"
+                    legRightColor="'.($avatar->properties->leg_right_color ?? '#D3D3D3').'"
                 >
-                    <Mesh src="'.( false ? '' : url('storage/default/rig/testhat.glb') ).'" position="0,2,0"></Mesh>
+                    '.$models.'
                 </Humanoid>
             </Root>
         ');

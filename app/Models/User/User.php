@@ -97,22 +97,23 @@ class User extends Authenticatable
 
     public function getAvatar(): object
     {
-        $avatar = $this->avatar()->with(['items','face','head','torso','armLeft','armRight','legLeft','legRight'])->first();
+        $avatar = $this->avatar()->with(['items.model', 'face','head','torso','armLeft','armRight','legLeft','legRight'])->first();
 
         $result = (object) array("equipped", "properties");
         $result->equipped = [];
+        $result->body = [];
         $result->properties = [];
 
         // has to be a stupid thing like this
         // or @equipped is ignored
-        $pe = fn ($v) => array_push($result->equipped, $v);
-        $pe($avatar->face);
-        $pe($avatar->head);
-        $pe($avatar->torso);
-        $pe($avatar->arm_left);
-        $pe($avatar->arm_right);
-        $pe($avatar->leg_left);
-        $pe($avatar->leg_right);
+        $pb = fn ($n, $v) => $v != null ? ($result->body[$n] = $v) : null;
+        $pb('face', $avatar->face);
+        $pb('head', $avatar->head);
+        $pb('torso', $avatar->torso);
+        $pb('arm_left', $avatar->arm_left);
+        $pb('arm_right', $avatar->arm_right);
+        $pb('leg_left', $avatar->leg_left);
+        $pb('leg_right', $avatar->leg_right);
         
         foreach ($avatar->items as $item) {
             array_push($result->equipped, $item);
@@ -126,6 +127,7 @@ class User extends Authenticatable
         $pp('leg_left_color', $avatar->leg_left_color);
         $pp('leg_right_color', $avatar->leg_right_color);
 
+        $result->body = (object) $result->body;
         $result->properties = (object) $result->properties;
 
         return $result;

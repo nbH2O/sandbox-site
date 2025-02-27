@@ -10,37 +10,30 @@ use App\Models\User\UserRole;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+
+// php artisan db:seed --force
 class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     * 
+     * Called seeders should represent 'hardcoded' data...
+     * that would need to be the same no matter which environment
+     * and will usually need hard coding in other places
+     * (such as shop sort)
      */
     public function run(): void
     {
         Artisan::call('config:clear');
 
+        DB::table('item_types')->truncate();
+        DB::table('roles')->truncate();
+
         $this->call([
             ItemTypeSeeder::class,
             RoleSeeder::class,
-        ]);
-
-        // main account
-        User::create([
-            'id' => 1,
-            'name' => 'admin',
-            'email' => 'fake',
-            'password' => 'fake',
-            'is_name_scrubbed' => 0,
-            'is_description_scrubbed' => 0,
-            'points' => 0,
-            'currency' => 0,
-            'born_at' => now()->subYears(100),
-            'online_at' => Carbon::parse('2023-01-01'),
-            'rewarded_at' => Carbon::parse('2023-01-01')
-        ]);
-        UserRole::create([
-            'user_id' => 1,
-            'role_id' => 2 // admin role is 2, owner is 1
         ]);
     }
 }
