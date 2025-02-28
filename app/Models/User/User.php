@@ -273,7 +273,7 @@ class User extends Authenticatable
         if ($this->render_ulid)
             return config('site.file_url').'/'.$this->render_ulid.'.png';
 
-        return config('site.file_url').'/default/rendering.png';
+        return config('site.file_url').'/default/user_rendering.png';
     }
 
     public function comments(): MorphMany

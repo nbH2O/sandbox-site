@@ -27,8 +27,8 @@ return new class extends Migration
             );
 
             $table->string('name');
-            $table->text('description');
-            $table->integer('price');
+            $table->text('description')->nullable();
+            $table->integer('price')->nullable();
             $table->boolean('is_name_scrubbed');
             $table->boolean('is_description_scrubbed');
 
