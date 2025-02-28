@@ -7,11 +7,14 @@
                                 placeholder="Type"
                         >
                                 @foreach (config('site.item_types') as $key => $val)
-                                        <option value="{{ $key }}">{{ $val }}</option>
+                                        @if ($val == 'face' || $val == 'hat')
+                                                <option value="{{ $key }}">{{ $val }}</option>
+                                        @endif
                                 @endforeach
                         </x-select>
                 </div>
                 <div>
+                        <p>Faces can be PNG | Hats can be GLB</p>
                         <x-input 
                                 type="file"
                                 name="file"

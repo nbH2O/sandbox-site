@@ -21,7 +21,7 @@ class DevSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'id' => 2,
+            'id' => 1,
             'name' => 'test',
             'email' => 'test@example.com',
             'is_name_scrubbed' => 0,

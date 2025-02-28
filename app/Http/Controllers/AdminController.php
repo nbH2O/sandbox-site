@@ -43,9 +43,11 @@ class AdminController extends Controller
     {
         if ($request->isMethod('post')) {
 
+            $itemTypeIDs = array_flip(config('site.item_types'));
+            
             $validated = $request->validate([
-                'file' => 'required|file|mimes:jpg,png,obj,gltf,glb|max:2048', // example rules
-                'type_id' => 'required|in:1,2',
+                'file' => 'required|file|mimes:png,glb|max:2048', // example rules
+                'type_id' => 'required|in:'.$itemTypeIDs['face'].','.$itemTypeIDs['hat'],
                 'name' => 'required|max:20',
                 'description' => 'nullable|max:128',
                 'price' => 'nullable|integer',

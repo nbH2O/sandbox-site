@@ -14,6 +14,22 @@ class Avatar extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'head_color',
+        'torso_color',
+        'arm_left_color',
+        'arm_right_color',
+        'leg_left_color',
+        'leg_right_color'
+    ];
+
     public function users():BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -23,6 +23,8 @@ class RenderController extends Controller
 
         Storage::disk('public')->put($token.'.png', file_get_contents($file));
 
+        Storage::disk('public')->delete($sql->renderable->render_ulid.'.png');
+
         $sql->renderable->render_ulid = $sql->token;
         $sql->renderable->save();
 
