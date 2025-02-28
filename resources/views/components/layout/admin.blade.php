@@ -8,6 +8,7 @@
         'Item Managements' => [
             'Moderate' => '/item/moderate',
             'Create' => '/item/create',
+            'Create Figure' => '/item/create-figure'
         ],
         'User Management' => [
             'Moderate' => '/user/moderate',

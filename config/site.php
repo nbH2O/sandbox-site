@@ -13,6 +13,8 @@ return [
 
     // defualts in db
     'item_types' => [
+        0 => null,
+
         1 => 'figure', // bundle
         2 => 'head',
         3 => 'torso',
@@ -27,6 +29,14 @@ return [
         11 => 'shirt',
         12 => 'pants',
     ],
+    'private_item_types' => [
+        'torso',
+        'arm_left',
+        'arm_right',
+        'leg_left',
+        'leg_right'
+    ],
+
     'roles' => [
         [
             'id' => 1,

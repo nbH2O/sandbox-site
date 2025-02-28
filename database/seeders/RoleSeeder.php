@@ -17,7 +17,14 @@ class RoleSeeder extends Seeder
         $presets = config('site.roles');
 
         if ($presets) {
-            Role::insert($presets);
+            foreach ($presets as $preset) {
+                $id = $preset['id'];
+                unset($preset['id']);
+                Role::updateOrInsert(
+                    ['id' => $id],
+                    $preset
+                );
+            }
         }
     }
 }

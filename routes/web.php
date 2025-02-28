@@ -80,6 +80,9 @@ Route::middleware(['auth', MinPower::class.":100"])->prefix('admin/panel')->grou
     )->middleware([MinPower::class.":250"]);
     Route::match(['get', 'post'], '/item/create', 
         [AdminController::class, 'createItem']
+    )->middleware([HasRole::class.":Market Designer,250"]);
+    Route::match(['get', 'post'], '/item/create-figure', 
+        [AdminController::class, 'createFigure']
     )->middleware([HasRole::class.":Market Designer,250"]);;
 })->name('admin.');
 

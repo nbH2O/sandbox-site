@@ -28,9 +28,6 @@ class DatabaseSeeder extends Seeder
     {
         Artisan::call('config:clear');
 
-        DB::table('item_types')->truncate();
-        DB::table('roles')->truncate();
-
         $this->call([
             ItemTypeSeeder::class,
             RoleSeeder::class,

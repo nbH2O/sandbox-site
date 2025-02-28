@@ -88,7 +88,6 @@ class AdminController extends Controller
                     'available_from' => $validated['available_from'],
                     'available_to' => $validated['available_to'],
                     'is_public' => $validated['is_public'] ?? 0,
-                    'render_ulid' => $validated['type_id'] == $itemTypesFlipped['hat'] ? null : $ulid,
                     'file_ulid' => $validated['type_id'] == $itemTypesFlipped['hat'] ? null : $ulid,
                     'model_id' => $validated['type_id'] == $itemTypesFlipped['hat'] ? $model->id : null,
                     'is_name_scrubbed' => 0,
@@ -111,6 +110,144 @@ class AdminController extends Controller
             return back()->with('success', 'File uploaded successfully!');
         } else {
             return view('admin.item.create');
+        }
+    }
+
+    public function createFigure(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $itemTypeIDs = array_flip(config('site.item_types'));
+            
+            $validated = $request->validate([
+                'torso_file' => 'nullable|file|max:2048',
+                'arm_left_file' => 'nullable|file|max:2048',
+                'arm_right_file' => 'nullable|file|max:2048',
+                'leg_left_file' => 'nullable|file|max:2048',
+                'leg_right_file' => 'nullable|file|max:2048',
+
+                'name' => 'required|max:20',
+                'description' => 'nullable|max:128',
+                'price' => 'nullable|integer',
+                'is_onsale' => 'nullable|in:1,true,on',
+                'max_copies' => 'nullable|integer',
+                'available_from' => 'nullable|date',
+                'available_to' => 'nullable|date',
+                'is_public' => 'nullable|in:1,true,on'
+            ]);
+
+            DB::transaction(function () use ($request, $validated, $itemTypeIDs) {
+
+                $files = [
+                    'torso' => $request->file('torso_file') ?? null,
+                    'arm_left' => $request->file('arm_left_file') ?? null,
+                    'arm_right' => $request->file('arm_right_file') ?? null,
+                    'leg_left' => $request->file('leg_left_file') ?? null,
+                    'leg_right' => $request->file('leg_right_file') ?? null,
+                ];
+
+                $ulids = [];
+
+                foreach ($files as $key => $val) {
+                    if (isset($val)) {
+                        $ulid = Str::ulid();
+                                                        // better hope they uploaded an obj!
+                        Storage::disk('public')->put($ulid.'.obj', file_get_contents($val));
+
+                        $ulids[$key] = $ulid;
+
+                        $newItem = Item::create([
+                            'name' => $validated['name'].' '.ucwords(str_replace('_', ' ', $key)),
+                            'creator_id' => config('site.main_account_id'),
+                            'type_id' => $itemTypeIDs[$key],
+                            'description' => 'g',
+                            'price' => 0,
+                            'is_onsale' => 0,
+                            'is_special' => 0,
+                            'is_public' => 1,
+                            'file_ulid' => $ulid,
+                            'is_name_scrubbed' => 0,
+                            'is_description_scrubbed' => 0,
+                            'is_sold_out' => 0,
+                            'is_accepted' => 1
+                        ]);
+
+                        RenderImage::dispatch($newItem, '
+                            <Root name="SceneRoot">
+                                <Humanoid 
+                                    setRenderSubject="'.$key.'"
+
+                                    face="'.url('storage/default/rig/face.png').'"
+                                    head="'.url('storage/default/rig/head.obj').'"
+                                    torso="'.(($key == 'torso') ? url('storage/'.$ulid.'.obj') : url('storage/default/rig/torso.obj') ).'"
+                                    armLeft="'.(($key == 'arm_left') ? url('storage/'.$ulid.'.obj') : url('storage/default/rig/armLeft.obj') ).'"
+                                    armRight="'.(($key == 'arm_right') ? url('storage/'.$ulid.'.obj') : url('storage/default/rig/armRight.obj') ).'"
+                                    legLeft="'.(($key == 'leg_left') ? url('storage/'.$ulid.'.obj') : url('storage/default/rig/legLeft.obj') ).'"
+                                    legRight="'.(($key == 'leg_right') ? url('storage/'.$ulid.'.obj') : url('storage/default/rig/legRight.obj') ).'"
+
+                                    headColor="#D3D3D3"
+                                    torsoColor="#D3D3D3"
+                                    armLeftColor="#D3D3D3"
+                                    armRightColor="#D3D3D3"
+                                    legLeftColor="#D3D3D3"
+                                    legRightColor="#D3D3D3"
+                                >
+                                </Humanoid>
+                            </Root>
+                        ');
+                    } else {
+                        unset($files[$key]);
+                    }
+                }
+
+                $ulid = Str::ulid();
+
+                $newFigure = Item::create([
+                    'type_id' => $itemTypeIDs['figure'],
+                    'name' => $validated['name'],
+                    'description' => $validated['description'],
+                    'creator_id' => config('site.main_account_id'),
+                    'price' => $validated['price'],
+                    'is_onsale' => $validated['is_onsale'] ?? 0,
+                    'is_special' => 0,
+                    'max_copies' => $validated['max_copies'],
+                    'available_from' => $validated['available_from'],
+                    'available_to' => $validated['available_to'],
+                    'is_public' => $validated['is_public'] ?? 0,
+                    'file_ulid' => $ulid,
+                    'is_name_scrubbed' => 0,
+                    'is_description_scrubbed' => 0,
+                    'is_sold_out' => 0,
+                    'is_accepted' => 1
+                ]);
+
+                RenderImage::dispatch($newFigure, '
+                    <Root name="SceneRoot">
+                        <Humanoid 
+                            isRenderSubject="true"
+
+                            face="'.url('storage/default/rig/face.png').'"
+                            head="'.url('storage/default/rig/head.obj').'"
+                            torso="'.( isset($ulids['torso']) ? url('storage/'.$ulids['torso'].'.obj') : url('storage/default/rig/torso.obj') ).'"
+                            armLeft="'.( isset($ulids['arm_left']) ? url('storage/'.$ulids['arm_left'].'.obj') : url('storage/default/rig/armLeft.obj') ).'"
+                            armRight="'.( isset($ulids['arm_right']) ? url('storage/'.$ulids['arm_left'].'.obj') : url('storage/default/rig/armRight.obj') ).'"
+                            legLeft="'.( isset($ulids['leg_left']) ? url('storage/'.$ulids['leg_left'].'.obj') : url('storage/default/rig/legLeft.obj') ).'"
+                            legRight="'.( isset($ulids['leg_right']) ? url('storage/'.$ulids['leg_right'].'.obj') : url('storage/default/rig/legRight.obj') ).'"
+
+                            headColor="#D3D3D3"
+                            torsoColor="#D3D3D3"
+                            armLeftColor="#D3D3D3"
+                            armRightColor="#D3D3D3"
+                            legLeftColor="#D3D3D3"
+                            legRightColor="#D3D3D3"
+                        >
+                        </Humanoid>
+                    </Root>
+                ');
+            });
+
+            return back()->with('success', 'File uploaded successfully!');
+        } else {
+            return view('admin.item.create-figure');
         }
     }
 }
