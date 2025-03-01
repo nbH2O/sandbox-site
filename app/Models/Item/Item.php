@@ -143,7 +143,7 @@ class Item extends Model
     {
         return Inventory::where('item_id', $this->id)
                         ->select('user_id', 'item_id')
-                        ->groupBy('user_id', 'item_id')
+                        ->groupBy('id', 'user_id', 'item_id')
                         ->havingRaw('COUNT(*) > 1')
                         ->selectRaw('COUNT(*) as count')
                         ->sum('count');

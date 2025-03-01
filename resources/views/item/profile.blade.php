@@ -55,7 +55,7 @@
     <div class="max-w-full w-[60rem]">
         <h3 class="mb-3">{{ $item->getName() }}</h3>
         <div class="flex flex-col sm:flex-row gap-4">
-            <x-card class="basis-full sm:basis-1/2 md:basis-4/12 bg-glow aspect-square relative">
+            <x-card class="basis-full sm:basis-1/2 md:basis-4/12 bg-glow aspect-square relative {{ $isOwned ? '!border-green' : null }}">
                 <img src="{{ $item->getRender() }}" />
                 <div class="absolute m-2 top-0 left-0 flex gap-2">
                     @if ($item->isMaxCopies() && !$item->isSoldOut())
@@ -177,6 +177,12 @@
             />
             
         </div>
+        @if (in_array($item->type->name, config('site.bundle_item_types')))
+            <div class="my-4">
+            <h4>{{ __('Contents') }}</h4>
+
+            </div>
+        @endif
         <div class="mt-2" x-data="{ tab: 'comments', economyTabLoaded: false }">
             <x-tab-list>
                 <x-tab 

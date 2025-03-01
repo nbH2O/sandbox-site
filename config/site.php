@@ -27,6 +27,10 @@ return [
         11 => 'shirt',
         12 => 'pants',
     ],
+    'bundle_item_types' => [
+        'figure',
+        'pack'
+    ],
     'private_item_types' => [
         'torso',
         'arm_left',

@@ -32,7 +32,7 @@ class EditAvatar extends Component
             array_push($equippedIDs, $equippedItem->id);
         }
 
-        $inventory = $user->inventory()->whereNotIn('item_id', $equippedIDs)->groupBy('item_id')->distinct()->with('item')->simplePaginate(8);
+        $inventory = $user->inventory()->whereNotIn('item_id', $equippedIDs)->groupBy('id', 'item_id')->distinct()->with('item')->simplePaginate(8);
 
         return view('livewire.user.edit-avatar', [
             'inventory' => $inventory,

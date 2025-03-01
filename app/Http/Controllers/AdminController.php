@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\Item\Item;
+use App\Models\Item\Bundle;
 use App\Models\Model;
 use App\Models\Site\SoftMaintenance;
 use App\Jobs\RenderImage;
@@ -88,6 +89,7 @@ class AdminController extends Controller
                     'available_from' => $validated['available_from'],
                     'available_to' => $validated['available_to'],
                     'is_public' => $validated['is_public'] ?? 0,
+                    'render_ulid' => $validated['type_id'] == $itemTypesFlipped['face'] ? $ulid : null,
                     'file_ulid' => $validated['type_id'] == $itemTypesFlipped['hat'] ? null : $ulid,
                     'model_id' => $validated['type_id'] == $itemTypesFlipped['hat'] ? $model->id : null,
                     'is_name_scrubbed' => 0,
@@ -146,6 +148,7 @@ class AdminController extends Controller
                 ];
 
                 $ulids = [];
+                $bodyPartIDs = [];
 
                 foreach ($files as $key => $val) {
                     if (isset($val)) {
@@ -170,6 +173,8 @@ class AdminController extends Controller
                             'is_sold_out' => 0,
                             'is_accepted' => 1
                         ]);
+
+                        array_push($bodyPartIDs, $newItem->id);
 
                         RenderImage::dispatch($newItem, '
                             <Root name="SceneRoot">
@@ -220,6 +225,15 @@ class AdminController extends Controller
                     'is_accepted' => 1
                 ]);
 
+                $bundleInserts = [];
+                foreach ($bodyPartIDs as $bpID) {
+                    array_push($bundleInserts, [
+                        'bundle_id' => $newFigure->id,
+                        'item_id' => $bpID
+                    ]);
+                }
+                Bundle::insert($bundleInserts);
+
                 RenderImage::dispatch($newFigure, '
                     <Root name="SceneRoot">
                         <Humanoid 
@@ -229,7 +243,7 @@ class AdminController extends Controller
                             head="'.url('storage/default/rig/head.obj').'"
                             torso="'.( isset($ulids['torso']) ? url('storage/'.$ulids['torso'].'.obj') : url('storage/default/rig/torso.obj') ).'"
                             armLeft="'.( isset($ulids['arm_left']) ? url('storage/'.$ulids['arm_left'].'.obj') : url('storage/default/rig/armLeft.obj') ).'"
-                            armRight="'.( isset($ulids['arm_right']) ? url('storage/'.$ulids['arm_left'].'.obj') : url('storage/default/rig/armRight.obj') ).'"
+                            armRight="'.( isset($ulids['arm_right']) ? url('storage/'.$ulids['arm_right'].'.obj') : url('storage/default/rig/armRight.obj') ).'"
                             legLeft="'.( isset($ulids['leg_left']) ? url('storage/'.$ulids['leg_left'].'.obj') : url('storage/default/rig/legLeft.obj') ).'"
                             legRight="'.( isset($ulids['leg_right']) ? url('storage/'.$ulids['leg_right'].'.obj') : url('storage/default/rig/legRight.obj') ).'"
 

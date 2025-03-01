@@ -3,7 +3,7 @@
     'outerClass' => 'text-muted'
 ])
 
-<div class="relative {{ $outerClass }}">
+<div class="relative w-full {{ $outerClass }}">
     <x-input {{ $attributes->merge(['class' => 'w-full']) }} />
     <div class="absolute right-0 top-0 h-full flex items-center px-3">
         @svg($icon, [

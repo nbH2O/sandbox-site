@@ -5,15 +5,16 @@
     <script x-ref="description">@json(Auth::user()->description)</script>
     <p>{{ __('Description') }}</p>
     <x-textarea x-model="newDescription">
-        <x-button 
-            x-on:click="$wire.saveDescription(newDescription)"
-            x-show="newDescription != description"
-            wire:loading.attr="data-busy" 
-            class="absolute bottom-0 right-0 m-2" 
-            size="sm" color="blue"
-        >
-            {{ __('Save') }}
-        </x-button>
+        <div class="absolute m-2 right-0 bottom-0 flex">
+            <x-button 
+                x-on:click="$wire.saveDescription(newDescription)"
+                x-show="newDescription != description"
+                wire:loading.attr="data-busy" 
+                size="sm" color="blue"
+            >
+                {{ __('Save') }}
+            </x-button>
+        </div>
     </x-textarea>
     @error('newDescription')
         <small class="text-red">{{ $message }}</small>

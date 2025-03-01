@@ -64,8 +64,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('item_id')->constrained();
 
-            // null if its not a resale purchase
-            $table->foreignId('reseller_id')->nullable()->constrained(
+            $table->foreignId('seller_id')->nullable()->constrained(
                 table: 'users', indexName: 'seller_id'
             );
             $table->foreignId('buyer_id')->constrained(
@@ -77,18 +76,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('inventories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('item_id');
 
-            // these are only for specials obvisouslsly
-            $table->boolean('is_for_trade')->nullable(); // 1 wanna trade 0 no, null whatever
-            $table->integer('resale_price')->nullable();
-            $table->integer('serial');
-
-            $table->timestamps();
-        });
     }
 
     /**
@@ -99,6 +87,6 @@ return new class extends Migration
         Schema::dropIfExists('items');
         Schema::dropIfExists('item_types');
         Schema::dropIfExists('item_bundle_contents');
-        Schema::dropIfExists('inventories');
+        Schema::dropIfExists('item_sale_logs');
     }
 };

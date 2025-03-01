@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Item\Item;
 use App\Models\Item\Inventory;
+use App\Models\Item\Bundle;
+use App\Models\Item\SaleLog;
 
 use Illuminate\Support\Facades\DB;
 
@@ -39,17 +41,45 @@ class ItemController extends Controller
                                                 ->orderBy('serial', 'DESC')
                                                 ->first();
                             $serial = $highest?->serial + 1 ?? 1;
+
                             Inventory::insert([
                                 'user_id' => $user->id,
                                 'item_id' => $item->id,
                                 'serial' => $serial
                             ]);
+                            SaleLog::insert([
+                                'seller_id' => $item->user->id,
+                                'buyer_id' => $user->id,
+                                'item_id' => $item->id,
+                                'price' => $item->price,
+                                'created_at' => now(),
+                            ]);
+
                             if ($serial >= $item->max_copies) {
                                 $item->timestamps = false;
                                 $item->is_sold_out = true;
                                 $item->save();
                             }
                             $item->creator->increment('currency', round($item->price * config('site.after_tax')));
+
+                            if (in_array($item->type->name, config('site.bundle_item_types'))) {
+                                $bundleContents = Bundle::where('bundle_id', $item->id)->get();
+                                $toInsert = [];
+
+                                foreach ($bundleContents as $bC) {
+                                    $bcHighest = Inventory::where('item_id', $bC->id)
+                                                ->orderBy('serial', 'DESC')
+                                                ->first();
+                                    $bcSerial = $bcHighest?->serial + 1 ?? 1;
+                                    array_push($toInsert, [
+                                        'user_id' => $user->id,
+                                        'item_id' => $bC->item_id,
+                                        'serial' => $bcSerial
+                                    ]);
+                                }
+
+                                Inventory::insert($toInsert);
+                            }
                         });
                         $validator->errors()->add('purchaseSuccessful', 'j');
                     }
