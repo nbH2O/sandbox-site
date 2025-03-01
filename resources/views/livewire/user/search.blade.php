@@ -23,8 +23,8 @@
                         <img class="w-full aspect-square bg-glow" src="{{ $user->getRender() }}" />
                     </div>
                     <div class="flex flex-col gap-2">
-                        <h4 class="flex items-center gap-2"><x-ri-circle-fill class="{{ ($user->online_at > now()->subMinutes(4)) ? 'text-[#00A437]' : 'text-border-light dark:text-border-dark' }} size-2.5" />{{ $user->getName() }}</h4>
-                        <p class="">
+                        <h4 class="flex items-center gap-2 text-h5 sm:text-h4"><x-ri-circle-fill class="{{ ($user->online_at > now()->subMinutes(4)) ? 'text-[#00A437]' : 'text-border-light dark:text-border-dark' }} size-2.5" />{{ $user->getName() }}</h4>
+                        <p class="text-sm sm:text-base">
                             {{ $user->getDescription() }}
                         </p>
                         @if ($user->roles)

@@ -13,8 +13,6 @@ return [
 
     // defualts in db
     'item_types' => [
-        0 => null,
-
         1 => 'figure', // bundle
         2 => 'head',
         3 => 'torso',

@@ -15,8 +15,8 @@
         @foreach ($comments as $comment)
             <div class="h-[2px] bg-border-light dark:bg-border-dark"></div>
             <div class="flex gap-4">
-                <div class="shrink-0">
-                    <img class="w-26 md:w-32 bg-glow" src="{{ $comment->user->getRender() }}" />
+                <div class="shrink-0 w-1/4 sm:w-32 ">
+                    <img class="bg-glow" src="{{ $comment->user->getRender() }}" />
                 </div>
                 <div class="flex flex-1 flex-col gap-1">
                     <div class="flex-1">
@@ -63,5 +63,7 @@
             </div>
         @endforeach
     </div>
-    {{ $comments->links() }}
+    <div class="flex justify-center mt-2 md:mt-0">
+        {{ $comments->links() }}
+    </div>
 </div>

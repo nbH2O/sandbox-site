@@ -97,5 +97,6 @@
                 ])
             </div>
         </div>
+        <div class="md:hidden h-[2px] bg-border-light dark:bg-border-dark my-4"></div>
     </div>
 </x-layout.app>

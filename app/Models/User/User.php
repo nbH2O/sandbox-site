@@ -143,13 +143,15 @@ class User extends Authenticatable
         $avatar = $this->getAvatar();
 
         $models = '';
-        foreach ($avatar->equipped as $ei) {
-            $xml = $ei->model->data;
+        foreach ($avatar->equipped as $equippedItem) {
+            $xml = $equippedItem->model->data;
 
             $doc = new \DOMDocument();
             $doc->loadXML($xml);
             $root = $doc->documentElement; // Get the first (root) element
-            $root->setAttribute('position', '0,2,0');
+            $root->setAttribute('position', (0+$equippedItem->pivot->position_x_adjust).','.(2+$equippedItem->pivot->position_y_adjust).','.(0+$equippedItem->pivot->position_z_adjust));
+            $root->setAttribute('scale', ($equippedItem->pivot->scale ?? 1));
+            $root->setAttribute('rotation', (0+$equippedItem->pivot->rotation_x).','.(0+$equippedItem->pivot->rotation_y).','.(0+$equippedItem->pivot->rotation_z));
 
             // Get all elements in the document
             $elements = $doc->getElementsByTagName('*');

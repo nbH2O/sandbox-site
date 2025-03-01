@@ -1,28 +1,32 @@
 <div>
-    <div class="flex gap-4 mb-4">
-        <x-input 
-            wire:model="query"
-            x-on:keyup.enter="$wire.$refresh()"
-            placeholder="Search..."
-        />
-        <x-select wire:model.change="sort">
-            <option value="updated">{{ __('Recently Updated') }}</option>
-            <option value="newest">{{ __('Newest') }}</option>
-            <option value="oldest">{{ __('Oldest') }}</option>
-            <option value="cheapest">{{ __('Cheapest') }}</option>
-            <option value="priciest">{{ __('Priciest') }}</option>
-        </x-select>
-        <x-button
-            x-on:click="$wire.$refresh()"
-            wire:loading.attr="data-busy"
-        >
-            <x-ri-search-line class="size-5 -ms-1.5 me-2" />
-            {{ __('Search') }}
-        </x-button>
+    <div class="flex flex-col sm:flex-row gap-4 mb-4">
+        <div class="grow">
+            <x-input 
+                wire:model="query"
+                x-on:keyup.enter="$wire.$refresh()"
+                placeholder="Search..."
+            />
+        </div>
+        <div class="flex gap-4 [&>*]:grow sm:[&>*]:grow-0">
+            <x-select wire:model.change="sort">
+                <option value="updated">{{ __('Recently Updated') }}</option>
+                <option value="newest">{{ __('Newest') }}</option>
+                <option value="oldest">{{ __('Oldest') }}</option>
+                <option value="cheapest">{{ __('Cheapest') }}</option>
+                <option value="priciest">{{ __('Priciest') }}</option>
+            </x-select>
+            <x-button
+                x-on:click="$wire.$refresh()"
+                wire:loading.attr="data-busy"
+            >
+                <x-ri-search-line class="size-5 -ms-1.5 me-2" />
+                {{ __('Search') }}
+            </x-button>
+        </div>
     </div>
     <div class="flex flex-col md:flex-row">
         <div class="flex flex-col gap-4 flex-1">
-            <x-tab-list x-data="{ active: 'all' }">
+            <x-tab-list x-data="{ active: 'all' }" class="flex-col sm:flex-row">
                 <x-tab
                     icon="ri-asterisk"
                     title="{{ __('All') }}"

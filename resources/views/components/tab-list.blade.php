@@ -6,6 +6,6 @@
     ]
 ])
 
-<div {!! $attributes->merge(['class' => $vVals[$vertical].' gap-2']) !!}>
+<div {!! $attributes->merge(['class' => $vVals[$vertical].' gap-2 ']) !!}>
     {{ $slot }}
 </div>
