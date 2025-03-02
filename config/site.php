@@ -67,5 +67,14 @@ return [
             'power' => 100,
             'is_public' => 1
         ],
+        [
+            'id' => 4,
+            'name' => 'Tester',
+            'description' => 'Test website updates',
+            'icon' => 'ri-test-tube-fill',
+            'color' => '#5DA93D',
+            'power' => 5,
+            'is_public' => 1
+        ]
     ]
 ];
