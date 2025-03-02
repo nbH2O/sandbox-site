@@ -22,7 +22,8 @@ class Search extends Component
     }
 
     public function render()
-    {        
+    {      
+        $user = Auth()->user();
         // for some reason doing a uery within the with()
         // just doesnt work for type specifically
         // so it has to be super jank like this i guess
@@ -76,8 +77,18 @@ class Search extends Component
                     # code...
                     break;
             }
-        })
-        ->simplePaginate(16);
+        });
+
+        if($user) {
+            if ($user->isAdmin()) {
+                
+            } else {
+                $sql->where('is_public', true);
+            }
+        } else {
+            $sql->where('is_public', true);
+        }
+        $sql = $sql->simplePaginate(16);
 
         
         return view('livewire.item.search', [

@@ -15,9 +15,6 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->validateCsrfTokens(except: [
-            'renderer_callback',
-        ]);
         // soft maintenance takes priority
         $middleware->web(append: [SoftMaintenance::class, UserChecks::class, FeatureStatus::class]);
     })

@@ -9,6 +9,9 @@ use App\Models\RenderToken;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+
+use Symfony\Component\Uid\Ulid;
 
 class RenderImage implements ShouldQueue
 {
@@ -25,20 +28,26 @@ class RenderImage implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(): bool|Ulid
     {
         $ulid = Str::ulid();
-        RenderToken::insert([
-            'token' => $ulid,
-            'renderable_id' => $this->model->id,
-            'renderable_type' => get_class($this->model),
-            'expires_at' => now()->addMinutes(2)
-        ]);
 
         $response = Http::post(config('site.renderer_url'), [
-            'payload' => $this->payload,
-            'token' => $ulid,
-            'callback' => url(config('site.renderer_callback')),
+            'payload' => $this->payload
         ]);
+        $response = $response->json();
+
+        if ($response['success'] == 1) {
+            Storage::disk('public')->put($ulid.'.png', base64_decode($response['base64']));
+
+            Storage::disk('public')->delete($this->model->render_ulid.'.png');
+
+            $this->model->render_ulid = $ulid;
+            $this->model->save();
+
+            return $ulid;
+        } else {
+            return false;
+        }
     }
 }

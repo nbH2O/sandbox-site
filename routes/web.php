@@ -9,10 +9,6 @@ use App\Http\Controllers\RenderController;
 use App\Http\Middleware\MinPower;
 use App\Http\Middleware\HasRole;
 
-Route::post(config('site.renderer_callback'), 
-    [RenderController::class, 'callback']
-);
-
 Route::get('/', function () {
     return view('welcome');
 });

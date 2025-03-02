@@ -28,6 +28,11 @@
                             />
                         @endif
                     @endif
+                    @if (!$item->is_public)
+                        <x-badge color="gray">
+                            {{ __('Private') }}
+                        </x-badge>
+                    @endif
                 @endif
             </div>
             <div class="absolute p-2 mb-2 bottom-0 left-0 flex gap-2 w-full justify-between">
@@ -53,7 +58,7 @@
                     </div>
                 @endif
                 @if ($item->is_special)
-                    <x-badge color="special" innerClass="bg-clip-text flex items-center gap-1.5">
+                    <x-badge color="special">
                         <span class="font-bold">Special</span>
                     </x-badge>
                 @endif

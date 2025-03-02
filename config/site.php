@@ -8,9 +8,6 @@ return [
     'panel_access_min_power' => 200,
     'renderer_url' => env('RENDERER_URL', 'http://localhost:3000/render'),
 
-    // also have to change manually in bootstrap/app.php
-    'renderer_callback' => '/renderer_callback',
-
     'max_avatar_items' => 3,
 
     // defualts in db

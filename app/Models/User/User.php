@@ -15,6 +15,8 @@ use Illuminate\Support\Collection as BaseCollection;
 use \Staudenmeir\LaravelMergedRelations\Eloquent\HasMergedRelationships;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+use Symfony\Component\Uid\Ulid;
+
 use App\Models\Item\Inventory;
 use App\Models\Comment;
 
@@ -125,7 +127,7 @@ class User extends Authenticatable
             array_push($result->equipped, $item);
         }
 
-        $pp = fn ($n, $v) => $result->properties[$n] = $v;
+        $pp = fn ($n, $v) => $result->properties[$n] = $v ?? '#D3D3D3';
         $pp('head_color', $avatar->head_color);
         $pp('torso_color', $avatar->torso_color);
         $pp('arm_left_color', $avatar->arm_left_color);
@@ -143,7 +145,7 @@ class User extends Authenticatable
         return $this->belongsTo(Avatar::class);
     }
 
-    public function doRender(): null
+    public function doRender($isSync = false): bool|Ulid
     {
         $avatar = $this->getAvatar();
 
@@ -177,7 +179,7 @@ class User extends Authenticatable
             }
         }
 
-        RenderImage::dispatch($this, '
+        $renderString = '
             <Root name="SceneRoot">
                 <Humanoid
                     isRenderSubject="true"
@@ -200,9 +202,15 @@ class User extends Authenticatable
                     '.$models.'
                 </Humanoid>
             </Root>
-        ');
+        ';
 
-        return null;
+        if (!$isSync) {
+            RenderImage::dispatch($this, $renderString);
+            return true;
+        } else {
+            RenderImage::dispatchSync($this, $renderString);
+            return true;
+        }
     }
 
     public function roles(): BelongsToMany
@@ -223,6 +231,17 @@ class User extends Authenticatable
     public function anyRoles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class)->orderBy('power', 'DESC');
+    }
+
+    public function isAdmin(): bool
+    {
+        $highestRole = $this->anyRoles()->first();
+
+        if ($highestRole->power >= config('site.panel_access_min_power')) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function hasPanelAccess(): bool

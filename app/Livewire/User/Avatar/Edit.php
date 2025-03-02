@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\User;
+namespace App\Livewire\User\Avatar;
 
 use Livewire\Component;
 
@@ -15,11 +15,18 @@ use App\Jobs\RenderImage;
 
 use App\Events\UserRegistered;
 
-class EditAvatar extends Component
+class Edit extends Component
 {
     use WithPagination;
 
     public $query = null;
+
+    public $type = 'accessory';
+
+    public function updateType($val)
+    {
+        $this->type = $val;
+    }
 
     public function render()
     {
@@ -38,28 +45,40 @@ class EditAvatar extends Component
             array_push($equippedIDs, $equippedItem->id);
         }
 
+        $typeIDs = [];
+
+        switch ($this->type) {
+            case 'clothing':
+                $typeIDs = [$itemTypeIDs['shirt'], $itemTypeIDs['pants']];
+                break;
+            case 'body':
+                $typeIDs = [
+                    $itemTypeIDs['head'], $itemTypeIDs['face'],
+                    $itemTypeIDs['torso'],
+                    $itemTypeIDs['arm_left'], $itemTypeIDs['arm_right'],
+                    $itemTypeIDs['leg_left'], $itemTypeIDs['leg_right']
+                ];
+                break;
+            case 'accessory':
+            default:
+                $typeIDs = [$itemTypeIDs['hat']];
+                break;
+        }
+
         $inventory = $user->inventory()
                         ->whereNotIn('item_id', $equippedIDs)
                         ->groupBy('id', 'item_id')
                         ->distinct()
-                        ->whereDoesntHave('item', function ($query) use ($itemTypeIDs) {
-                            $query->whereIn('type_id', [$itemTypeIDs['figure'], $itemTypeIDs['pack']]);
+                        ->whereHas('item', function ($query) use ($itemTypeIDs, $typeIDs) {
+                            $query->whereIn('type_id', $typeIDs);
                         })
                         ->simplePaginate(8);
 
-        return view('livewire.user.edit-avatar', [
+        return view('livewire.user.avatar.edit', [
             'inventory' => $inventory,
-            'equipped' => $avatar->equipped
+            'equipped' => $avatar->equipped,
+            'properties' => $avatar->properties
         ]);
-    }
-
-    public function saveAvatar()
-    {
-        if (! $user = Auth()->user())
-            dd('no login');
-
-        //event(new UserRegistered($user));
-        $user->doRender();
     }
 
     public function unequip($id) 
