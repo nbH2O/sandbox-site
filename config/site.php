@@ -11,6 +11,8 @@ return [
     // also have to change manually in bootstrap/app.php
     'renderer_callback' => '/renderer_callback',
 
+    'max_avatar_items' => 3,
+
     // defualts in db
     'item_types' => [
         1 => 'figure', // bundle

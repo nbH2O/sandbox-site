@@ -4,7 +4,7 @@
     'info' => true
 ])
 
-<div class="flex flex-col relative">
+<div {{ $attributes->merge(['class' => 'flex flex-col relative']) }}>
     <div class="relative">
         <!-- Little bar thing on tha bottom -->
         <div class="absolute bottom-0 h-2 w-full {{ $item->is_special ? 'bg-[#f4ca47]/50' : 'bg-[rgba(79,_86,_96,_.50)]' }}"></div>

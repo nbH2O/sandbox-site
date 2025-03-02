@@ -8,6 +8,7 @@
             <div class="flex gap-4 grid grid-cols-4">
                 @foreach($inventory as $inv)
                     <x-one-off.item.card
+                        x-on:click.prevent="$wire.equip({{ $inv->item->id }})"
                         :item="$inv->item"
                         :badges="false"
                         :info="false"
@@ -24,6 +25,7 @@
         <div class="flex gap-4 grid grid-cols-4">
             @foreach ($equipped as $e)
                 <x-one-off.item.card 
+                    x-on:click.prevent="$wire.unequip({{ $e->id }})"
                     :item="$e" 
                     :badges="false" 
                     :info="false"

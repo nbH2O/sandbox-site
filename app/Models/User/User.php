@@ -100,21 +100,26 @@ class User extends Authenticatable
     {
         $avatar = $this->avatar()->with(['items.model', 'face','head','torso','armLeft','armRight','legLeft','legRight'])->first();
 
-        $result = (object) array("equipped", "properties");
+        $result = (object) array("equipped", "body", "properties");
         $result->equipped = [];
         $result->body = [];
         $result->properties = [];
 
         // has to be a stupid thing like this
         // or @equipped is ignored
-        $pb = fn ($n, $v) => $v != null ? ($result->body[$n] = $v) : null;
+        $pb = function ($n, $v) use ($result) { 
+            if ($v != null) {
+                $result->body[$n] = $v;
+                array_push($result->equipped, $v);
+            }
+        };
         $pb('face', $avatar->face);
         $pb('head', $avatar->head);
         $pb('torso', $avatar->torso);
-        $pb('arm_left', $avatar->arm_left);
-        $pb('arm_right', $avatar->arm_right);
-        $pb('leg_left', $avatar->leg_left);
-        $pb('leg_right', $avatar->leg_right);
+        $pb('arm_left', $avatar->armLeft);
+        $pb('arm_right', $avatar->armRight);
+        $pb('leg_left', $avatar->legLeft);
+        $pb('leg_right', $avatar->legRight);
         
         foreach ($avatar->items as $item) {
             array_push($result->equipped, $item);
@@ -144,29 +149,32 @@ class User extends Authenticatable
 
         $models = '';
         foreach ($avatar->equipped as $equippedItem) {
-            $xml = $equippedItem->model->data;
+            $itemTypeIDs = array_flip(config('site.item_types'));
+            if ($equippedItem->type->id == $itemTypeIDs['hat']) {
+                $xml = $equippedItem->model->data;
 
-            $doc = new \DOMDocument();
-            $doc->loadXML($xml);
-            $root = $doc->documentElement; // Get the first (root) element
-            $root->setAttribute('position', (0+$equippedItem->pivot->position_x_adjust).','.(2+$equippedItem->pivot->position_y_adjust).','.(0+$equippedItem->pivot->position_z_adjust));
-            $root->setAttribute('scale', ($equippedItem->pivot->scale ?? 1));
-            $root->setAttribute('rotation', (0+$equippedItem->pivot->rotation_x).','.(0+$equippedItem->pivot->rotation_y).','.(0+$equippedItem->pivot->rotation_z));
-
-            // Get all elements in the document
-            $elements = $doc->getElementsByTagName('*');
-
-            // Iterate over all elements and check for the 'src' attribute
-            foreach ($elements as $element) {
-                if ($element->hasAttribute('src')) {
-                    $element->setAttribute('src', url($element->getAttribute('src')));
+                $doc = new \DOMDocument();
+                $doc->loadXML($xml);
+                $root = $doc->documentElement; // Get the first (root) element
+                $root->setAttribute('position', (0+$equippedItem->pivot->position_x_adjust).','.(2+$equippedItem->pivot->position_y_adjust).','.(0+$equippedItem->pivot->position_z_adjust));
+                $root->setAttribute('scale', ($equippedItem->pivot->scale ?? 1));
+                $root->setAttribute('rotation', (0+$equippedItem->pivot->rotation_x).','.(0+$equippedItem->pivot->rotation_y).','.(0+$equippedItem->pivot->rotation_z));
+    
+                // Get all elements in the document
+                $elements = $doc->getElementsByTagName('*');
+    
+                // Iterate over all elements and check for the 'src' attribute
+                foreach ($elements as $element) {
+                    if ($element->hasAttribute('src')) {
+                        $element->setAttribute('src', url($element->getAttribute('src')));
+                    }
                 }
+                
+                $doc->formatOutput = false;
+                $res = $doc->saveXML($root);
+                // fix self-closing tag crap
+                $models .=  preg_replace('/<(\w+)([^>]*?)\s*\/>/', '<$1$2></$1>', $res);
             }
-            
-            $doc->formatOutput = false;
-            $res = $doc->saveXML($root);
-            // fix self-closing tag crap
-            $models .=  preg_replace('/<(\w+)([^>]*?)\s*\/>/', '<$1$2></$1>', $res);
         }
 
         RenderImage::dispatch($this, '
