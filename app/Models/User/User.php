@@ -168,7 +168,7 @@ class User extends Authenticatable
                 // Iterate over all elements and check for the 'src' attribute
                 foreach ($elements as $element) {
                     if ($element->hasAttribute('src')) {
-                        $element->setAttribute('src', url($element->getAttribute('src')));
+                        $element->setAttribute('src', config('site.local_url').'storage/'.$element->getAttribute('src'));
                     }
                 }
                 
@@ -184,13 +184,13 @@ class User extends Authenticatable
                 <Humanoid
                     isRenderSubject="true"
 
-                    face="'.( isset($avatar->body->face) ? url('storage/'.$avatar->body->face->file_ulid.'.png') : url('storage/default/rig/face.png') ).'"
-                    head="'.( isset($avatar->body->head) ? url('storage/'.$avatar->body->head->file_ulid.'.obj') : url('storage/default/rig/head.obj') ).'"
-                    torso="'.( isset($avatar->body->torso) ? url('storage/'.$avatar->body->torso->file_ulid.'.obj') : url('storage/default/rig/torso.obj') ).'"
-                    armLeft="'.( isset($avatar->body->arm_left) ? url('storage/'.$avatar->body->arm_left->file_ulid.'.obj') : url('storage/default/rig/armLeft.obj') ).'"
-                    armRight="'.( isset($avatar->body?->arm_right) ? url('storage/'.$avatar->body->arm_right->file_ulid.'.obj') : url('storage/default/rig/armRight.obj') ).'"
-                    legLeft="'.( isset($avatar->body->leg_left) ? url('storage/'.$avatar->body->leg_left->file_ulid.'.obj') : url('storage/default/rig/legLeft.obj') ).'"
-                    legRight="'.( isset($avatar->body->leg_right) ? url('storage/'.$avatar->body->leg_right->file_ulid.'.obj') : url('storage/default/rig/legRight.obj') ).'"
+                    face="'.( isset($avatar->body->face) ? config('site.local_url').'storage/'.$avatar->body->face->file_ulid.'.png' : config('site.local_url').'storage/default/rig/face.png' ).'"
+                    head="'.( isset($avatar->body->head) ? config('site.local_url').$avatar->body->head->file_ulid.'.obj' : config('site.local_url').'storage/default/rig/head.obj' ).'"
+                    torso="'.( isset($avatar->body->torso) ? config('site.local_url').$avatar->body->torso->file_ulid.'.obj' : config('site.local_url').'storage/default/rig/torso.obj' ).'"
+                    armLeft="'.( isset($avatar->body->arm_left) ? config('site.local_url').$avatar->body->arm_left->file_ulid.'.obj' : config('site.local_url').'storage/default/rig/armLeft.obj' ).'"
+                    armRight="'.( isset($avatar->body?->arm_right) ? config('site.local_url').$avatar->body->arm_right->file_ulid.'.obj' : config('site.local_url').'storage/default/rig/armRight.obj' ).'"
+                    legLeft="'.( isset($avatar->body->leg_left) ? config('site.local_url').$avatar->body->leg_left->file_ulid.'.obj' : config('site.local_url').'storage/default/rig/legLeft.obj' ).'"
+                    legRight="'.( isset($avatar->body->leg_right) ? config('site.local_url').$avatar->body->leg_right->file_ulid.'.obj' : config('site.local_url').'storage/default/rig/legRight.obj' ).'"
 
                     headColor="'.($avatar->properties->head_color ?? '#D3D3D3').'"
                     torsoColor="'.($avatar->properties->torso_color ?? '#D3D3D3').'"

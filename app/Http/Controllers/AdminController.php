@@ -101,7 +101,7 @@ class AdminController extends Controller
                 if (in_array($validated['type_id'], [$itemTypesFlipped['hat']])) {
                     RenderImage::dispatch($newItem, '
                         <Root name="SceneRoot">
-                            <Mesh isRenderSubject="true" src="'.url('storage/'.$ulid.'.'.$ext).'"></Mesh>
+                            <Mesh isRenderSubject="true" src="'.config('site.local_url').'storage/'.$ulid.'.'.$ext.'"></Mesh>
                         </Root>
                     ');
                 }
@@ -181,13 +181,13 @@ class AdminController extends Controller
                                 <Humanoid 
                                     setRenderSubject="'.$key.'"
 
-                                    face="'.url('storage/default/rig/face.png').'"
-                                    head="'.url('storage/default/rig/head.obj').'"
-                                    torso="'.(($key == 'torso') ? url('storage/'.$ulid.'.obj') : url('storage/default/rig/torso.obj') ).'"
-                                    armLeft="'.(($key == 'arm_left') ? url('storage/'.$ulid.'.obj') : url('storage/default/rig/armLeft.obj') ).'"
-                                    armRight="'.(($key == 'arm_right') ? url('storage/'.$ulid.'.obj') : url('storage/default/rig/armRight.obj') ).'"
-                                    legLeft="'.(($key == 'leg_left') ? url('storage/'.$ulid.'.obj') : url('storage/default/rig/legLeft.obj') ).'"
-                                    legRight="'.(($key == 'leg_right') ? url('storage/'.$ulid.'.obj') : url('storage/default/rig/legRight.obj') ).'"
+                                    face="'.config('site.local_url').'storage/default/rig/face.png'.'"
+                                    head="'.config('site.local_url').'storage/default/rig/head.obj'.'"
+                                    torso="'.(($key == 'torso') ? config('site.local_url').'storage/'.$ulid.'.obj' : config('site.local_url').'storage/default/rig/torso.obj' ).'"
+                                    armLeft="'.(($key == 'arm_left') ? config('site.local_url').'storage/'.$ulid.'.obj' : config('site.local_url').'storage/default/rig/armLeft.obj' ).'"
+                                    armRight="'.(($key == 'arm_right') ? config('site.local_url').'storage/'.$ulid.'.obj' : config('site.local_url').'storage/default/rig/armRight.obj' ).'"
+                                    legLeft="'.(($key == 'leg_left') ? config('site.local_url').'storage/'.$ulid.'.obj' : config('site.local_url').'storage/default/rig/legLeft.obj' ).'"
+                                    legRight="'.(($key == 'leg_right') ? config('site.local_url').'storage/'.$ulid.'.obj' : config('site.local_url').'storage/default/rig/legRight.obj' ).'"
 
                                     headColor="#D3D3D3"
                                     torsoColor="#D3D3D3"
@@ -239,13 +239,13 @@ class AdminController extends Controller
                         <Humanoid 
                             isRenderSubject="true"
 
-                            face="'.url('storage/default/rig/face.png').'"
-                            head="'.url('storage/default/rig/head.obj').'"
-                            torso="'.( isset($ulids['torso']) ? url('storage/'.$ulids['torso'].'.obj') : url('storage/default/rig/torso.obj') ).'"
-                            armLeft="'.( isset($ulids['arm_left']) ? url('storage/'.$ulids['arm_left'].'.obj') : url('storage/default/rig/armLeft.obj') ).'"
-                            armRight="'.( isset($ulids['arm_right']) ? url('storage/'.$ulids['arm_right'].'.obj') : url('storage/default/rig/armRight.obj') ).'"
-                            legLeft="'.( isset($ulids['leg_left']) ? url('storage/'.$ulids['leg_left'].'.obj') : url('storage/default/rig/legLeft.obj') ).'"
-                            legRight="'.( isset($ulids['leg_right']) ? url('storage/'.$ulids['leg_right'].'.obj') : url('storage/default/rig/legRight.obj') ).'"
+                            face="'.config('site.local_url').'storage/default/rig/face.png'.'"
+                            head="'.config('site.local_url').'storage/default/rig/head.obj'.'"
+                            torso="'.( isset($ulids['torso']) ? config('site.local_url').'storage/'.$ulids['torso'].'.obj' : config('site.local_url').'storage/default/rig/torso.obj' ).'"
+                            armLeft="'.( isset($ulids['arm_left']) ? config('site.local_url').'storage/'.$ulids['arm_left'].'.obj' : config('site.local_url').'storage/default/rig/armLeft.obj' ).'"
+                            armRight="'.( isset($ulids['arm_right']) ? config('site.local_url').'storage/'.$ulids['arm_right'].'.obj' : config('site.local_url').'storage/default/rig/armRight.obj' ).'"
+                            legLeft="'.( isset($ulids['leg_left']) ? config('site.local_url').'storage/'.$ulids['leg_left'].'.obj' : config('site.local_url').'storage/default/rig/legLeft.obj' ).'"
+                            legRight="'.( isset($ulids['leg_right']) ? config('site.local_url').'storage/'.$ulids['leg_right'].'.obj' : config('site.local_url').'storage/default/rig/legRight.obj' ).'"
 
                             headColor="#D3D3D3"
                             torsoColor="#D3D3D3"

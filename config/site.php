@@ -7,6 +7,7 @@ return [
     'after_tax' => 0.9,
     'panel_access_min_power' => 200,
     'renderer_url' => env('RENDERER_URL', 'http://localhost:3000/render'),
+    'local_url' => env('APP_LOCAL_URL', 'http://bhlol.test/'),
 
     'max_avatar_items' => 3,
 
