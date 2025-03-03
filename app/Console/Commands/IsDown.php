@@ -25,11 +25,11 @@ class IsDown extends Command
      * Execute the console command.
      */
     public function handle()
-    {
+    {   
         if (App::isDownForMaintenance()) {
-            $this->info(true);
-        } else {
-            $this->info(false);
+            $this->info(1);
         }
+            
+        $this->info(0);
     }
 }
