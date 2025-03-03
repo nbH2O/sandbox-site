@@ -30,7 +30,7 @@ class FriendButton extends Component
             $q->where('sender_id', $this->user->id)
                 ->orWhere('sender_id', $au->id);
         })
-        ->orWhere(function ($q) use ($au) {
+        ->andWhere(function ($q) use ($au) {
             $q->where('receiver_id', $this->user->id)
                 ->orWhere('receiver_id', $au->id);
         })->first();
