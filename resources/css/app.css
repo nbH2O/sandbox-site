@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+[x-cloak] {
+    @apply hidden;
+}
+
 .tippy-box {
     @apply transition ease-in-out !duration-150;
 }
