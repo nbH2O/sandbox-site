@@ -95,7 +95,7 @@ class User extends Authenticatable
 
     public function getLink(): string
     {
-        return url('/@'.$this->id);
+        return route('user.profile', ['id' => $this->id]);
     }
 
     public function getAvatar(): object

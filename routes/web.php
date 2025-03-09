@@ -24,21 +24,24 @@ Route::get('/worlds',
 Route::get('/market', function () {
     return view('item.index');
 })->name('market');
-Route::get('/${id}', 
+Route::get('/item/{id}/profile', 
     [ItemController::class, 'profile']
-);
-Route::middleware('auth')->post('/${id}/purchase', 
+)->name('item.profile');
+Route::middleware('auth')->post('/item/${id}/purchase', 
     [ItemController::class, 'purchase']
-);
+)->name('item.purchase');
 
 
 Route::get('/members', function () {
     return view('user.index');
 })->name('members');
 
-Route::get('/@{id}', 
+Route::get('/member/{id}/profile', 
     [UserController::class, 'profile']
-);
+)->name('user.profile');
+Route::get('/member/{id}/trade', 
+    [UserController::class, 'trade']
+)->name('user.trade');
 
 Route::middleware('auth')->prefix('my')->group(function () {
     Route::get('/avatar', function () {

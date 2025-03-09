@@ -116,7 +116,7 @@
                                 </x-button>
                             </x-slot>
 
-                            <form x-ref="purchaseForm" method="POST" action="{{ '/$'.$item->id.'/purchase' }}" class="hidden">
+                            <form x-ref="purchaseForm" method="POST" action="{{ route('item.purchase', ['id' => $item->id]) }}" class="hidden">
                                 {{ csrf_field() }}
                                 <input name="item_id" value={{ $item->id }} />
                                 <input name="price" value="{{ $item->price }}" />
@@ -153,7 +153,7 @@
                 label="{{ __('Creator') }}"
             >
                 <x-slot name="value">
-                    <a class="flex" href="{{ '/@'.$item->creator->id }}">
+                    <a class="flex" href="{{ route('user.profile', ['id' => $item->creator->id]) }}">
                         @if ($item->creator->id === config('site.main_account_id'))
                             @svg('ri-planet-fill', [
                                 'class' => 'size-6 text-primary me-1'

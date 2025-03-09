@@ -18,12 +18,12 @@
                     @foreach ($resellers as $reseller)
                         <div class="flex items-center justify-between border-t-2 border-border-light dark:border-border-dark">
                             <div class="flex gap-3 items-center">
-                                <a href="{{ '/@'.$reseller->user->id }}">
+                                <a href="{{ route('user.profile', ['id' => $reseller->user->id]) }}">
                                     <img class="size-28" src="{{ $reseller->user->getRender() }}" />
                                 </a>
                                 <div class="flex flex-col gap-1">
 
-                                    <a href="{{ '/@'.$reseller->user->id }}">
+                                    <a href="{{ route('user.profile', ['id' => $reseller->user->id]) }}">
                                         <h6>{{ $reseller->user->getName() }}</h6>
                                     </a>
                                     <p class="{{ $reseller->serial == 1 ? 'text-gold' : ($reseller->serial == 2 ? 'text-silver' : ($reseller->serial == 3 ? 'text-bronze' : 'text-muted-2')) }} text-sm">#{{ $reseller->serial }}</p>
@@ -32,7 +32,7 @@
                             </div>
                             <div class="flex gap-4 items-center">
                                 @if ($reseller->is_for_trade == true)
-                                    <a href="{{ '/@'.$reseller->user->id.'/trade' }}" data-tooltip="{{ $reseller->user->getName() }} {{ __("has marked this item 'For Trade'") }}">
+                                    <a href="{{ route('user.trade', ['id' => $reseller->user->id]) }}" data-tooltip="{{ $reseller->user->getName() }} {{ __("has marked this item 'For Trade'") }}">
                                         @svg('ri-swap-2-fill', [
                                             'class' => 'size-6 text-green'
                                         ])

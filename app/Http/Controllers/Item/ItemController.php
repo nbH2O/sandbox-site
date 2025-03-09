@@ -89,6 +89,6 @@ class ItemController extends Controller
             return redirect(route('login'));
         }
 
-        return redirect('/$'.$id)->withErrors($validator);
+        return redirect()->route('item.profile', ['id' => $id])->withErrors($validator);
     }
 }
