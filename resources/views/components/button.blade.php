@@ -27,6 +27,14 @@
             'main' => 'text-lg',
             'busy' => 'size-9'
         ],
+        'xl' => [
+            's' => [
+                true => 'size-14',
+                false => 'px-7 h-14'
+            ],
+            'main' => 'text-xl',
+            'busy' => 'size-10'
+        ]
     ],
 
     'color' => 'blue',
@@ -45,7 +53,8 @@
 
 @if ($href)
     <a {!! $attributes->merge([
-        'class' => $sizeVals[$size]['s'][$aspect].' '.$sizeVals[$size]['main'].' '.$colorVals[$color].' relative flex justify-center cursor-pointer select-none text-dark  p-[4px] group'
+        'class' => $sizeVals[$size]['s'][$aspect].' '.$sizeVals[$size]['main'].' '.$colorVals[$color].' relative flex justify-center cursor-pointer select-none text-dark  p-[4px] group',
+        'href' => $href
     ]) !!}>
             <x-ri-loader-5-fill class="hidden group-data-[busy]:block  absolute m-auto animate-spin {{ $sizeVals[$size]['busy'] }}" />
             <span class="h-full w-full group-data-[busy]:opacity-0 flex justify-center items-center">
