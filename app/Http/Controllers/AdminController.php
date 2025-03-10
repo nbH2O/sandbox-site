@@ -264,4 +264,34 @@ class AdminController extends Controller
             return view('admin.item.create-figure');
         }
     }
+
+    public function doRender(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $itemTypes = config('site.item_types');
+            $itemTypeIDs = array_flip($itemTypes);
+
+            if ($request->input('subject_type') == 'item') {
+                $item = Item::find($request->input('subject_id'));
+
+                if ($item) {
+                    $item->doRender();
+                }
+            } elseif ($request->input('subject_type') == 'user') {
+                $user = User::find($request->input('subject_id'));
+
+                if ($user) {
+                    $user->doRender();
+                }
+            } else {
+                return view('admin.re-render')->withErrors([
+                    'no' => 'not valid type?'
+                ]);
+            }
+
+            return back()->with('success', 'File uploaded successfully!');
+        } else {
+            return view('admin.re-render');
+        }
+    }
 }

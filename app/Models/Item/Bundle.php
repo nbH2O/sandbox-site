@@ -16,8 +16,8 @@ class Bundle extends Model
     {
         return $this->belongsTo(Item::class, 'bundle_id');
     }
-    public function content(): HasOne
+    public function content(): BelongsTo
     {
-        return $this->hasOne(Item::class);
+        return $this->belongsTo(Item::class, 'item_id');
     }
 }

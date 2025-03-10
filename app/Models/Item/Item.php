@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use App\Models\User\User;
 use App\Models\Comment;
 use App\Models\Model as ModelModel;
+use App\Jobs\RenderImage;
 
 class Item extends Model
 {
@@ -114,6 +115,190 @@ class Item extends Model
                 ->where('resale_price', '>', 0)
                 ->with('user');
     }
+
+    public function doRender($sync = false): bool
+    {
+        $itemTypes = config('site.item_types');
+        $itemTypeIDs = array_flip(config('site.item_types'));
+        $bundleTypeIDs = array_keys(config('site.bundle_item_types'));
+        $defaultParts = [
+            'face' => config('site.local_url').'storage/default/rig/face.png',
+            'head' => config('site.local_url').'storage/default/rig/head.obj',
+            'torso' => config('site.local_url').'storage/default/rig/torso.obj',
+            'arm_left' => config('site.local_url').'storage/default/rig/armLeft.obj',
+            'arm_right' => config('site.local_url').'storage/default/rig/armRight.obj',
+            'leg_left' => config('site.local_url').'storage/default/rig/legLeft.obj',
+            'leg_right' => config('site.local_url').'storage/default/rig/legRight.obj'
+        ];
+
+        $renderString = null;
+
+        if ($this->type_id == $itemTypeIDs['hat']) {
+            $modelData = ModelModel::find($this->model_id);
+            $models = '';
+            $xml = $modelData->data;
+
+            $doc = new \DOMDocument();
+            $doc->loadXML($xml);
+            $root = $doc->documentElement; // Get the first (root) element
+            $root->setAttribute('isRenderSubject', 'true');
+
+            // Get all elements in the document
+            $elements = $doc->getElementsByTagName('*');
+
+            // Iterate over all elements and check for the 'src' attribute
+            foreach ($elements as $element) {
+                if ($element->hasAttribute('src')) {
+                    $element->setAttribute('src', config('site.local_url').'storage/'.$element->getAttribute('src'));
+                }
+            }
+            
+            $doc->formatOutput = false;
+            $res = $doc->saveXML($root);
+            // fix self-closing tag crap
+            $models .=  preg_replace('/<(\w+)([^>]*?)\s*\/>/', '<$1$2></$1>', $res);
+
+            $renderString = '
+                <Root name="SceneRoot">
+                    '.$models.'
+                </Root>
+            ';
+
+            if ($sync == true) {
+                RenderImage::dispatchSync($this, $renderString);
+            } else {
+                RenderImage::dispatch($this, $renderString);
+            }
+        } elseif ($this->type_id == $itemTypeIDs['shirt'] || $this->type_id == $itemTypeIDs['pants']) {
+            $renderString = '
+                <Root name="SceneRoot">
+                    <Humanoid 
+                        isRenderSubject="true"
+
+                        clothing1="'.config('site.local_url').'storage/'.$this->file_ulid.'.png"
+
+                        face="'.$defaultParts['face'].'"
+                        head="'.$defaultParts['head'].'"
+                        torso="'.$defaultParts['torso'].'"
+                        armLeft="'.$defaultParts['arm_left'].'"
+                        armRight="'.$defaultParts['arm_right'].'"
+                        legLeft="'.$defaultParts['leg_left'].'"
+                        legRight="'.$defaultParts['leg_right'].'"
+
+                        headColor="#D3D3D3"
+                        torsoColor="#D3D3D3"
+                        armLeftColor="#D3D3D3"
+                        armRightColor="#D3D3D3"
+                        legLeftColor="#D3D3D3"
+                        legRightColor="#D3D3D3"
+                    >
+                    </Humanoid>
+                </Root>
+            ';
+        } elseif ($this->type_id == $itemTypeIDs['figure']) {
+            $bundle = Bundle::where('bundle_id', $this->id)->with('content')->get();
+            $parts = $defaultParts;
+
+            foreach ($bundle as $bi) {
+                $parts[$itemTypes[$bi->content->type_id]] = config('site.local_url').'storage/'.$bi->content->file_ulid.'.obj';
+            }
+
+            foreach ($bundle as $bi) {
+                $key = $itemTypes[$bi->content->type_id];
+
+                $renderString = '
+                    <Root name="SceneRoot">
+                        <Humanoid 
+                            setRenderSubject="'.$key.'"
+
+                            face="'.$parts['face'].'"
+                            head="'.$parts['head'].'"
+                            torso="'.$parts['torso'].'"
+                            armLeft="'.$parts['arm_left'].'"
+                            armRight="'.$parts['arm_right'].'"
+                            legLeft="'.$parts['leg_left'].'"
+                            legRight="'.$parts['leg_right'].'"
+
+                            headColor="#D3D3D3"
+                            torsoColor="#D3D3D3"
+                            armLeftColor="#D3D3D3"
+                            armRightColor="#D3D3D3"
+                            legLeftColor="#D3D3D3"
+                            legRightColor="#D3D3D3"
+                        >
+                        </Humanoid>
+                    </Root>
+                ';
+
+                if ($sync == true) {
+                    RenderImage::dispatchSync($bi->content, $renderString);
+                } else {
+                    RenderImage::dispatch($bi->content, $renderString);
+                }
+            }
+
+            $renderString = '
+                <Root name="SceneRoot">
+                    <Humanoid 
+                        isRenderSubject="true"
+
+                        face="'.$parts['face'].'"
+                        head="'.$parts['head'].'"
+                        torso="'.$parts['torso'].'"
+                        armLeft="'.$parts['arm_left'].'"
+                        armRight="'.$parts['arm_right'].'"
+                        legLeft="'.$parts['leg_left'].'"
+                        legRight="'.$parts['leg_right'].'"
+
+                        headColor="#D3D3D3"
+                        torsoColor="#D3D3D3"
+                        armLeftColor="#D3D3D3"
+                        armRightColor="#D3D3D3"
+                        legLeftColor="#D3D3D3"
+                        legRightColor="#D3D3D3"
+                    >
+                    </Humanoid>
+                </Root>
+            ';
+
+            if ($sync == true) {
+                RenderImage::dispatchSync($this, $renderString);
+            } else {
+                RenderImage::dispatch($this, $renderString);
+            }
+        } elseif ($this->type_id == $itemTypeIDs['pack']) {
+            // not added yet lo
+            $renderString = '
+                <Root name="SceneRoot">
+                    <Humanoid 
+                        isRenderSubject="true"
+
+                        face="'.$defaultParts['face'].'"
+                        head="'.$defaultParts['head'].'"
+                        torso="'.$defaultParts['torso'].'"
+                        armLeft="'.$defaultParts['arm_left'].'"
+                        armRight="'.$defaultParts['arm_right'].'"
+                        legLeft="'.$defaultParts['leg_left'].'"
+                        legRight="'.$defaultParts['leg_right'].'"
+
+                        headColor="#D3D3D3"
+                        torsoColor="#D3D3D3"
+                        armLeftColor="#D3D3D3"
+                        armRightColor="#D3D3D3"
+                        legLeftColor="#D3D3D3"
+                        legRightColor="#D3D3D3"
+                    >
+                    </Humanoid>
+                </Root>
+            ';
+        } else {
+            $this->render_ulid = $this->file_ulid;
+        }
+
+        $this->save();
+        return true;
+    }
+
     /**
      * get the items's render url
      *
