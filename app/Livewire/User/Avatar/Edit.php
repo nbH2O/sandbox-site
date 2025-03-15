@@ -91,7 +91,7 @@ class Edit extends Component
         $avatar = $user->avatar;
         $item = Item::where('id', $id)->first();
 
-        if (in_array($item->type_id, [$itemTypeIDs['hat']])) {
+        if (in_array($item->type_id, [$itemTypeIDs['hat'], $itemTypeIDs['shirt'], $itemTypeIDs['pants'], $itemTypeIDs['suit']])) {
             AvatarItem::where(['avatar_id' => $user->avatar_id, 'item_id' => $id])->delete();
         } else {
             $avatar->{config('site.item_types')[$item->type_id].'_id'} = null;
