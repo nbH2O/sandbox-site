@@ -4,7 +4,7 @@
     containerClass="w-[60rem]"
 >
     <x-slot name="actions">
-        <x-button color="green">
+        <x-button color="green" href="{{ route('item.create-clothing') }}">
             @svg('ri-add-fill', [
                 'class' => 'size-6 -ms-2 me-1.5'
             ])

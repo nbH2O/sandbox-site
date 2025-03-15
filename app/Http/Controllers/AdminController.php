@@ -11,7 +11,6 @@ use App\Models\Item\Item;
 use App\Models\Item\Bundle;
 use App\Models\Model;
 use App\Models\Site\SoftMaintenance;
-use App\Jobs\RenderImage;
 
 class AdminController extends Controller
 {
@@ -95,16 +94,11 @@ class AdminController extends Controller
                     'is_name_scrubbed' => 0,
                     'is_description_scrubbed' => 0,
                     'is_sold_out' => 0,
-                    'is_accepted' => 1
+                    'is_accepted' => 1,
+                    'is_pending' => 0
                 ]);
                 
-                if (in_array($validated['type_id'], [$itemTypesFlipped['hat']])) {
-                    RenderImage::dispatch($newItem, '
-                        <Root name="SceneRoot">
-                            <Mesh isRenderSubject="true" src="'.config('site.local_url').'storage/'.$ulid.'.'.$ext.'"></Mesh>
-                        </Root>
-                    ');
-                }
+                $newItem->doRender();
             });
 
 
@@ -171,34 +165,13 @@ class AdminController extends Controller
                             'is_name_scrubbed' => 0,
                             'is_description_scrubbed' => 0,
                             'is_sold_out' => 0,
-                            'is_accepted' => 1
+                            'is_accepted' => 1,
+                            'is_pending' => 0
                         ]);
 
                         array_push($bodyPartIDs, $newItem->id);
 
-                        RenderImage::dispatch($newItem, '
-                            <Root name="SceneRoot">
-                                <Humanoid 
-                                    setRenderSubject="'.$key.'"
-
-                                    face="'.config('site.local_url').'storage/default/rig/face.png'.'"
-                                    head="'.config('site.local_url').'storage/default/rig/head.obj'.'"
-                                    torso="'.(($key == 'torso') ? config('site.local_url').'storage/'.$ulid.'.obj' : config('site.local_url').'storage/default/rig/torso.obj' ).'"
-                                    armLeft="'.(($key == 'arm_left') ? config('site.local_url').'storage/'.$ulid.'.obj' : config('site.local_url').'storage/default/rig/armLeft.obj' ).'"
-                                    armRight="'.(($key == 'arm_right') ? config('site.local_url').'storage/'.$ulid.'.obj' : config('site.local_url').'storage/default/rig/armRight.obj' ).'"
-                                    legLeft="'.(($key == 'leg_left') ? config('site.local_url').'storage/'.$ulid.'.obj' : config('site.local_url').'storage/default/rig/legLeft.obj' ).'"
-                                    legRight="'.(($key == 'leg_right') ? config('site.local_url').'storage/'.$ulid.'.obj' : config('site.local_url').'storage/default/rig/legRight.obj' ).'"
-
-                                    headColor="#D3D3D3"
-                                    torsoColor="#D3D3D3"
-                                    armLeftColor="#D3D3D3"
-                                    armRightColor="#D3D3D3"
-                                    legLeftColor="#D3D3D3"
-                                    legRightColor="#D3D3D3"
-                                >
-                                </Humanoid>
-                            </Root>
-                        ');
+                        $newItem->doRender();
                     } else {
                         unset($files[$key]);
                     }
@@ -222,7 +195,8 @@ class AdminController extends Controller
                     'is_name_scrubbed' => 0,
                     'is_description_scrubbed' => 0,
                     'is_sold_out' => 0,
-                    'is_accepted' => 1
+                    'is_accepted' => 1,
+                    'is_pending' => 0
                 ]);
 
                 $bundleInserts = [];
@@ -234,29 +208,7 @@ class AdminController extends Controller
                 }
                 Bundle::insert($bundleInserts);
 
-                RenderImage::dispatch($newFigure, '
-                    <Root name="SceneRoot">
-                        <Humanoid 
-                            isRenderSubject="true"
-
-                            face="'.config('site.local_url').'storage/default/rig/face.png'.'"
-                            head="'.config('site.local_url').'storage/default/rig/head.obj'.'"
-                            torso="'.( isset($ulids['torso']) ? config('site.local_url').'storage/'.$ulids['torso'].'.obj' : config('site.local_url').'storage/default/rig/torso.obj' ).'"
-                            armLeft="'.( isset($ulids['arm_left']) ? config('site.local_url').'storage/'.$ulids['arm_left'].'.obj' : config('site.local_url').'storage/default/rig/armLeft.obj' ).'"
-                            armRight="'.( isset($ulids['arm_right']) ? config('site.local_url').'storage/'.$ulids['arm_right'].'.obj' : config('site.local_url').'storage/default/rig/armRight.obj' ).'"
-                            legLeft="'.( isset($ulids['leg_left']) ? config('site.local_url').'storage/'.$ulids['leg_left'].'.obj' : config('site.local_url').'storage/default/rig/legLeft.obj' ).'"
-                            legRight="'.( isset($ulids['leg_right']) ? config('site.local_url').'storage/'.$ulids['leg_right'].'.obj' : config('site.local_url').'storage/default/rig/legRight.obj' ).'"
-
-                            headColor="#D3D3D3"
-                            torsoColor="#D3D3D3"
-                            armLeftColor="#D3D3D3"
-                            armRightColor="#D3D3D3"
-                            legLeftColor="#D3D3D3"
-                            legRightColor="#D3D3D3"
-                        >
-                        </Humanoid>
-                    </Root>
-                ');
+                $newFigure->doRender();
             });
 
             return back()->with('success', 'File uploaded successfully!');

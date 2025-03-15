@@ -29,6 +29,8 @@ class Search extends Component
         // so it has to be super jank like this i guess
         $sql = Item::with(['creator'])
         ->where('name', 'LIKE', '%'.$this->query.'%')
+        ->where('is_pending', 0)
+        ->where('is_accepted', 1)
         ->whereHas('type', function ($q) {
             $q->where('is_public', true)
             ->when(true, function ($query) {
@@ -38,7 +40,8 @@ class Search extends Component
                         break;
                     case 'clothing':
                         $query->where('name', 'shirt')
-                            ->orWhere('name', 'pants');
+                            ->orWhere('name', 'pants')
+                            ->orWhere('name', 'suit');
                         break;
                     case 'body':
                         $query->where('name', 'figure')

@@ -49,7 +49,7 @@ class Edit extends Component
 
         switch ($this->type) {
             case 'clothing':
-                $typeIDs = [$itemTypeIDs['shirt'], $itemTypeIDs['pants']];
+                $typeIDs = [$itemTypeIDs['shirt'], $itemTypeIDs['pants'], $itemTypeIDs['suit']];
                 break;
             case 'body':
                 $typeIDs = [
@@ -70,7 +70,9 @@ class Edit extends Component
                         ->groupBy('id', 'item_id')
                         ->distinct()
                         ->whereHas('item', function ($query) use ($itemTypeIDs, $typeIDs) {
-                            $query->whereIn('type_id', $typeIDs);
+                            $query->whereIn('type_id', $typeIDs)
+                                ->where('is_pending', 0)
+                                ->where('is_accepted', 1);
                         })
                         ->simplePaginate(8);
 
@@ -106,7 +108,7 @@ class Edit extends Component
             $item = $inv->item;
             $avatar = $user->avatar;
 
-            if (in_array($item->type->id, [$itemTypeIDs['hat']])) {
+            if (in_array($item->type->id, [$itemTypeIDs['hat'], $itemTypeIDs['shirt'], $itemTypeIDs['pants'], $itemTypeIDs['suit']])) {
                 $avatarItems = $avatar->items();
 
                 if ($avatarItems->count() <= config('site.max_avatar_items')) {

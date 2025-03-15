@@ -52,7 +52,8 @@ class Item extends Model
         'is_name_scrubbed',
         'is_description_scrubbed',
         'is_sold_out',
-        'is_accepted'
+        'is_accepted',
+        'is_pending'
     ];
 
     /**
@@ -169,7 +170,7 @@ class Item extends Model
             } else {
                 RenderImage::dispatch($this, $renderString);
             }
-        } elseif ($this->type_id == $itemTypeIDs['shirt'] || $this->type_id == $itemTypeIDs['pants']) {
+        } elseif ($this->type_id == $itemTypeIDs['shirt'] || $this->type_id == $itemTypeIDs['pants'] || $this->type_id == $itemTypeIDs['suit']) {
             $renderString = '
                 <Root name="SceneRoot">
                     <Humanoid 
@@ -195,6 +196,12 @@ class Item extends Model
                     </Humanoid>
                 </Root>
             ';
+
+            if ($sync == true) {
+                RenderImage::dispatchSync($this, $renderString);
+            } else {
+                RenderImage::dispatch($this, $renderString);
+            }
         } elseif ($this->type_id == $itemTypeIDs['figure']) {
             $bundle = Bundle::where('bundle_id', $this->id)->with('content')->get();
             $parts = $defaultParts;

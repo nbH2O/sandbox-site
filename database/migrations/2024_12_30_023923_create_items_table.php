@@ -47,6 +47,7 @@ return new class extends Migration
 
             $table->boolean('is_public');
             $table->boolean('is_accepted');
+            $table->boolean('is_pending');
             $table->timestamps();
         });
 

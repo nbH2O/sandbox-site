@@ -26,6 +26,7 @@ return [
         10 => 'hat',
         11 => 'shirt',
         12 => 'pants',
+        13 => 'suit'
     ],
     'bundle_item_types' => [
         'figure',

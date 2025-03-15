@@ -31,6 +31,12 @@ Route::middleware('auth')->post('/item/${id}/purchase',
     [ItemController::class, 'purchase']
 )->name('item.purchase');
 
+Route::middleware('auth')->get('/market/create',
+    [ItemController::class, 'createClothing']
+)->name('item.create-clothing');
+Route::middleware(['auth', 'throttle:3,1'])->post('/market/create',
+    [ItemController::class, 'createClothing']
+)->name('item.create-clothing');
 
 Route::get('/members', function () {
     return view('user.index');
@@ -58,7 +64,7 @@ Route::middleware('auth')->prefix('my')->group(function () {
     })->name('chats');
 });
 
-Route::middleware('guest')->prefix('auth')->group(function () {
+Route::middleware(['guest', 'throttle:15,1'])->prefix('auth')->group(function () {
     Route::get('/login', function () {
         return view('auth.login');
     })->name('login');
@@ -88,7 +94,11 @@ Route::middleware(['auth', MinPower::class.":100"])->prefix('admin/panel')->grou
     
     Route::match(['get', 'post'], '/item/create-figure', 
         [AdminController::class, 'createFigure']
-    )->middleware([HasRole::class.":Market Designer,250"]);;
+    )->middleware([HasRole::class.":Market Designer,250"]);
+
+    Route::get('/item/queue', function () {
+        return view('admin.item.queue');
+    })->middleware([HasRole::class.":Moderator,200"]);
 })->name('admin.');
 
 Route::get('/402', function () {

@@ -10,7 +10,9 @@ use App\Models\Item\Inventory;
 use App\Models\Item\Bundle;
 use App\Models\Item\SaleLog;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
@@ -90,5 +92,59 @@ class ItemController extends Controller
         }
 
         return redirect()->route('item.profile', ['id' => $id])->withErrors($validator);
+    }
+
+    public function createClothing(Request $request)
+    { 
+        if ($user = Auth()->user()) {
+            if ($request->isMethod('GET')) {
+                return view('item.create-clothing');
+            } else if ($request->isMethod('POST')) {
+                $itemTypeIDs = array_flip(config('site.item_types'));
+            
+                $validated = $request->validate([
+                    'file' => 'required|file|mimetypes:image/png|dimensions:ratio=585/830,max_width=585|max:256', // example rules
+                    'type_id' => 'required|in:'.$itemTypeIDs['shirt'].','.$itemTypeIDs['pants'].','.$itemTypeIDs['suit'],
+                    'name' => 'required|max:20',
+                    'description' => 'nullable|max:128',
+                    'price' => 'nullable|integer',
+                    'is_onsale' => 'nullable|in:1,true,on'
+                ]);
+
+                $ulid = Str::ulid();
+
+                try {
+                    DB::transaction(function () use ($request, $validated, $user, $ulid) {
+                        $newClothing = Item::create([
+                            'type_id' => $validated['type_id'],
+                            'name' => $validated['name'],
+                            'description' => $validated['description'],
+                            'creator_id' => $user->id,
+                            'price' => $validated['price'],
+                            'is_onsale' => $validated['is_onsale'] ?? 0,
+                            'is_special' => 0,
+                            'is_public' => 1,
+                            'render_ulid' => null,
+                            'file_ulid' => $ulid,
+                            'model_id' => null,
+                            'is_name_scrubbed' => 0,
+                            'is_description_scrubbed' => 0,
+                            'is_sold_out' => 0,
+                            'is_accepted' => 0,
+                            'is_pending' => 1
+                        ]);
+
+                        Storage::disk('public')->put($ulid.'.png', file_get_contents($request->file('file')));
+                    });
+                } catch (\Exception $e) {
+                    Storage::disk('public')->delete($ulid.'.png');
+                    return back()->with('success', false);
+                };
+
+                return back()->with('success', true);
+            }
+        } else {
+            return redirect(route('login'));
+        }
     }
 }

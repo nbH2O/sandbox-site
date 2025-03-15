@@ -150,6 +150,8 @@ class User extends Authenticatable
         $avatar = $this->getAvatar();
 
         $models = '';
+        $clothing = [];
+
         foreach ($avatar->equipped as $equippedItem) {
             $itemTypeIDs = array_flip(config('site.item_types'));
             if ($equippedItem->type->id == $itemTypeIDs['hat']) {
@@ -176,13 +178,27 @@ class User extends Authenticatable
                 $res = $doc->saveXML($root);
                 // fix self-closing tag crap
                 $models .=  preg_replace('/<(\w+)([^>]*?)\s*\/>/', '<$1$2></$1>', $res);
+            } else if (
+                $equippedItem->type->id == $itemTypeIDs['shirt']
+                || $equippedItem->type->id == $itemTypeIDs['pants']
+                || $equippedItem->type->id == $itemTypeIDs['suit']
+            ) {
+                array_push($clothing, config('site.local_url').'storage/'.$equippedItem->file_ulid.'.png');
             }
+        }
+
+        $clothingString = '';
+        foreach ($clothing as $key => $val) {
+            $clothingString .= 'clothing'.($key+1).'="'.$val.'"
+            ';
         }
 
         $renderString = '
             <Root name="SceneRoot">
                 <Humanoid
                     isRenderSubject="true"
+
+                    '.$clothingString.'
 
                     face="'.( isset($avatar->body->face) ? config('site.local_url').'storage/'.$avatar->body->face->file_ulid.'.png' : config('site.local_url').'storage/default/rig/face.png' ).'"
                     head="'.( isset($avatar->body->head) ? config('site.local_url').$avatar->body->head->file_ulid.'.obj' : config('site.local_url').'storage/default/rig/head.obj' ).'"
@@ -236,6 +252,8 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         $highestRole = $this->anyRoles()->first();
+
+        if (!$highestRole) return false;
 
         if ($highestRole->power >= config('site.panel_access_min_power')) {
             return true;
