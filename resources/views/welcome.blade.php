@@ -43,7 +43,6 @@
         <meta name="description" content="Participate!">
         <meta name="keywords" content="Lunoba, participate, community, engagement, events">
         <meta name="author" content="Lunoba">
-        <meta name="robots" content="index, follow">
 
         <!-- Open Graph (Facebook, LinkedIn, etc.) -->
         <meta property="og:title" content="Lunoba">

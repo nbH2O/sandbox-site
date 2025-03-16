@@ -12,7 +12,11 @@
     'title' => null,
     'pageTitle' => false, // show title in page on top??
     'containerClass' => null, // inside main
-    'actions' => null
+    'actions' => null,
+
+    'description' => null,
+    'image' => null,
+    'imageSize' => null
 ])
 
 <!DOCTYPE html>
@@ -23,6 +27,18 @@
 <link href="https://fonts.bunny.net/css?family=montserrat:600,700,800" rel="stylesheet" />
         <title>{{ $title }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#af63fa">
+
+        @if ($description)
+            <meta property="og:description" content="{{ $description }}" />
+        @endif
+
+        @if ($image)
+            <meta property="og:image" content="{{ $image }}" />
+            @if ($imageSize)
+                <meta name="twitter:card" content="summary_large_image">
+            @endif
+        @endif
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 

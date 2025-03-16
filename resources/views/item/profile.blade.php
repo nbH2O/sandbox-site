@@ -1,5 +1,8 @@
 <x-layout.app
     title="{{ $item->getName() }}"
+
+    description="{{ $item->getDescription() }}"
+    image="{{ $item->getRender() }}"
 >
     @php
         $copies = $item->getCopies();

@@ -6,6 +6,8 @@
     title="{{ __('Create Clothing') }}"
     :pageTitle="true"
     containerClass="w-[25rem]"
+
+    description="Create unique clothing to style your avatar"
 >
     @if ($success = session('success'))
         @if ($success === true)
