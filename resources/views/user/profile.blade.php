@@ -3,6 +3,7 @@
 
     description="{{ $user->getDescription() }}"
     image="{{ $user->getRender() }}"
+    imageSize="lg"
 >
     <div class="max-w-full w-[50rem] flex-wrap flex flex-col md:flex-row">
         <div class="w-full md:w-[calc(50%_-_calc(1px_+0.75rem))] flex flex-col bg-glow">

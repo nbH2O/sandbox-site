@@ -3,6 +3,7 @@
 
     description="{{ $item->getDescription() }}"
     image="{{ $item->getRender() }}"
+    imageSize="lg"
 >
     @php
         $copies = $item->getCopies();

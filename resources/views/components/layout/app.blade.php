@@ -26,6 +26,7 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
 <link href="https://fonts.bunny.net/css?family=montserrat:600,700,800" rel="stylesheet" />
         <title>{{ $title }}</title>
+        <meta property="og:title" content="{{ $title }}" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#af63fa">
 
@@ -36,6 +37,8 @@
         @if ($image)
             <meta property="og:image" content="{{ $image }}" />
             @if ($imageSize)
+                <meta property="og:image:width" content="512">
+                <meta property="og:image:height" content="512">
                 <meta name="twitter:card" content="summary_large_image">
             @endif
         @endif
