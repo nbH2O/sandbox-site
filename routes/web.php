@@ -13,9 +13,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/mailable', function () {
+    $token = App\Models\User\VerificationToken::find(1);
+ 
+    return new App\Mail\VerifyEmail($token);
+});
+
 Route::get('/banned', 
     [UserController::class, 'banned']
 )->name('banned');
+Route::get('/verify/email/{id}/{token}', 
+    [UserController::class, 'verify']
+)->name('user.verify.email');
 
 Route::get('/worlds', 
     [UserController::class, 'index']
@@ -68,6 +77,9 @@ Route::middleware(['guest', 'throttle:15,1'])->prefix('auth')->group(function ()
     Route::get('/login', function () {
         return view('auth.login');
     })->name('login');
+    Route::get('/join', function () {
+        return view('auth.register');
+    })->name('register');
 });
 
 Route::middleware('auth')->group(function () {

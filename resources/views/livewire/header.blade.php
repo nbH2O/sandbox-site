@@ -1,8 +1,10 @@
 <header class="dark z-[1000] text-[#ededf1] z-10 bg-header h-11  px-2 overflow-visible flex">
     <div class="flex justify-between max-w-full w-[60rem] mx-auto">
         <div class="flex">
-            <img class="max-h-full p-2 block lg:hidden" src="/images/logo/small.png" />
-            <img class="max-h-full !ps-0 p-2 hidden lg:block" src="/images/logo/large.png" />
+            <a href="/">
+                <img class="max-h-full p-2 block lg:hidden" src="/images/logo/small.png" />
+                <img class="max-h-full !ps-0 p-2 hidden lg:block" src="/images/logo/large.png" />
+            </a>
             <nav class="hidden sm:flex">
                 <x-one-off.header.link
                     title="{{ __('Worlds') }}"
@@ -150,7 +152,7 @@
                         </div>
                     </x-dropdown>
                     
-                    <x-button color="primary" size="sm" outerClass="group">
+                    <x-button color="primary" size="sm" href="{{ route('register') }}" outerClass="group">
                         <x-ri-user-5-line class="-ms-1.5 me-1.5 size-5 group-hover:animate-bounce" />
                         <span class="font-bold">{{ __('Join') }}</span>
                     </x-button>

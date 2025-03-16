@@ -38,6 +38,18 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'description',
+        'is_name_scrubbed',
+        'is_description_scrubbed',
+        'email_verified_at',
+        'currency',
+        'points',
+        'theme',
+        'render_ulid',
+        'avatar_id',
+        'born_at',
+        'rewarded_at',
+        'online_at',
     ];
 
     /**
