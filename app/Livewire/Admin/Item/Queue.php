@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Item;
 
 use Livewire\Component;
 use App\Models\Item\Item;
+use App\Models\User\User;
 use Livewire\WithPagination;
 
 class Queue extends Component
@@ -17,6 +18,10 @@ class Queue extends Component
             $item->is_accepted = 1;
             $item->is_pending = 0;
             $item->save();
+
+            $user = User::find($item->creator_id);
+            $item->grantTo($user, true);
+
             $item->doRender();
         }
     }

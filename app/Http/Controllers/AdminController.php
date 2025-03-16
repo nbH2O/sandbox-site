@@ -12,6 +12,8 @@ use App\Models\Item\Bundle;
 use App\Models\Model;
 use App\Models\Site\SoftMaintenance;
 
+use App\Models\User\User;
+
 class AdminController extends Controller
 {
     public function siteMaintenance(Request $request)

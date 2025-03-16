@@ -10,7 +10,11 @@ use App\Http\Middleware\MinPower;
 use App\Http\Middleware\HasRole;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth()->check()) {
+        return redirect()->route('user.profile', ['id' => Auth()->user()->id]);
+    } else {
+        return view('welcome');
+    }
 });
 
 Route::get('/mailable', function () {
@@ -36,7 +40,7 @@ Route::get('/market', function () {
 Route::get('/item/{id}/profile', 
     [ItemController::class, 'profile']
 )->name('item.profile');
-Route::middleware('auth')->post('/item/${id}/purchase', 
+Route::middleware('auth')->post('/item/{id}/purchase', 
     [ItemController::class, 'purchase']
 )->name('item.purchase');
 

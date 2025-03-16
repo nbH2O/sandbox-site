@@ -38,26 +38,9 @@ class ItemController extends Controller
                         $validator->errors()->add('highPrice', 'j');
                     } else {
                         DB::transaction(function () use ($user, $item) {
-                            $user->decrement('currency', $item->price);
-                            $highest = Inventory::where('item_id', $item->id)
-                                                ->orderBy('serial', 'DESC')
-                                                ->first();
-                            $serial = $highest?->serial + 1 ?? 1;
+                            $inv = $item->grantTo($user);
 
-                            Inventory::insert([
-                                'user_id' => $user->id,
-                                'item_id' => $item->id,
-                                'serial' => $serial
-                            ]);
-                            SaleLog::insert([
-                                'seller_id' => $item->user->id,
-                                'buyer_id' => $user->id,
-                                'item_id' => $item->id,
-                                'price' => $item->price,
-                                'created_at' => now(),
-                            ]);
-
-                            if ($serial >= $item->max_copies) {
+                            if ($inv->serial >= $item->max_copies) {
                                 $item->timestamps = false;
                                 $item->is_sold_out = true;
                                 $item->save();

@@ -11,6 +11,19 @@ use App\Models\Item\Item;
 
 class Inventory extends Model
 {
+        /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'serial',
+        'item_id',
+        'user_id',
+        'is_for_trade',
+        'resale_price'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -14,6 +14,9 @@ use App\Models\Comment;
 use App\Models\Model as ModelModel;
 use App\Jobs\RenderImage;
 
+use App\Models\Item\Inventory;
+use App\Models\Item\SaleLog;
+
 class Item extends Model
 {
     /**
@@ -304,6 +307,39 @@ class Item extends Model
 
         $this->save();
         return true;
+    }
+
+    public function grantTo(User $user, $isFree = false): bool|Inventory
+    {
+        if ($user) {
+            $price = $this->price;
+            if ($isFree == true) {
+                $price = 0;
+            }
+
+            $user->decrement('currency', $price);
+            $highest = Inventory::where('item_id', $this->id)
+                                ->orderBy('serial', 'DESC')
+                                ->first();
+            $serial = $highest?->serial + 1 ?? 1;
+    
+            $inv = Inventory::create([
+                'user_id' => $user->id,
+                'item_id' => $this->id,
+                'serial' => $serial
+            ]);
+            SaleLog::insert([
+                'seller_id' => $this->creator_id,
+                'buyer_id' => $user->id,
+                'item_id' => $this->id,
+                'price' => $price,
+                'created_at' => now(),
+            ]);
+
+            return $inv;
+        }
+
+        return false;
     }
 
     /**
