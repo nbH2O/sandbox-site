@@ -40,7 +40,7 @@ class ItemController extends Controller
                         DB::transaction(function () use ($user, $item) {
                             $inv = $item->grantTo($user);
 
-                            if ($inv->serial >= $item->max_copies) {
+                            if ($item->max_copies != null && $inv->serial >= $item->max_copies) {
                                 $item->timestamps = false;
                                 $item->is_sold_out = true;
                                 $item->save();
