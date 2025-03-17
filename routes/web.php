@@ -80,7 +80,7 @@ Route::middleware('auth')->prefix('my')->group(function () {
     })->name('chats');
 });
 
-Route::middleware(['guest', 'throttle:20,2'])->prefix('auth')->group(function () {
+Route::middleware('guest')->prefix('auth')->group(function () {
     Route::get('/login', function () {
         return view('auth.login');
     })->name('login');

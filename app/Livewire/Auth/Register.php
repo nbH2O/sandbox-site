@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\User\User;
+use App\Models\User\RegisterIP;
 use App\Events\UserRegistered;
 
 class Register extends Component
@@ -44,6 +45,15 @@ class Register extends Component
     {
         $this->validate();
 
+        $ip = request()->header('CF-Connecting-IP', request()->ip());
+        $previousIP = RegisterIP::where('ip_address', $ip)->orderBy('created_at', 'DESC')->first();
+
+        if ($previousIP) {
+            if ($previousIP->created_at >= now()->subDays(1)) {
+                abort(429);
+            }
+        }
+
         $newUser = User::create([
             'name' => $this->username,
             'email' => $this->email,
@@ -55,6 +65,13 @@ class Register extends Component
             'born_at' => now()->subYears(18),
             'rewarded_at' => now()->subDays(1),
             'online_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        RegisterIP::insert([
+            'user_id' => $newUser->id,
+            'ip_address' => $ip,
             'created_at' => now(),
             'updated_at' => now()
         ]);
