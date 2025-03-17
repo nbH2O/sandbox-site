@@ -444,9 +444,9 @@ class Item extends Model
             return false;
         if ($this->isTradeable())
             return false;
-        if (!$this->available_from?->isPast())
+        if ($this->available_from && !$this->available_from->isPast())
             return false;
-        if ($this->available_to?->isPast())
+        if ($this->available_to && $this->available_to->isPast())
             return false;
 
         return true;
