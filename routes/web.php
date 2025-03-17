@@ -47,7 +47,7 @@ Route::middleware('auth')->post('/item/{id}/purchase',
 Route::middleware('auth')->get('/market/create',
     [ItemController::class, 'createClothing']
 )->name('item.create-clothing');
-Route::middleware(['auth', 'throttle:3,1'])->post('/market/create',
+Route::middleware(['auth', 'throttle:6,720'])->post('/market/create',
     [ItemController::class, 'createClothing']
 )->name('item.create-clothing');
 
@@ -80,7 +80,7 @@ Route::middleware('auth')->prefix('my')->group(function () {
     })->name('chats');
 });
 
-Route::middleware(['guest', 'throttle:15,1'])->prefix('auth')->group(function () {
+Route::middleware(['guest', 'throttle:20,2'])->prefix('auth')->group(function () {
     Route::get('/login', function () {
         return view('auth.login');
     })->name('login');
