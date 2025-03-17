@@ -14,18 +14,18 @@
             <div class="absolute m-2 top-0 left-0 flex gap-2">
                 @if ($badges == true)
                     @if (($item->isMaxCopies() && !$item->isSoldOut()) || $item->isScheduled())
-                        @if ($item->isMaxCopies() && !$item->isSoldOut() && !$item->available_from?->isFuture())
+                        @if ($item->isScheduled())
+                            <x-one-off.item.timer-badge
+                                :from="$item->available_from"
+                                :to="$item->available_to"
+                            />
+                        @elseif ($item->isMaxCopies() && !$item->isSoldOut() && !$item->available_from?->isFuture())
                             <x-badge color="red" innerClass="flex items-center gap-1.5">
                                 @svg('ri-shopping-bag-3-fill', [
                                     'class' => 'size-3.5'
                                 ])
                                 {{ Number::format($item->max_copies - $item->getCopies()) }} {{ __('left') }}
                             </x-badge>
-                        @elseif ($item->isScheduled())
-                            <x-one-off.item.timer-badge
-                                :from="$item->available_from"
-                                :to="$item->available_to"
-                            />
                         @endif
                     @endif
                     @if (!$item->is_public)

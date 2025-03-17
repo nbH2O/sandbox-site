@@ -69,6 +69,9 @@ Route::middleware('auth')->prefix('my')->group(function () {
     Route::get('/settings', function () {
         return view('user.settings');
     })->name('settings');
+    Route::get('/transactions', function () {
+        return view('user.transactions');
+    })->name('transactions');
     Route::get('/notifications', function () {
         return view('user.edit-avatar');
     })->name('notifications');

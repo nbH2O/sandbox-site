@@ -413,8 +413,12 @@ class Item extends Model
             return false;
         if ($this->isSoldOut())
             return false;
+        if ($this->available_to && $this->available_to->isPast())
+            return false;
+        if ($this->available_from && $this->available_from->isPast() && !$this->available_to)
+            return false;
 
-        return !$this->available_to?->isPast() || !$this->available_from?->isPast();
+        return true;
     }
     /**
      * Determine if the model is sold out
@@ -438,9 +442,11 @@ class Item extends Model
             return false;
         if ($this->is_sold_out && $this->max_copies)
             return false;
-        if ($this->available_to && $this->available_to->isPast())
+        if ($this->isTradeable())
             return false;
-        if ($this->available_from && $this->available_from->isFuture())
+        if (!$this->available_from?->isPast())
+            return false;
+        if ($this->available_to?->isPast())
             return false;
 
         return true;

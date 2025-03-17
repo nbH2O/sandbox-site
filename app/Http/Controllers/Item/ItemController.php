@@ -90,7 +90,7 @@ class ItemController extends Controller
                     'type_id' => 'required|in:'.$itemTypeIDs['shirt'].','.$itemTypeIDs['pants'].','.$itemTypeIDs['suit'],
                     'name' => 'required|max:20',
                     'description' => 'nullable|max:128',
-                    'price' => 'nullable|integer',
+                    'price' => 'nullable|integer|max:131072',
                     'is_onsale' => 'nullable|in:1,true,on'
                 ]);
 

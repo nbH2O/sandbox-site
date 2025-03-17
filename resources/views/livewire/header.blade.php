@@ -97,7 +97,12 @@
 
                     </x-one-off.header.bi-dropdown>
 
-                    <p>{{ Number::format(Auth::user()->currency) }}</p>
+                    <a href="{{ route('transactions') }}" class="dark bg-primary px-2.5 flex gap-2 items-center">
+                        @svg('ri-vip-diamond-fill', [
+                            'class' => 'size-4'
+                        ])
+                        <span>{{ Number::format(Auth::user()->currency) }}</span>
+                    </a>
 
                     <x-dropdown class="ms-2" align="right">
                         <x-slot name="trigger">
